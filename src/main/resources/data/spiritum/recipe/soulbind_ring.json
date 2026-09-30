@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " M ",
+    "M M",
+    " C "
+  ],
+  "key": {
+    "M": "spiritum:hex_ash",
+    "C": "spiritum:argent_nugget"
+  },
+  "result": {
+    "id": "spiritum:soulbind_ring",
+    "count": 1
+  }
+}

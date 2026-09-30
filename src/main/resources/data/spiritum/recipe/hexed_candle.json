@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S",
+    "H",
+    "H"
+  ],
+  "key": {
+    "S": "minecraft:string",
+    "H": "spiritum:hexstone"
+  },
+  "result": {
+    "id": "spiritum:hexed_candle",
+    "count": 1
+  }
+}

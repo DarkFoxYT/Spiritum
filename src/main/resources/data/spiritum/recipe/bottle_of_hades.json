@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "C C",
+    "C C",
+    " C "
+  ],
+  "key": {
+    "C": "spiritum:calx_of_hades"
+  },
+  "result": {
+    "id": "spiritum:bottle_of_hades",
+    "count": 1
+  }
+}

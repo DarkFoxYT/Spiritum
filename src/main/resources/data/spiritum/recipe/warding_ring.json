@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " M ",
+    "M M",
+    " C "
+  ],
+  "key": {
+    "M": "spiritum:argent_nugget",
+    "C": "spiritum:argent_ingot"
+  },
+  "result": {
+    "id": "spiritum:warding_ring",
+    "count": 1
+  }
+}

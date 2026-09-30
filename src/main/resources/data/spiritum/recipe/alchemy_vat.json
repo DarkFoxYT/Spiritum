@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "A A",
+    "A A",
+    "AAA"
+  ],
+  "key": {
+    "A": "spiritum:argent_ingot"
+  },
+  "result": {
+    "id": "spiritum:alchemy_vat",
+    "count": 1
+  }
+}

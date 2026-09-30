@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "N",
+    "N",
+    "N"
+  ],
+  "key": {
+    "N": "spiritum:argent_nugget"
+  },
+  "result": {
+    "id": "spiritum:argent_needle",
+    "count": 1
+  }
+}

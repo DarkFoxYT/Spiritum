@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "spiritum:argent_ingot"
+  ],
+  "result": {
+    "id": "spiritum:argent_nugget",
+    "count": 9
+  }
+}

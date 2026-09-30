@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AHA",
+    " H ",
+    "HH "
+  ],
+  "key": {
+    "A": "spiritum:argent_ingot",
+    "H": "spiritum:hexstone"
+  },
+  "result": {
+    "id": "spiritum:ritual_pedestal",
+    "count": 1
+  }
+}

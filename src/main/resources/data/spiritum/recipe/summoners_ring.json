@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " M ",
+    "M M",
+    " C "
+  ],
+  "key": {
+    "M": "spiritum:calx_of_hades",
+    "C": "spiritum:spirit_gem"
+  },
+  "result": {
+    "id": "spiritum:summoners_ring",
+    "count": 1
+  }
+}

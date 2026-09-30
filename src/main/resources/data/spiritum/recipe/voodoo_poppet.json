@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " F ",
+    "FFF",
+    " F "
+  ],
+  "key": {
+    "F": "spiritum:living_flesh"
+  },
+  "result": {
+    "id": "spiritum:voodoo_poppet",
+    "count": 1
+  }
+}

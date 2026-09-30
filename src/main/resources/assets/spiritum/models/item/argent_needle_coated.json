@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "spiritum:item/argent_needle_overlay",
+    "layer1": "spiritum:item/argent_needle"
+  }
+}

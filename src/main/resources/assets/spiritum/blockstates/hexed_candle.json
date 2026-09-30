@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "flame=0": {
+      "model": "spiritum:block/hexed_candle_0"
+    },
+    "flame=1": {
+      "model": "spiritum:block/hexed_candle_1"
+    },
+    "flame=2": {
+      "model": "spiritum:block/hexed_candle_2"
+    },
+    "flame=3": {
+      "model": "spiritum:block/hexed_candle_3"
+    },
+    "flame=4": {
+      "model": "spiritum:block/hexed_candle_4"
+    },
+    "flame=5": {
+      "model": "spiritum:block/hexed_candle_5"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:has_component",
+    "component": "minecraft:potion_contents",
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "spiritum:item/argent_needle_coated",
+      "tints": [
+        {
+          "type": "minecraft:potion",
+          "default": 16777215
+        }
+      ]
+    },
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "spiritum:item/argent_needle"
+    }
+  }
+}

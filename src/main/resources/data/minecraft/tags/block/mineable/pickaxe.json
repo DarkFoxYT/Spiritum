@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "spiritum:hexstone",
+    "spiritum:polished_hexstone",
+    "spiritum:hexstone_bricks",
+    "spiritum:ritual_pedestal",
+    "spiritum:alchemy_vat"
+  ]
+}

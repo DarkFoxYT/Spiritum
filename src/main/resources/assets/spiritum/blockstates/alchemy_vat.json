@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "filled=false": {
+      "model": "spiritum:block/alchemy_vat_false"
+    },
+    "filled=true": {
+      "model": "spiritum:block/alchemy_vat_true"
+    }
+  }
+}

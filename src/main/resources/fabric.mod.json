@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "spiritum",
+  "version": "${version}",
+  "name": "Spiritum",
+  "description": "The art of manipulation and usage of spirit.",
+  "authors": ["dark"],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "environment": "*",
+  "mixins": ["spiritum.mixins.json"],
+  "entrypoints": {
+    "jei_mod_plugin": ["net.dark.spiritum.client.compat.SpiritumJeiPlugin"],
+    "rei_client": ["net.dark.spiritum.client.compat.SpiritumReiPlugin"],
+    "client": [
+      "net.dark.spiritum.client.SpiritumClient"
+    ],
+    "main": [
+      "net.dark.spiritum.Spiritum"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}",
+    "java": ">=21"
+  }
+}
