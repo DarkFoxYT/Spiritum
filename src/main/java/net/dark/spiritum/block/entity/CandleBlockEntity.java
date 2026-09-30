@@ -94,9 +94,12 @@ public class CandleBlockEntity extends BlockEntity {
             return;
         }
         if (flame == 3 && world.getTime() % 20 == 0) candle.markDirty();
+        boolean highRitual = candle.ritualOwner != null
+                && world.getBlockEntity(candle.ritualOwner) instanceof PedestalBlockEntity pedestal
+                && net.dark.spiritum.magic.RitualEffects.isHighRitual(pedestal.getActiveRitual());
         if (world.getTime() % 5 == 0)
             server.spawnParticles(
-                    flame == 5
+                    flame == 5 || highRitual
                             ? ModParticles.BIG_HEXFLAME
                             : flame == 2 ? ParticleTypes.SOUL_FIRE_FLAME : flame >= 4
                                     ? ModParticles.HEXFLAME

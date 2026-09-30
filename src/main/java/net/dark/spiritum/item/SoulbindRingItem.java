@@ -25,8 +25,7 @@ public class SoulbindRingItem extends GemSocketItem {
         if (SpiritBinding.socket(ring).isEmpty()
                 && other.isOf(ModContent.SPIRIT_GEM)
                 && SpiritBinding.player(other).isEmpty()) {
-            if (!world.isClient())
-                user.sendMessage(Text.translatable("message.spiritum.bound_gem_required"), true);
+
             return ActionResult.FAIL;
         }
         return super.use(world, user, hand);

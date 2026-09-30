@@ -30,12 +30,12 @@ public class ArgentNeedleItem extends Item {
         var target =
                 bound.map(id -> world.getServer().getPlayerManager().getPlayer(id)).orElse(null);
         if (target == null || !target.isAlive()) {
-            user.sendMessage(Text.translatable("message.spiritum.target_unavailable"), true);
+
             return ActionResult.FAIL;
         }
         ServerWorld targetWorld = (ServerWorld) target.getEntityWorld();
         if (RingMagic.warded(target)) {
-            user.sendMessage(Text.translatable("message.spiritum.target_warded"), true);
+
             return ActionResult.FAIL;
         }
         target.damage(targetWorld, targetWorld.getDamageSources().indirectMagic(user, user), 1f);
@@ -61,16 +61,10 @@ public class ArgentNeedleItem extends Item {
         }
         InteractionEffects.atHand(user, false);
         InteractionEffects.atHand(target, true);
-        if (poppet.getDamage() + 1 >= poppet.getMaxDamage()) {
-            ItemStack gem = SpiritBinding.socket(poppet);
-            SpiritBinding.socket(poppet, ItemStack.EMPTY);
-            user.getInventory().offerOrDrop(gem);
-        }
         poppet.damage(1, user, hand == Hand.MAIN_HAND ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND);
         user.getItemCooldownManager().set(needle, 20);
         needle.decrement(1);
-        user.sendMessage(
-                Text.translatable("message.spiritum.voodoo_applied", target.getName()), true);
+
         return ActionResult.SUCCESS;
     }
 }

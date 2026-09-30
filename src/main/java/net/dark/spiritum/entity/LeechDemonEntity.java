@@ -39,6 +39,7 @@ public class LeechDemonEntity extends OwnedDemonEntity {
     public void tick() {
         super.tick();
         if (!(getEntityWorld() instanceof ServerWorld server) || !isAlive()) return;
+        if (age % 5 == 0) server.spawnParticles(net.dark.spiritum.registry.ModParticles.HEXFLAME, getX(), getY() + .2, getZ(), 2, .1, .1, .1, 0);
         if (latchCooldown > 0) latchCooldown--;
         var owner = getOwner();
         if (owner == null || !owner.isAlive()) {

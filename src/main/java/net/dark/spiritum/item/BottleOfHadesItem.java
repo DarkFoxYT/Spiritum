@@ -137,10 +137,7 @@ public final class BottleOfHadesItem extends Item {
             ItemStack bottle = player.getStackInHand(hand);
             int captured = capture(server, player, bottle);
             if (captured > 0) InteractionEffects.atHand(player, true);
-            player.sendMessage(
-                    Text.translatable(
-                            "message.spiritum.bottle_captured", captured, count(bottle), CAPACITY),
-                    true);
+
             player.getItemCooldownManager().set(bottle, 20);
         }
         return ActionResult.SUCCESS;
@@ -154,9 +151,7 @@ public final class BottleOfHadesItem extends Item {
         if (context.getSide() != Direction.UP) return ActionResult.PASS;
         if (context.getWorld() instanceof ServerWorld server) {
             int released = release(server, context.getBlockPos().up(), bottle);
-            player.sendMessage(
-                    Text.translatable("message.spiritum.bottle_released", released, count(bottle)),
-                    true);
+
             player.getItemCooldownManager().set(bottle, 20);
         }
         return ActionResult.SUCCESS;

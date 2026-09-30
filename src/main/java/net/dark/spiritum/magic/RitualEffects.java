@@ -69,8 +69,7 @@ public final class RitualEffects {
                                 player.getYaw(),
                                 player.getPitch(),
                                 true);
-                        player.sendMessage(
-                                Text.translatable("message.spiritum.calling_complete"), false);
+
                     }
                 }
             }
@@ -195,10 +194,10 @@ public final class RitualEffects {
         var sprite = ModParticles.sigil(rite.id());
         if (sprite != null)
             world.spawnParticles(
-                    sprite, pos.getX() + .5, pos.getY() + 1.8, pos.getZ() + .5, 1, 0, 0, 0, 0);
+                    sprite, pos.getX() + .5, pos.getY() + 2.6, pos.getZ() + .5, 1, 0, 0, 0, 0);
         double angle = elapsed * .12;
         world.spawnParticles(
-                ModParticles.HEXFLAME,
+                isHighRitual(rite.id()) ? ModParticles.BIG_HEXFLAME : ModParticles.HEXFLAME,
                 pos.getX() + .5 + Math.cos(angle) * .7,
                 pos.getY() + 1.75,
                 pos.getZ() + .5 + Math.sin(angle) * .7,
@@ -217,6 +216,10 @@ public final class RitualEffects {
                 .25,
                 .35,
                 .05);
+    }
+
+    public static boolean isHighRitual(String id) {
+        return id.endsWith("_binding") || id.equals("calling") || id.equals("withering");
     }
 
     private RitualEffects() {}

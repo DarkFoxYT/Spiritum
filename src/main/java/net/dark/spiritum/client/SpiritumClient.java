@@ -47,6 +47,10 @@ public class SpiritumClient implements ClientModInitializer {
                 (stack, context, type, lines) -> {
                     var id = Registries.ITEM.getId(stack.getItem());
                     if (!id.getNamespace().equals("spiritum")) return;
+                    if (stack.isOf(ModContent.SUMMONERS_RING)
+                            || stack.isOf(ModContent.SOULBIND_RING)
+                            || stack.isOf(ModContent.WARDING_RING))
+                        lines.add(Text.translatable("tooltip.spiritum." + id.getPath()).formatted(Formatting.GRAY));
                     var gem =
                             stack.isOf(ModContent.SPIRIT_GEM) ? stack : SpiritBinding.socket(stack);
                     SpiritBinding.player(gem)

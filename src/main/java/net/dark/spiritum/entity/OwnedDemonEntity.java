@@ -166,7 +166,7 @@ public abstract class OwnedDemonEntity extends PathAwareEntity {
         if (getOwnerUuid() == null && player.isCreative()) {
             if (!getEntityWorld().isClient()) {
                 setOwnerUuid(player.getUuid());
-                player.sendMessage(Text.translatable("message.spiritum.demon_claimed"), true);
+
             }
             return ActionResult.SUCCESS;
         }

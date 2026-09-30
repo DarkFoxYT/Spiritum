@@ -76,7 +76,7 @@ public final class SpiritParticles {
             sigils.clear();
             sigilWorld = world;
         }
-        var key = new SigilKey(BlockPos.ofFloored(x, y - 1, z), texture);
+        var key = new SigilKey(BlockPos.ofFloored(x, y - 2, z), texture);
         var existing = sigils.get(key);
         if (existing != null && existing.isAlive()) {
             existing.refresh();

@@ -72,7 +72,7 @@ public class SpiritEnergyEntity extends Entity implements FlyingItemEntity {
         }
         if (age % 5 == 0)
             world.spawnParticles(
-                    ParticleTypes.END_ROD, getX(), getY(), getZ(), 1, .03, .03, .03, 0);
+                    net.dark.spiritum.registry.ModParticles.HEXFLAME, getX(), getY(), getZ(), 1, .03, .03, .03, 0);
     }
 
     @Override

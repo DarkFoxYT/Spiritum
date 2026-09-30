@@ -23,6 +23,8 @@ public class GemSocketItem extends Item {
 
     protected boolean acceptsGem(ItemStack stack) { return stack.isOf(ModContent.SPIRIT_GEM); }
 
+    protected boolean canRemoveGem() { return true; }
+
     @Override
     public Optional<TooltipData> getTooltipData(ItemStack stack) {
         return Optional.of(new GemSocketTooltipData(SpiritBinding.socket(stack)));
@@ -39,7 +41,7 @@ public class GemSocketItem extends Item {
             slot.markDirty();
             return true;
         }
-        if (click == ClickType.RIGHT && cursor.isEmpty() && !gem.isEmpty()) {
+        if (canRemoveGem() && click == ClickType.RIGHT && cursor.isEmpty() && !gem.isEmpty()) {
             cursorReference.set(gem);
             SpiritBinding.socket(holder, ItemStack.EMPTY);
             player.playSound(SoundEvents.ITEM_BUNDLE_REMOVE_ONE, .8f, 1);
@@ -59,7 +61,7 @@ public class GemSocketItem extends Item {
             player.playSound(SoundEvents.ITEM_BUNDLE_INSERT, .8f, 1);
             return true;
         }
-        if (click == ClickType.RIGHT && !gem.isEmpty() && slot.getStack().isEmpty() && slot.canInsert(gem)) {
+        if (canRemoveGem() && click == ClickType.RIGHT && !gem.isEmpty() && slot.getStack().isEmpty() && slot.canInsert(gem)) {
             if (!slot.insertStack(gem.copy()).isEmpty()) return false;
             SpiritBinding.socket(holder, ItemStack.EMPTY);
             player.playSound(SoundEvents.ITEM_BUNDLE_REMOVE_ONE, .8f, 1);
@@ -96,12 +98,12 @@ public class GemSocketItem extends Item {
     public ActionResult use(World world, PlayerEntity user, Hand hand) {
         ItemStack holder = user.getStackInHand(hand);
         ItemStack gem = SpiritBinding.socket(holder);
-        if (user.isSneaking() && !gem.isEmpty()) {
+        if (canRemoveGem() && user.isSneaking() && !gem.isEmpty()) {
             if (!world.isClient()) {
                 SpiritBinding.socket(holder, ItemStack.EMPTY);
                 InteractionEffects.atHand(user, false);
                 user.getInventory().offerOrDrop(gem);
-                user.sendMessage(Text.translatable("message.spiritum.gem_removed"), true);
+
             }
             return ActionResult.SUCCESS;
         }
@@ -112,7 +114,7 @@ public class GemSocketItem extends Item {
             SpiritBinding.socket(holder, other);
             InteractionEffects.atHand(user, true);
             if (!user.isCreative()) other.decrement(1);
-            user.sendMessage(Text.translatable("message.spiritum.gem_inserted"), true);
+
         }
         return ActionResult.SUCCESS;
     }

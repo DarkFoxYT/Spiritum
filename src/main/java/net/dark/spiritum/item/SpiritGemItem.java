@@ -18,7 +18,7 @@ public class SpiritGemItem extends Item {
         if (!world.isClient()) {
             SpiritBinding.bind(user.getStackInHand(hand), user);
             InteractionEffects.atHand(user, true);
-            user.sendMessage(Text.translatable("message.spiritum.gem_bound", user.getName()), true);
+
         }
         return ActionResult.SUCCESS;
     }

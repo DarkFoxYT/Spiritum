@@ -44,7 +44,7 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
 
     public void insert(ItemStack stack, PlayerEntity player) {
         if (!activeRitual.isEmpty()) {
-            player.sendMessage(Text.translatable("message.spiritum.ritual_busy"), true);
+
             return;
         }
         int amount = player.isSneaking() ? stack.getCount() : 1;
@@ -55,11 +55,7 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
 
     public void extract(PlayerEntity player) {
         if (!activeRitual.isEmpty()) {
-            player.sendMessage(
-                    Text.translatable(
-                            "message.spiritum.active_ritual",
-                            Text.translatable("ritual.spiritum." + activeRitual)),
-                    true);
+
             return;
         }
         if (offerings.isEmpty()) return;
@@ -97,7 +93,7 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
             if (player == null || !player.isAlive() || RingMagic.warded(player)) return false;
             callingOrigin = player.getEntityPos();
             callingDimension = player.getEntityWorld().getRegistryKey().getValue().toString();
-            player.sendMessage(Text.translatable("message.spiritum.calling_started"), false);
+
         }
         boundPlayers.clear();
         boundPlayers.addAll(bindings);
@@ -162,8 +158,7 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
             if (world.getBlockEntity(candlePos) instanceof CandleBlockEntity candle
                     && candle.flame() >= 4) candle.snuff();
         var player = world.getServer().getPlayerManager().getPlayer(boundPlayer);
-        if (player != null)
-            player.sendMessage(Text.translatable("message.spiritum.calling_cancelled"), false);
+
         stop();
     }
 
