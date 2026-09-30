@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "HHH",
+    "HHH"
+  ],
+  "key": {
+    "H": "spiritum:hexstone"
+  },
+  "result": {
+    "id": "spiritum:hexstone_wall",
+    "count": 6
+  }
+}

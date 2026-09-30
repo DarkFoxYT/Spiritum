@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "H  ",
+    "HH ",
+    "HHH"
+  ],
+  "key": {
+    "H": "spiritum:polished_hexstone"
+  },
+  "result": {
+    "id": "spiritum:polished_hexstone_stairs",
+    "count": 4
+  }
+}

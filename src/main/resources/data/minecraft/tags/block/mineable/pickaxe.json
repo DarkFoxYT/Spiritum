@@ -4,6 +4,15 @@
     "spiritum:hexstone",
     "spiritum:polished_hexstone",
     "spiritum:hexstone_bricks",
+    "spiritum:hexstone_stairs",
+    "spiritum:hexstone_slab",
+    "spiritum:hexstone_wall",
+    "spiritum:polished_hexstone_stairs",
+    "spiritum:polished_hexstone_slab",
+    "spiritum:polished_hexstone_wall",
+    "spiritum:hexstone_brick_stairs",
+    "spiritum:hexstone_brick_slab",
+    "spiritum:hexstone_brick_wall",
     "spiritum:ritual_pedestal",
     "spiritum:alchemy_vat"
   ]

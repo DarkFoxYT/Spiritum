@@ -8,6 +8,10 @@
       "model": "spiritum:item/argent_needle_coated",
       "tints": [
         {
+          "type": "minecraft:constant",
+          "value": 16777215
+        },
+        {
           "type": "minecraft:potion",
           "default": 16777215
         }

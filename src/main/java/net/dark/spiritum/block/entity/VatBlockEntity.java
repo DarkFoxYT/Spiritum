@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 
 public class VatBlockEntity extends OfferingBlockEntity {
     private int boilTicks;
+    private volatile int waterColor = 0x3F76E4;
 
     public VatBlockEntity(BlockPos pos, BlockState state) {
         super(ModContent.VAT_ENTITY, pos, state);
@@ -23,6 +24,41 @@ public class VatBlockEntity extends OfferingBlockEntity {
 
     public int getBoilTicks() {
         return boilTicks;
+    }
+
+    public int getWaterColor() {
+        return waterColor;
+    }
+
+    @Override
+    public void changed() {
+        waterColor = calculateWaterColor();
+        super.changed();
+    }
+
+    private int calculateWaterColor() {
+        if (offerings.isEmpty()) return 0x3F76E4;
+        long red = 0, green = 0, blue = 0, total = 0;
+        for (ItemStack stack : offerings) {
+            int color = ingredientColor(stack.getItem());
+            int count = stack.getCount();
+            red += ((color >> 16) & 255) * count;
+            green += ((color >> 8) & 255) * count;
+            blue += (color & 255) * count;
+            total += count;
+        }
+        return total == 0 ? 0x3F76E4 : ((int)(red / total) << 16) | ((int)(green / total) << 8) | (int)(blue / total);
+    }
+
+    private static int ingredientColor(Item item) {
+        if (item == Items.REDSTONE) return 0xC73643;
+        if (item == Items.GLOWSTONE_DUST || item == Items.GLOWSTONE || item == Items.HONEY_BOTTLE) return 0xE8C65B;
+        if (item == Items.CHARCOAL) return 0x494253;
+        if (item == ModContent.SPIRIT_FRAGMENT || item == ModContent.SPIRIT_GEM) return 0x8DDD64;
+        if (item == Items.ROTTEN_FLESH || item == ModContent.LIVING_FLESH) return 0xB67473;
+        if (item == ModContent.HEX_ASH || item == ModContent.CALX_OF_HADES) return 0x8F70B2;
+        if (item == ModContent.ARGENT_INGOT) return 0xB9D5CF;
+        return 0xCEC7AD;
     }
 
     public void fill() {
@@ -139,6 +175,8 @@ public class VatBlockEntity extends OfferingBlockEntity {
     protected void readData(ReadView view) {
         super.readData(view);
         boilTicks = view.getInt("BoilTicks", 0);
+        waterColor = calculateWaterColor();
+        if (world != null && world.isClient()) world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
     }
 
     @Override

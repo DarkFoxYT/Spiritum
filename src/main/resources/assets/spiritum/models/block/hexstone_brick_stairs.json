@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "spiritum:block/hexstone_bricks",
+    "top": "spiritum:block/hexstone_bricks",
+    "side": "spiritum:block/hexstone_bricks"
+  }
+}

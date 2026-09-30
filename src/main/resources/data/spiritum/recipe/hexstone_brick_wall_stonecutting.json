@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "spiritum:hexstone_bricks",
+  "result": {
+    "id": "spiritum:hexstone_brick_wall",
+    "count": 1
+  }
+}

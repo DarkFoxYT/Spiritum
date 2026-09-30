@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "spiritum:hexstone_wall",
+    "spiritum:polished_hexstone_wall",
+    "spiritum:hexstone_brick_wall"
+  ]
+}

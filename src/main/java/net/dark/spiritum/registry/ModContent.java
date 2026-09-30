@@ -64,6 +64,25 @@ public final class ModContent {
             block(
                     "hexstone_bricks",
                     new Block(settings("hexstone_bricks", Blocks.CALCITE).strength(1.5f)));
+    public static final Block HEXSTONE_STAIRS = stairs("hexstone_stairs", HEXSTONE);
+    public static final Block HEXSTONE_SLAB = slab("hexstone_slab", HEXSTONE);
+    public static final Block HEXSTONE_WALL = wall("hexstone_wall", HEXSTONE);
+    public static final Block POLISHED_HEXSTONE_STAIRS = stairs("polished_hexstone_stairs", POLISHED_HEXSTONE);
+    public static final Block POLISHED_HEXSTONE_SLAB = slab("polished_hexstone_slab", POLISHED_HEXSTONE);
+    public static final Block POLISHED_HEXSTONE_WALL = wall("polished_hexstone_wall", POLISHED_HEXSTONE);
+    public static final Block HEXSTONE_BRICK_STAIRS = stairs("hexstone_brick_stairs", HEXSTONE_BRICKS);
+    public static final Block HEXSTONE_BRICK_SLAB = slab("hexstone_brick_slab", HEXSTONE_BRICKS);
+    public static final Block HEXSTONE_BRICK_WALL = wall("hexstone_brick_wall", HEXSTONE_BRICKS);
+
+    private static Block stairs(String name, Block base) {
+        return block(name, new StairsBlock(base.getDefaultState(), settings(name, base)));
+    }
+    private static Block slab(String name, Block base) {
+        return block(name, new SlabBlock(settings(name, base)));
+    }
+    private static Block wall(String name, Block base) {
+        return block(name, new WallBlock(settings(name, base)));
+    }
     public static final HexedCandleBlock HEXED_CANDLE =
             block(
                     "hexed_candle",
@@ -96,9 +115,9 @@ public final class ModContent {
     public static final Item HEX_ASH = item("hex_ash");
     public static final Item CALX_OF_HADES = item("calx_of_hades");
     public static final Item VOODOO_POPPET =
-            custom("voodoo_poppet", GemSocketItem::new, new Item.Settings().maxCount(1));
+            custom("voodoo_poppet", GemSocketItem::new, new Item.Settings().maxDamage(64));
     public static final Item ARGENT_NEEDLE =
-            custom("argent_needle", ArgentNeedleItem::new, new Item.Settings().maxDamage(64));
+            custom("argent_needle", ArgentNeedleItem::new, new Item.Settings().maxCount(1));
     public static final Item HEXBLADE = hexblade();
     public static final Item BOTTLE_OF_HADES =
             custom("bottle_of_hades", BottleOfHadesItem::new, new Item.Settings().maxCount(1));

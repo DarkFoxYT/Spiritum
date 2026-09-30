@@ -98,7 +98,7 @@ public class CandleBlockEntity extends BlockEntity {
             server.spawnParticles(
                     flame == 5
                             ? ModParticles.BIG_HEXFLAME
-                            : flame == 2 || flame >= 4
+                            : flame == 2 ? ParticleTypes.SOUL_FIRE_FLAME : flame >= 4
                                     ? ModParticles.HEXFLAME
                                     : ParticleTypes.FLAME,
                     pos.getX() + .5,

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "spiritum:polished_hexstone",
+  "result": {
+    "id": "spiritum:polished_hexstone_slab",
+    "count": 2
+  }
+}

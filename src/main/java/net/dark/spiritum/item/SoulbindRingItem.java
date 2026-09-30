@@ -13,6 +13,11 @@ public class SoulbindRingItem extends GemSocketItem {
     }
 
     @Override
+    protected boolean acceptsGem(ItemStack stack) {
+        return super.acceptsGem(stack) && SpiritBinding.player(stack).isPresent();
+    }
+
+    @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand) {
         ItemStack ring = user.getStackInHand(hand);
         ItemStack other =

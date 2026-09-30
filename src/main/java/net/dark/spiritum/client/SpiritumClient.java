@@ -3,6 +3,9 @@ package net.dark.spiritum.client;
 import net.dark.spiritum.block.HexedCandleBlock;
 import net.dark.spiritum.item.BottleOfHadesItem;
 import net.dark.spiritum.item.SpiritBinding;
+import net.dark.spiritum.item.GemSocketTooltipData;
+import net.dark.spiritum.block.entity.VatBlockEntity;
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
 import net.dark.spiritum.registry.ModContent;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
@@ -22,6 +25,7 @@ public class SpiritumClient implements ClientModInitializer {
     public void onInitializeClient() {
         DemonRenderers.initialize();
         SpiritParticles.initialize();
+        TooltipComponentCallback.EVENT.register(data -> data instanceof GemSocketTooltipData gem ? new GemSocketTooltip(gem) : null);
         BlockEntityRendererFactories.register(ModContent.PEDESTAL_ENTITY, PedestalRenderer::new);
         BlockRenderLayerMap.putBlock(ModContent.HEXED_CANDLE, BlockRenderLayer.CUTOUT);
         BlockRenderLayerMap.putBlock(ModContent.ALCHEMY_VAT, BlockRenderLayer.CUTOUT);
@@ -35,17 +39,14 @@ public class SpiritumClient implements ClientModInitializer {
                 ModContent.HEXED_CANDLE);
         ColorProviderRegistry.BLOCK.register(
                 (state, world, pos, tint) ->
-                        world != null && pos != null
-                                ? BiomeColors.getWaterColor(world, pos)
+                        world != null && pos != null && world.getBlockEntity(pos) instanceof VatBlockEntity vat
+                                ? vat.getWaterColor()
                                 : 0x3F76E4,
                 ModContent.ALCHEMY_VAT);
         ItemTooltipCallback.EVENT.register(
                 (stack, context, type, lines) -> {
                     var id = Registries.ITEM.getId(stack.getItem());
                     if (!id.getNamespace().equals("spiritum")) return;
-                    lines.add(
-                            Text.translatable("tooltip.spiritum." + id.getPath())
-                                    .formatted(Formatting.DARK_PURPLE));
                     var gem =
                             stack.isOf(ModContent.SPIRIT_GEM) ? stack : SpiritBinding.socket(stack);
                     SpiritBinding.player(gem)
@@ -56,20 +57,6 @@ public class SpiritumClient implements ClientModInitializer {
                                                                     "tooltip.spiritum.bound",
                                                                     SpiritBinding.playerName(gem))
                                                             .formatted(Formatting.AQUA)));
-                    if (stack.isOf(ModContent.HEXBLADE)
-                            || stack.isOf(ModContent.VOODOO_POPPET)
-                            || stack.isOf(ModContent.SOULBIND_RING))
-                        lines.add(
-                                Text.translatable(
-                                                gem.isEmpty()
-                                                        ? "tooltip.spiritum.socket_empty"
-                                                        : "tooltip.spiritum.socket_full")
-                                        .formatted(Formatting.GRAY));
-                    if (stack.isOf(ModContent.ARGENT_NEEDLE)
-                            && stack.contains(DataComponentTypes.POTION_CONTENTS))
-                        lines.add(
-                                Text.translatable("tooltip.spiritum.coated")
-                                        .formatted(Formatting.AQUA));
                     if (stack.isOf(ModContent.BOTTLE_OF_HADES))
                         lines.add(
                                 Text.translatable(

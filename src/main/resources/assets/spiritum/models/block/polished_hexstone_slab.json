@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "spiritum:block/polished_hexstone",
+    "top": "spiritum:block/polished_hexstone",
+    "side": "spiritum:block/polished_hexstone"
+  }
+}

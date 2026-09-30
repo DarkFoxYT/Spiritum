@@ -33,6 +33,9 @@ def supplied_block(name, texture):
             model['elements'].append(part)
     model['parent']='minecraft:block/block'
     model['textures']={'0':'spiritum:block/'+texture,'particle':'spiritum:block/'+texture}
+    if name == 'alchemy_vat':
+        for part in model.get('elements',[]):
+            for face in part.get('faces',{}).values(): face.pop('tintindex',None)
     model.pop('format_version',None)
     return model
 
@@ -60,11 +63,40 @@ for filled in (False, True):
     asset('models/block/alchemy_vat_'+str(filled).lower(), model)
 asset('blockstates/alchemy_vat', {'variants':{'filled='+str(f).lower():{'model':'spiritum:block/alchemy_vat_'+str(f).lower()} for f in (False,True)}})
 
-all_blocks = list(blocks)+['hexed_candle','ritual_pedestal','alchemy_vat']
+building_variants=[]
+for base, prefix in [('hexstone','hexstone'),('polished_hexstone','polished_hexstone'),('hexstone_bricks','hexstone_brick')]:
+    for kind in ('stairs','slab','wall'):
+        name=prefix+'_'+kind
+        building_variants.append(name)
+        state=json.loads((Path(__file__).parent/'templates'/f'{kind}.json').read_text())
+        def replace_models(value):
+            if isinstance(value,dict):
+                for key,entry in value.items():
+                    if key=='model': value[key]='spiritum:block/'+(base if entry=='minecraft:block/cobblestone' else entry.removeprefix('minecraft:block/').replace('cobblestone',prefix))
+                    else: replace_models(entry)
+            elif isinstance(value,list):
+                for entry in value: replace_models(entry)
+        replace_models(state)
+        asset('blockstates/'+name,state)
+        texture='spiritum:block/'+base
+        if kind=='stairs':
+            for suffix,parent in [('', 'stairs'),('_inner','inner_stairs'),('_outer','outer_stairs')]:
+                asset('models/block/'+name+suffix,{'parent':'minecraft:block/'+parent,'textures':{'bottom':texture,'top':texture,'side':texture}})
+        elif kind=='slab':
+            for suffix,parent in [('', 'slab'),('_top','slab_top')]:
+                asset('models/block/'+name+suffix,{'parent':'minecraft:block/'+parent,'textures':{'bottom':texture,'top':texture,'side':texture}})
+        else:
+            for suffix,parent in [('_post','template_wall_post'),('_side','template_wall_side'),('_side_tall','template_wall_side_tall'),('_inventory','wall_inventory')]:
+                asset('models/block/'+name+suffix,{'parent':'minecraft:block/'+parent,'textures':{'wall':texture}})
+
+all_blocks = list(blocks)+building_variants+['hexed_candle','ritual_pedestal','alchemy_vat']
 for name in all_blocks:
     parent = 'hexed_candle_0' if name == 'hexed_candle' else 'alchemy_vat_false' if name == 'alchemy_vat' else name
+    if name.endswith('_wall'): parent=name+'_inventory'
     asset('models/item/'+name, {'parent':'spiritum:block/'+parent})
     data('loot_table/blocks/'+name, {'type':'minecraft:block','pools':[{'rolls':1,'entries':[{'type':'minecraft:item','name':'spiritum:'+name}],'conditions':[{'condition':'minecraft:survives_explosion'}]}]})
+    if name.endswith('_slab'):
+        data('loot_table/blocks/'+name,{'type':'minecraft:block','pools':[{'rolls':1,'entries':[{'type':'minecraft:item','name':'spiritum:'+name,'functions':[{'function':'minecraft:set_count','count':2,'conditions':[{'condition':'minecraft:block_state_property','block':'spiritum:'+name,'properties':{'type':'double'}}]},{'function':'minecraft:explosion_decay'}]}]}]})
 
 items = {name:name for name in ('spirit_fragment','argent_nugget','spirit_gem','living_flesh','hexblade','hex_ash','calx_of_hades','argent_needle')}
 items.update({'argent_ingot':'argent','voodoo_poppet':'poppet'})
@@ -74,8 +106,8 @@ for name, texture in items.items():
     asset('models/item/'+name, {'parent':'minecraft:item/handheld' if name == 'hexblade' else 'minecraft:item/generated','textures':{'layer0':'spiritum:item/'+texture}})
 for name in all_blocks + list(items):
     asset('items/'+name, {'model':{'type':'minecraft:model','model':'spiritum:item/'+name}})
-asset('models/item/argent_needle_coated',{'parent':'minecraft:item/generated','textures':{'layer0':'spiritum:item/argent_needle_overlay','layer1':'spiritum:item/argent_needle'}})
-asset('items/argent_needle',{'model':{'type':'minecraft:condition','property':'minecraft:has_component','component':'minecraft:potion_contents','on_true':{'type':'minecraft:model','model':'spiritum:item/argent_needle_coated','tints':[{'type':'minecraft:potion','default':16777215}]},'on_false':{'type':'minecraft:model','model':'spiritum:item/argent_needle'}}})
+asset('models/item/argent_needle_coated',{'parent':'minecraft:item/generated','textures':{'layer0':'spiritum:item/argent_needle','layer1':'spiritum:item/argent_needle_overlay'}})
+asset('items/argent_needle',{'model':{'type':'minecraft:condition','property':'minecraft:has_component','component':'minecraft:potion_contents','on_true':{'type':'minecraft:model','model':'spiritum:item/argent_needle_coated','tints':[{'type':'minecraft:constant','value':16777215},{'type':'minecraft:potion','default':16777215}]},'on_false':{'type':'minecraft:model','model':'spiritum:item/argent_needle'}}})
 asset('items/soulbind_ring',{'model':{'type':'minecraft:condition','property':'minecraft:has_component','component':'minecraft:container','on_true':{'type':'minecraft:model','model':'spiritum:item/soulbind_ring'},'on_false':{'type':'minecraft:model','model':'spiritum:item/empty_soulbind_ring'}}})
 for image in sorted((SOURCE/'particle').glob('*.png')):
     asset('particles/'+image.stem,{'textures':['spiritum:'+image.stem]})
@@ -91,6 +123,11 @@ def shapeless(name, ingredients, output, count=1):
     data('recipe/'+name, {'type':'minecraft:crafting_shapeless','category':'misc','ingredients':ingredients,'result':{'id':output,'count':count}})
 shaped('polished_hexstone',['HH','HH'],{'H':'spiritum:hexstone'},count=4)
 shaped('hexstone_bricks',['HH','HH'],{'H':'spiritum:polished_hexstone'},count=4)
+for base,prefix in [('hexstone','hexstone'),('polished_hexstone','polished_hexstone'),('hexstone_bricks','hexstone_brick')]:
+    for kind,pattern,count in [('stairs',['H  ','HH ','HHH'],4),('slab',['HHH'],6),('wall',['HHH','HHH'],6)]:
+        name=prefix+'_'+kind
+        shaped(name,pattern,{'H':'spiritum:'+base},count=count)
+        data('recipe/'+name+'_stonecutting',{'type':'minecraft:stonecutting','ingredient':'spiritum:'+base,'result':{'id':'spiritum:'+name,'count':2 if kind=='slab' else 1}})
 shaped('hexed_candle',['S','H','H'],{'S':'minecraft:string','H':'spiritum:hexstone'})
 shaped('ritual_pedestal',['AHA',' H ','HH '],{'A':'spiritum:argent_ingot','H':'spiritum:hexstone'})
 shaped('alchemy_vat',['A A','A A','AAA'],{'A':'spiritum:argent_ingot'})
@@ -105,10 +142,11 @@ shapeless('argent_nuggets',['spiritum:argent_ingot'],'spiritum:argent_nugget',9)
 for block in ('polished_hexstone','hexstone_bricks'):
     data('recipe/'+block+'_stonecutting',{'type':'minecraft:stonecutting','ingredient':'spiritum:hexstone','result':{'id':'spiritum:'+block,'count':1}})
 
-write('data/minecraft/tags/block/mineable/pickaxe.json',{'replace':False,'values':list('spiritum:'+b for b in blocks)+['spiritum:ritual_pedestal','spiritum:alchemy_vat']})
+write('data/minecraft/tags/block/mineable/pickaxe.json',{'replace':False,'values':list('spiritum:'+b for b in list(blocks)+building_variants)+['spiritum:ritual_pedestal','spiritum:alchemy_vat']})
+write('data/minecraft/tags/block/walls.json',{'replace':False,'values':['spiritum:'+name for name in building_variants if name.endswith('_wall')]})
 write('data/minecraft/tags/item/swords.json',{'replace':False,'values':['spiritum:hexblade']})
-data('worldgen/configured_feature/hexstone_deposit', {'type':'minecraft:ore','config':{'size':5,'discard_chance_on_air_exposure':0.0,'targets':[{'target':{'predicate_type':'minecraft:tag_match','tag':tag},'state':{'Name':'spiritum:hexstone'}} for tag in ('minecraft:stone_ore_replaceables','minecraft:deepslate_ore_replaceables')]}})
-data('worldgen/placed_feature/hexstone_deposit', {'feature':'spiritum:hexstone_deposit','placement':[{'type':'minecraft:rarity_filter','chance':8},{'type':'minecraft:in_square'},{'type':'minecraft:height_range','height':{'type':'minecraft:uniform','min_inclusive':{'absolute':-48},'max_inclusive':{'absolute':40}}},{'type':'minecraft:biome'}]})
+data('worldgen/configured_feature/hexstone_deposit', {'type':'minecraft:ore','config':{'size':64,'discard_chance_on_air_exposure':0.0,'targets':[{'target':{'predicate_type':'minecraft:tag_match','tag':'minecraft:base_stone_overworld'},'state':{'Name':'spiritum:hexstone'}}]}})
+data('worldgen/placed_feature/hexstone_deposit', {'feature':'spiritum:hexstone_deposit','placement':[{'type':'minecraft:count','count':2},{'type':'minecraft:in_square'},{'type':'minecraft:height_range','height':{'type':'minecraft:uniform','min_inclusive':{'absolute':-48},'max_inclusive':{'absolute':-48}}},{'type':'minecraft:biome'}]})
 
 lang = {'itemGroup.spiritum':'Spiritum', 'message.spiritum.ritual_busy':'The pedestal is channeling. Snuff a ritual candle to interrupt it.', 'message.spiritum.active_ritual':'Active rite: %s. Snuff a candle to end it.'}
 for name in all_blocks: lang['block.spiritum.'+name] = name.replace('_',' ').title()
@@ -135,7 +173,7 @@ lang.update({
     'viewer.spiritum.bound_candles':'%s ordinary + 1 player-bound candle',
     'viewer.spiritum.optional_candles':'2 ordinary + 0–4 player-bound candles',
     'viewer.spiritum.instant':'Instant; flames are consumed in sequence.',
-    'viewer.spiritum.persistent':'Persistent; keep all flames burning.',
+    'viewer.spiritum.persistent':'10-minute aura; keep its flames burning.',
     'viewer.spiritum.calling_movement':'Moving cancels and spends the offerings.',
     'viewer.spiritum.bound_protection':'Bound players are protected.',
     'message.spiritum.bottle_captured':'Stored %s demons. Bottle: %s / %s.',

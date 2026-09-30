@@ -177,12 +177,13 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
             for (OfferingRecipe recipe :
                     MagicRecipes.RITUALS.stream()
                             .sorted(
-                                    Comparator.comparingInt(
+                                    Comparator.comparingInt((OfferingRecipe r) -> r.id().equals("imp_binding") ? 0 : 1)
+                                            .thenComparing(Comparator.comparingInt(
                                                     (OfferingRecipe r) ->
                                                             r.ingredients().values().stream()
                                                                     .mapToInt(Integer::intValue)
                                                                     .sum())
-                                            .reversed())
+                                            .reversed()))
                             .toList()) {
                 if (!recipe.matches(pedestal.offerings)) continue;
                 List<BlockPos> selected = RitualCandles.select(world, pos, recipe, available);
@@ -202,6 +203,12 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
         pedestal.elapsed++;
         if (pedestal.elapsed % 5 == 0) RitualEffects.sigil(server, pos, recipe, pedestal.elapsed);
         if (pedestal.sustained) {
+            if (pedestal.elapsed >= 12000) {
+                for (BlockPos candlePos : List.copyOf(pedestal.candles))
+                    if (world.getBlockEntity(candlePos) instanceof CandleBlockEntity candle) candle.snuff();
+                pedestal.stop();
+                return;
+            }
             RitualEffects.sustain(server, pos, recipe, pedestal.elapsed, pedestal.boundPlayers);
         } else if (recipe.persistent() && pedestal.elapsed >= 60) {
             if (!recipe.matches(pedestal.offerings)) {

@@ -59,12 +59,16 @@ public class ArgentNeedleItem extends Item {
                                 effect.shouldShowIcon()),
                         user);
         }
-        needle.remove(DataComponentTypes.POTION_CONTENTS);
         InteractionEffects.atHand(user, false);
         InteractionEffects.atHand(target, true);
-        needle.damage(
-                1, user, hand == Hand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+        if (poppet.getDamage() + 1 >= poppet.getMaxDamage()) {
+            ItemStack gem = SpiritBinding.socket(poppet);
+            SpiritBinding.socket(poppet, ItemStack.EMPTY);
+            user.getInventory().offerOrDrop(gem);
+        }
+        poppet.damage(1, user, hand == Hand.MAIN_HAND ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND);
         user.getItemCooldownManager().set(needle, 20);
+        needle.decrement(1);
         user.sendMessage(
                 Text.translatable("message.spiritum.voodoo_applied", target.getName()), true);
         return ActionResult.SUCCESS;

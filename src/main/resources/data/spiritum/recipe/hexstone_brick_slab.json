@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "HHH"
+  ],
+  "key": {
+    "H": "spiritum:hexstone_bricks"
+  },
+  "result": {
+    "id": "spiritum:hexstone_brick_slab",
+    "count": 6
+  }
+}
