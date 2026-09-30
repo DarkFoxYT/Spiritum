@@ -7,7 +7,12 @@ import java.util.*;
 public record OfferingRecipe(
         String id, int candles, boolean persistent, Map<Item, Integer> ingredients, Item output) {
     public ItemStack outputStack() {
-        return output == null ? ItemStack.EMPTY : new ItemStack(output, id.equals("calx_of_hades") ? 3 : 1);
+        int count = switch (id) {
+            case "calx_of_hades" -> 3;
+            case "living_flesh" -> 2;
+            default -> 1;
+        };
+        return output == null ? ItemStack.EMPTY : new ItemStack(output, count);
     }
     public static Map<Item, Integer> ingredients(Object... pairs) {
         Map<Item, Integer> result = new LinkedHashMap<>();

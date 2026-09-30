@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
+    " C ",
     "C C",
-    "C C",
-    " C "
+    "CCC"
   ],
   "key": {
     "C": "spiritum:calx_of_hades"

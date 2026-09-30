@@ -114,15 +114,6 @@ public final class MagicRecipes {
                             Items.REDSTONE,
                             3),
                     alchemy(
-                            "hexblade",
-                            ModContent.HEXBLADE,
-                            ModContent.ARGENT_INGOT,
-                            3,
-                            Items.STICK,
-                            1,
-                            ModContent.HEX_ASH,
-                            1),
-                    alchemy(
                             "calx_of_hades",
                             ModContent.CALX_OF_HADES,
                             ModContent.LIVING_FLESH,

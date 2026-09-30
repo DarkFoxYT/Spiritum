@@ -2,16 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "AA",
-    "HH",
-    "HH"
+    " A ",
+    " A ",
+    "HSA"
   ],
   "key": {
     "A": "spiritum:argent_ingot",
-    "H": "spiritum:hexstone"
+    "S": "minecraft:stick",
+    "H": "spiritum:hex_ash"
   },
   "result": {
-    "id": "spiritum:ritual_pedestal",
+    "id": "spiritum:hexblade",
     "count": 1
   }
 }
