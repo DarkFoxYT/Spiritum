@@ -30,7 +30,7 @@ public record MagicRecipeView(OfferingRecipe recipe, boolean alchemy) {
     }
 
     public ItemStack output() {
-        if (alchemy) return new ItemStack(recipe.output());
+        if (alchemy) return recipe.outputStack();
         return recipe.id().equals("argentic_transmutation")
                 ? new ItemStack(ModContent.ARGENT_NUGGET)
                 : ItemStack.EMPTY;

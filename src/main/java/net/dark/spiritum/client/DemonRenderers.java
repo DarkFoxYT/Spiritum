@@ -6,6 +6,9 @@ import net.dark.spiritum.registry.ModEntities;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.render.entity.*;
 import net.minecraft.client.render.entity.feature.HeldItemFeatureRenderer;
+import net.minecraft.client.render.entity.feature.EyesFeatureRenderer;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.state.ArmedEntityRenderState;
 import net.minecraft.item.ItemDisplayContext;
@@ -51,6 +54,15 @@ public final class DemonRenderers {
                 boolean carriesItems) {
             super(context, new DemonModel(context.getPart(layer), kind), .25f);
             texture = Identifier.of("spiritum", "textures/entity/" + kind + "_demon.png");
+            DemonModel eyes = new DemonModel(context.getPart(layer), kind);
+            eyes.showOnlyEyes();
+            addFeature(new EyesFeatureRenderer<State, DemonModel>(this) {
+                @Override
+                public DemonModel getContextModel() { return eyes; }
+
+                @Override
+                public RenderLayer getEyesTexture() { return RenderLayers.eyes(texture); }
+            });
             if (carriesItems) addFeature(new HeldItemFeatureRenderer<>(this));
         }
 

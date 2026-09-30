@@ -134,7 +134,7 @@ public class VatBlockEntity extends OfferingBlockEntity {
                                 pos.getX() + .5,
                                 pos.getY() + .65,
                                 pos.getZ() + .5,
-                                new ItemStack(recipe.output()));
+                                recipe.outputStack());
                 result.setVelocity(0, .16, 0);
                 world.spawnEntity(result);
                 if (recipe.id().equals("slimeball"))

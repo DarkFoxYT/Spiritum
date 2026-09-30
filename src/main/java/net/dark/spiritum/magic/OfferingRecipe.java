@@ -6,6 +6,9 @@ import java.util.*;
 
 public record OfferingRecipe(
         String id, int candles, boolean persistent, Map<Item, Integer> ingredients, Item output) {
+    public ItemStack outputStack() {
+        return output == null ? ItemStack.EMPTY : new ItemStack(output, id.equals("calx_of_hades") ? 3 : 1);
+    }
     public static Map<Item, Integer> ingredients(Object... pairs) {
         Map<Item, Integer> result = new LinkedHashMap<>();
         for (int i = 0; i < pairs.length; i += 2)

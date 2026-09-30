@@ -39,6 +39,12 @@ public final class DemonModel extends EntityModel<State> implements ModelWithArm
         if (animations.containsKey("eyes")) animations.get("eyes").apply(time, 1);
     }
 
+    public void showOnlyEyes() {
+        root.traverse().forEach(part -> part.hidden = true);
+        ModelPart eyes = root.createPartGetter().apply("eyes");
+        if (eyes != null) eyes.traverse().forEach(part -> part.hidden = false);
+    }
+
     @Override
     public void setArmAngle(State state, Arm arm, MatrixStack matrices) {
         root.applyTransform(matrices);
