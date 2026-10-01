@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "sss",
+    "sas",
+    "sss"
+  ],
+  "key": {
+    "S": "minecraft:stone",
+    "a": "spiritum:argent_nugget"
+  },
+  "result": {
+    "id": "spiritum:hexstone",
+    "count": 8
+  }
+}

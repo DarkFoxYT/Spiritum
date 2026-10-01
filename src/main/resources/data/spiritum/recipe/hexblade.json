@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    " A ",
-    " A ",
-    "HSA"
+    "  A",
+    "AH ",
+    "SA "
   ],
   "key": {
     "A": "spiritum:argent_ingot",

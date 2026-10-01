@@ -112,17 +112,6 @@ public class CandleBlockEntity extends BlockEntity {
                     .03,
                     .025,
                     0);
-        if (flame == 5 && world.getTime() % 10 == 0)
-            server.spawnParticles(
-                    ParticleTypes.END_ROD,
-                    pos.getX() + .5,
-                    pos.getY() + 1.12,
-                    pos.getZ() + .5,
-                    1,
-                    .06,
-                    .1,
-                    .06,
-                    .01);
         if (world.getTime() % 40 == 0 && (flame == 1 || flame == 2)) {
             Vec3d center = Vec3d.ofCenter(pos);
             for (LivingEntity entity :
