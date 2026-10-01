@@ -1,0 +1,17 @@
+{
+  "type": "spiritum:alchemy",
+  "ingredients": [
+    {
+      "item": "spiritum:living_flesh",
+      "count": 2
+    },
+    {
+      "item": "spiritum:hex_ash",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "spiritum:calx_of_hades",
+    "count": 3
+  }
+}

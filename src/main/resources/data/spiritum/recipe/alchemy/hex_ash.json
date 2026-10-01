@@ -1,0 +1,21 @@
+{
+  "type": "spiritum:alchemy",
+  "ingredients": [
+    {
+      "item": "spiritum:spirit_fragment",
+      "count": 3
+    },
+    {
+      "item": "spiritum:hexstone",
+      "count": 2
+    },
+    {
+      "item": "minecraft:redstone",
+      "count": 3
+    }
+  ],
+  "result": {
+    "id": "spiritum:hex_ash",
+    "count": 1
+  }
+}

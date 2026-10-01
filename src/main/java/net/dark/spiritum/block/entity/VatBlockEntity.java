@@ -3,6 +3,7 @@ package net.dark.spiritum.block.entity;
 import net.dark.spiritum.block.AlchemyVatBlock;
 import net.dark.spiritum.magic.*;
 import net.dark.spiritum.registry.ModContent;
+import net.dark.spiritum.recipe.AlchemyRecipe;
 import net.minecraft.block.*;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.*;
@@ -112,17 +113,20 @@ public class VatBlockEntity extends OfferingBlockEntity {
                         pos.getX() + .88,
                         pos.getY() + 1.25,
                         pos.getZ() + .88);
+        var recipes = server.getRecipeManager().getAllOfType(AlchemyRecipe.TYPE);
         for (ItemEntity entity :
                 world.getEntitiesByClass(
                         ItemEntity.class, opening, e -> e.isAlive() && !e.getStack().isEmpty())) {
             // Accept only ingredients of at least one known recipe; accidental tools are safe.
             ItemStack stack = entity.getStack();
-            if (MagicRecipes.ALCHEMY.stream()
-                    .noneMatch(r -> r.ingredients().containsKey(stack.getItem()))) continue;
+            if (recipes.stream()
+                    .noneMatch(r -> r.value().inputs().stream()
+                            .anyMatch(input -> stack.isOf(input.item())))) continue;
             vat.add(stack.copy());
             entity.discard();
         }
-        for (OfferingRecipe recipe : MagicRecipes.ALCHEMY)
+        for (var entry : recipes) {
+            OfferingRecipe recipe = entry.value().offering(entry.id().getValue().toString());
             if (recipe.matches(vat.offerings)) {
                 recipe.consume(vat.offerings);
                 InteractionEffects.magic(world, Vec3d.ofCenter(pos).add(0, .5, 0), true);
@@ -137,14 +141,14 @@ public class VatBlockEntity extends OfferingBlockEntity {
                                 recipe.outputStack());
                 result.setVelocity(0, .16, 0);
                 world.spawnEntity(result);
-                if (recipe.id().equals("slimeball"))
+                for (ItemStack byproduct : entry.value().byproducts())
                     world.spawnEntity(
                             new ItemEntity(
                                     world,
                                     pos.getX() + .5,
                                     pos.getY() + 1,
                                     pos.getZ() + .5,
-                                    new ItemStack(Items.GLASS_BOTTLE)));
+                                    byproduct.copy()));
                 server.spawnParticles(
                         ParticleTypes.ENCHANT,
                         pos.getX() + .5,
@@ -164,6 +168,7 @@ public class VatBlockEntity extends OfferingBlockEntity {
                         1);
                 return;
             }
+        }
         if (--vat.boilTicks <= 0) {
             InteractionEffects.snuff(world, pos);
             vat.empty();

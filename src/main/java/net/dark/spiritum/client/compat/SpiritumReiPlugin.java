@@ -59,7 +59,8 @@ public final class SpiritumReiPlugin implements REIClientPlugin {
         @Override
         public Optional<Identifier> getDisplayLocation() {
             return Optional.of(
-                    ModContent.id((view.alchemy() ? "alchemy/" : "ritual/") + view.recipe().id()));
+                    view.alchemy() ? Identifier.of(view.recipe().id())
+                            : ModContent.id("ritual/" + view.recipe().id()));
         }
 
         @Override

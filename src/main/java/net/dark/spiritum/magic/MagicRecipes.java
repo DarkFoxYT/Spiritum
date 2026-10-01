@@ -10,11 +10,7 @@ import java.util.List;
 public final class MagicRecipes {
     private static OfferingRecipe rite(
             String id, int candles, boolean persistent, Object... items) {
-        return new OfferingRecipe(id, candles, persistent, ingredients(items), null);
-    }
-
-    private static OfferingRecipe alchemy(String id, Item output, Object... items) {
-        return new OfferingRecipe(id, 0, false, ingredients(items), output);
+        return new OfferingRecipe(id, candles, persistent, ingredients(items), ItemStack.EMPTY);
     }
 
     public static final List<OfferingRecipe> RITUALS =
@@ -80,49 +76,6 @@ public final class MagicRecipes {
                             2),
                     rite("calling", 3, false, Items.ENDER_PEARL, 2, ModContent.HEX_ASH, 2),
                     rite("withering", 2, true, Items.WITHER_ROSE, 2, Items.SOUL_SAND, 4));
-    public static final List<OfferingRecipe> ALCHEMY =
-            List.of(
-                    alchemy(
-                            "gunpowder",
-                            Items.GUNPOWDER,
-                            Items.REDSTONE,
-                            1,
-                            Items.GLOWSTONE_DUST,
-                            1,
-                            Items.CHARCOAL,
-                            1),
-                    alchemy("slimeball", Items.SLIME_BALL, Items.BONE, 2, Items.HONEY_BOTTLE, 1),
-                    alchemy(
-                            "spirit_gem",
-                            ModContent.SPIRIT_GEM,
-                            ModContent.SPIRIT_FRAGMENT,
-                            8,
-                            Items.GLOWSTONE,
-                            1),
-                    alchemy(
-                            "living_flesh",
-                            ModContent.LIVING_FLESH,
-                            ModContent.SPIRIT_GEM,
-                            1,
-                            Items.ROTTEN_FLESH,
-                            4),
-                    alchemy(
-                            "hex_ash",
-                            ModContent.HEX_ASH,
-                            ModContent.SPIRIT_FRAGMENT,
-                            3,
-                            ModContent.HEXSTONE.asItem(),
-                            2,
-                            Items.REDSTONE,
-                            3),
-                    alchemy(
-                            "calx_of_hades",
-                            ModContent.CALX_OF_HADES,
-                            ModContent.LIVING_FLESH,
-                            2,
-                            ModContent.HEX_ASH,
-                            2));
-
     public static OfferingRecipe ritual(String id) {
         return RITUALS.stream().filter(r -> r.id().equals(id)).findFirst().orElse(null);
     }

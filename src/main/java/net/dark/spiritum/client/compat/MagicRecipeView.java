@@ -2,6 +2,8 @@ package net.dark.spiritum.client.compat;
 
 import net.dark.spiritum.magic.*;
 import net.dark.spiritum.registry.ModContent;
+import net.dark.spiritum.recipe.AlchemyRecipe;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.*;
 import net.minecraft.text.Text;
@@ -69,6 +71,10 @@ public record MagicRecipeView(OfferingRecipe recipe, boolean alchemy) {
     }
 
     public static List<MagicRecipeView> alchemyRecipes() {
-        return MagicRecipes.ALCHEMY.stream().map(r -> new MagicRecipeView(r, true)).toList();
+        var world = MinecraftClient.getInstance().world;
+        if (world == null) return List.of();
+        return world.getRecipeManager().getSynchronizedRecipes().getAllOfType(AlchemyRecipe.TYPE)
+                .stream().map(entry -> new MagicRecipeView(
+                        entry.value().offering(entry.id().getValue().toString()), true)).toList();
     }
 }

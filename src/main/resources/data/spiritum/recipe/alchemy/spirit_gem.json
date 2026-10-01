@@ -1,0 +1,17 @@
+{
+  "type": "spiritum:alchemy",
+  "ingredients": [
+    {
+      "item": "spiritum:spirit_fragment",
+      "count": 8
+    },
+    {
+      "item": "minecraft:glowstone",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "spiritum:spirit_gem",
+    "count": 1
+  }
+}

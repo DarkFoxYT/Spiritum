@@ -1,0 +1,23 @@
+{
+  "type": "spiritum:alchemy",
+  "ingredients": [
+    {
+      "item": "minecraft:bone",
+      "count": 2
+    },
+    {
+      "item": "minecraft:honey_bottle",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "minecraft:slime_ball",
+    "count": 1
+  },
+  "byproducts": [
+    {
+      "count": 1,
+      "id": "minecraft:glass_bottle"
+    }
+  ]
+}

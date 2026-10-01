@@ -1,0 +1,21 @@
+{
+  "type": "spiritum:alchemy",
+  "ingredients": [
+    {
+      "item": "minecraft:redstone",
+      "count": 1
+    },
+    {
+      "item": "minecraft:glowstone_dust",
+      "count": 1
+    },
+    {
+      "item": "minecraft:charcoal",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "minecraft:gunpowder",
+    "count": 1
+  }
+}

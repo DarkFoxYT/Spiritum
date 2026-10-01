@@ -18,6 +18,7 @@ public class Spiritum implements ModInitializer {
     @Override
     public void onInitialize() {
         ModContent.initialize();
+        net.dark.spiritum.recipe.AlchemyRecipe.initialize();
         ModEntities.initialize();
         ModParticles.initialize();
         SpiritumWorld.initialize();

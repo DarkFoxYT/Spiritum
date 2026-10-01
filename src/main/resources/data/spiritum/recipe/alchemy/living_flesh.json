@@ -1,0 +1,17 @@
+{
+  "type": "spiritum:alchemy",
+  "ingredients": [
+    {
+      "item": "spiritum:spirit_gem",
+      "count": 1
+    },
+    {
+      "item": "minecraft:rotten_flesh",
+      "count": 4
+    }
+  ],
+  "result": {
+    "id": "spiritum:living_flesh",
+    "count": 2
+  }
+}

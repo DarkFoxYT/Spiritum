@@ -35,9 +35,9 @@ public final class RitualEffects {
             case "clear_skies" -> overworld.setWeather(12000, 0, false, false);
             case "thunder" -> overworld.setWeather(0, 12000, true, true);
             case "daytime" ->
-                    overworld.setTimeOfDay(overworld.getTimeOfDay() / 24000 * 24000 + 6000);
+                    setTimeWithinCurrentDay(overworld, 6000);
             case "nighttime" ->
-                    overworld.setTimeOfDay(overworld.getTimeOfDay() / 24000 * 24000 + 18000);
+                    setTimeWithinCurrentDay(overworld, 18000);
             case "zombie_summoning" ->
                     EntityType.ZOMBIE.spawn(world, pos.up(), SpawnReason.TRIGGERED);
             case "skeleton_summoning" ->
@@ -220,6 +220,11 @@ public final class RitualEffects {
 
     public static boolean isHighRitual(String id) {
         return id.endsWith("_binding") || id.equals("calling") || id.equals("withering");
+    }
+
+    private static void setTimeWithinCurrentDay(ServerWorld world, long time) {
+        long current = world.getTimeOfDay();
+        world.setTimeOfDay(current - Math.floorMod(current, 24000L) + time);
     }
 
     private RitualEffects() {}

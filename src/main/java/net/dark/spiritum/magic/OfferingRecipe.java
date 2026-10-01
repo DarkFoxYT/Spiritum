@@ -5,14 +5,13 @@ import net.minecraft.item.*;
 import java.util.*;
 
 public record OfferingRecipe(
-        String id, int candles, boolean persistent, Map<Item, Integer> ingredients, Item output) {
+        String id, int candles, boolean persistent, Map<Item, Integer> ingredients, ItemStack result) {
+    public Item output() {
+        return result.getItem();
+    }
+
     public ItemStack outputStack() {
-        int count = switch (id) {
-            case "calx_of_hades" -> 3;
-            case "living_flesh" -> 2;
-            default -> 1;
-        };
-        return output == null ? ItemStack.EMPTY : new ItemStack(output, count);
+        return result.copy();
     }
     public static Map<Item, Integer> ingredients(Object... pairs) {
         Map<Item, Integer> result = new LinkedHashMap<>();
