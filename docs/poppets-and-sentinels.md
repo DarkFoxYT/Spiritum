@@ -32,7 +32,10 @@ they're attacked. Without bound candles, no player is protected.
 
 Awakened sentinels pursue the attacker, slash for 12 damage with knockback at close
 range, and thrust forward for 10 damage at medium range. Stopping the rite, leaving
-its range, or losing the target returns them to dormancy. Overlapping rites protect
+its range, or losing the target makes them walk back to their placement position
+and restore their original facing before becoming dormant. Sneak-right-click a
+sentinel to pick it up. Placement position and facing persist across saves.
+Overlapping rites protect
 all their bound players against the sentinel. Server PvP settings still apply.
 
 The Sentinel uses the supplied Blockbench model, texture and guard, aggro, walk,

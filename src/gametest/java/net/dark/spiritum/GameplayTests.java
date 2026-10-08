@@ -441,9 +441,39 @@ public class GameplayTests {
         test.runAtTick(
                 108,
                 () -> {
-                    test.assertFalse(sentinel.isAwake(), "Removing rite makes sentinel dormant");
+                    test.assertEquals(0, sentinel.attackPose(), "Removing rite ends attacks");
                     test.assertTrue(
                             sentinel.getTarget() == null, "Removing rite clears aggression");
+                    test.getWorld().getServer().getPlayerManager().remove(player);
+                    test.complete();
+                });
+    }
+
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 100)
+    public void sentinelReturnsToPlacementAndCanBePickedUp(TestContext test) {
+        floor(test);
+        var player = player(test);
+        var sentinel = test.spawnEntity(ModEntities.SENTINEL, new Vec3d(3, 1, 3));
+        Vec3d home = sentinel.getEntityPos();
+        sentinel.setHome(home, 90);
+        sentinel.refreshPositionAndAngles(home.x + 2, home.y, home.z, -90, 0);
+        test.runAtTick(
+                80,
+                () -> {
+                    test.assertTrue(
+                            sentinel.getEntityPos().squaredDistanceTo(home) <= .04,
+                            "Sentinel walks back to its placement position: "
+                                    + sentinel.getEntityPos().subtract(home));
+                    test.assertFalse(sentinel.isAwake(), "Returned sentinel becomes dormant");
+                    test.assertTrue(
+                            Math.abs(MathHelper.wrapDegrees(sentinel.getYaw() - 90)) < 1,
+                            "Sentinel restores its placement facing");
+                    player.setSneaking(true);
+                    sentinel.interact(player, Hand.MAIN_HAND);
+                    test.assertTrue(sentinel.isRemoved(), "Sneak use picks up sentinel");
+                    test.assertTrue(
+                            player.getInventory().contains(new ItemStack(ModContent.SENTINEL)),
+                            "Pickup returns the sentinel item");
                     test.getWorld().getServer().getPlayerManager().remove(player);
                     test.complete();
                 });

@@ -23,6 +23,7 @@ public class SentinelItem extends Item {
                 pos.getZ() + .5,
                 context.getPlayer() == null ? 0 : context.getPlayer().getYaw(),
                 0);
+        sentinel.setHome(sentinel.getEntityPos(), sentinel.getYaw());
         if (!world.isSpaceEmpty(sentinel, sentinel.getBoundingBox())
                 || !world.spawnEntity(sentinel)) return ActionResult.FAIL;
         if (context.getPlayer() == null || !context.getPlayer().isCreative())
