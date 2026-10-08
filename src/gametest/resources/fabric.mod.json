@@ -8,7 +8,7 @@
     "fabric-gametest": [
       "net.dark.spiritum.GameplayTests",
       "net.dark.spiritum.AnimationTests",
-      "net.dark.spiritum.ItemUseTests"
+      "net.dark.spiritum.ItemUseTests", "net.dark.spiritum.CandleHarvestTests"
     ],
     "fabric-client-gametest": [
       "net.dark.spiritum.client.AssetClientTests"

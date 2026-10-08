@@ -17,6 +17,43 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.GameMode;
 
 public class GameplayTests {
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 130)
+    public void attachedLeechDoesNotPushItsHost(TestContext test) {
+        floor(test);
+        var owner = player(test);
+        var host = test.spawnMob(EntityType.COW, new Vec3d(3, 1, 3));
+        host.setAiDisabled(true);
+        host.setNoGravity(true);
+        var leech = test.spawnEntity(ModEntities.LEECH, new Vec3d(3.1, 1.5, 3));
+        leech.setAiDisabled(true);
+        leech.setOwnerUuid(owner.getUuid());
+        leech.setTarget(host);
+        Vec3d original = host.getEntityPos();
+        test.runAtTick(
+                10,
+                () -> {
+                    test.assertTrue(leech.isLatched(), "Leech attaches to its selected host");
+                    test.assertTrue(
+                            host.getEntityPos().squaredDistanceTo(original) < .000001,
+                            "Attaching does not displace the host");
+                });
+        test.runAtTick(
+                110,
+                () -> {
+                    test.assertTrue(leech.isLatched(), "Leech remains attached while draining");
+                    test.assertTrue(
+                            host.getEntityPos().squaredDistanceTo(original) < .000001,
+                            "An attached leech does not push its host over time");
+                    test.assertTrue(
+                            host.getVelocity().horizontalLengthSquared() < .000001,
+                            "Leech collision does not impart velocity to its host");
+                    test.assertEquals(
+                            8f, host.getHealth(), "Attached leech still drains two health");
+                    test.getWorld().getServer().getPlayerManager().remove(owner);
+                    test.complete();
+                });
+    }
+
     private PedestalBlockEntity ritual(
             TestContext test, ServerPlayerEntity player, String id, int ordinary, int flame) {
         floor(test);

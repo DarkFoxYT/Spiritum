@@ -30,6 +30,19 @@ public class LeechDemonEntity extends OwnedDemonEntity {
     }
 
     @Override
+    public boolean isPushable() {
+        return false;
+    }
+
+    @Override
+    public void pushAwayFrom(Entity entity) {}
+
+    @Override
+    protected void pushAway(Entity entity) {
+        // LivingEntity otherwise asks the other entity to push both apart.
+    }
+
+    @Override
     protected void initDataTracker(DataTracker.Builder builder) {
         super.initDataTracker(builder);
         builder.add(LATCHED, false);

@@ -28,21 +28,24 @@ public final class CandleHarvest {
                     }
                     if (!(entity instanceof MobEntity) && !hexblade) return;
                     boolean nearby = false;
+                    boolean gemCandle = false;
                     for (BlockPos pos :
                             BlockPos.iterate(
                                     entity.getBlockPos().add(-5, -5, -5),
                                     entity.getBlockPos().add(5, 5, 5))) {
                         if (Vec3d.ofCenter(pos).squaredDistanceTo(entity.getEntityPos()) <= 25
-                                && world.getBlockEntity(pos) instanceof CandleBlockEntity candle
-                                && candle.flame() == 3) {
-                            nearby = true;
-                            break;
+                                && world.getBlockEntity(pos) instanceof CandleBlockEntity candle) {
+                            if (candle.flame() == 5) {
+                                gemCandle = true;
+                                break;
+                            }
+                            if (candle.flame() == 3) nearby = true;
                         }
                     }
-                    if (!nearby && !hexblade) return;
-                    // One roll per death: 2% two fragments, 20% one fragment, 78% nothing.
+                    if (!gemCandle && !nearby && !hexblade) return;
+                    // Gem candles guarantee a fragment; every harvest keeps the 2% double drop.
                     int roll = world.random.nextInt(100);
-                    int count = roll < 2 ? 2 : roll < 22 ? 1 : 0;
+                    int count = roll < 2 ? 2 : gemCandle || roll < 22 ? 1 : 0;
                     if (count > 0)
                         world.spawnEntity(
                                 new ItemEntity(
