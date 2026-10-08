@@ -100,22 +100,22 @@ public class GameplayTests {
                 });
     }
 
-    @GameTest(maxTicks = 150)
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 150)
     public void leechBindingReturnsGem(TestContext test) {
         binding(test, "leech_binding", LeechDemonEntity.class);
     }
 
-    @GameTest(maxTicks = 150)
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 150)
     public void impBindingReturnsGem(TestContext test) {
         binding(test, "imp_binding", ImpDemonEntity.class);
     }
 
-    @GameTest(maxTicks = 150)
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 150)
     public void lemureBindingReturnsGem(TestContext test) {
         binding(test, "lemure_binding", LemureDemonEntity.class);
     }
 
-    @GameTest(maxTicks = 140)
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 140)
     public void callingCompletesAfterPlayerMoves(TestContext test) {
         var player = player(test);
         var pedestal = ritual(test, player, "calling", 2, 4);
@@ -140,7 +140,7 @@ public class GameplayTests {
                 });
     }
 
-    @GameTest(maxTicks = 140)
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 140)
     public void dominionRequiresGemCandlesAndProtectsStorage(TestContext test) {
         var bound = player(test);
         var pedestal = ritual(test, bound, "dominion", 4, 4);
@@ -237,7 +237,7 @@ public class GameplayTests {
                 });
     }
 
-    @GameTest(maxTicks = 125)
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 125)
     public void sentinelThrustLaunchesAndDealsTenDamage(TestContext test) {
         var player = player(test);
         ritual(test, player, "vigilance", 4, 4);
@@ -296,7 +296,7 @@ public class GameplayTests {
             for (int z = 0; z < 8; z++) test.setBlockState(x, 0, z, Blocks.STONE);
     }
 
-    @GameTest(maxTicks = 110)
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 110)
     public void thrownPoppetHitsWallWithCappedDamage(TestContext test) {
         floor(test);
         var player = player(test);
@@ -326,7 +326,7 @@ public class GameplayTests {
                 });
     }
 
-    @GameTest(maxTicks = 110)
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 110)
     public void groundedPoppetSupportsNeedleAndPickup(TestContext test) {
         floor(test);
         var player = player(test);
@@ -362,7 +362,7 @@ public class GameplayTests {
                 });
     }
 
-    @GameTest(maxTicks = 30)
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 30)
     public void dormantSentinelDoesNotRetaliate(TestContext test) {
         floor(test);
         var sentinel = test.spawnEntity(ModEntities.SENTINEL, new Vec3d(3, 1, 3));
@@ -385,7 +385,7 @@ public class GameplayTests {
                 });
     }
 
-    @GameTest(maxTicks = 150)
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 150)
     public void vigilanceAcceptsFourBindingsAndRevokesCombat(TestContext test) {
         floor(test);
         var player = player(test);

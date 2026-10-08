@@ -44,7 +44,7 @@ public class PedestalRenderer
         state.rotation =
                 pedestal.getWorld() == null
                         ? 0
-                        : (pedestal.getWorld().getTime() + tickProgress) * 2;
+                        : AnimationAngles.pedestal(pedestal.getWorld().getTime(), tickProgress);
         state.items.clear();
         // Keep every stack in storage; display up to 16 representatives to bound rendering costs.
         int count = Math.min(16, pedestal.getOfferings().size());

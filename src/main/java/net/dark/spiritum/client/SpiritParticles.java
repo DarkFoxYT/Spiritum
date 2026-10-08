@@ -140,7 +140,7 @@ public final class SpiritParticles {
             velocityY = sigil ? 0 : .012;
             collidesWithWorld = false;
             alpha = 1;
-            zRotation = sigil ? world.getTime() * .008f : 0;
+            zRotation = sigil ? AnimationAngles.sigil(world.getTime()) : 0;
             lastZRotation = zRotation;
         }
 
