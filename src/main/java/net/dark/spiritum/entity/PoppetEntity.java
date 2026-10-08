@@ -1,5 +1,6 @@
 package net.dark.spiritum.entity;
 
+import net.dark.spiritum.entity.poppet.PoppetModelDefinition;
 import net.dark.spiritum.entity.poppet.RigidBodyPiece;
 import net.dark.spiritum.item.*;
 import net.dark.spiritum.magic.RingMagic;
@@ -39,23 +40,6 @@ public class PoppetEntity extends Entity {
         }
     }
 
-    // Torso, head, arms, legs. Dimensions are in blocks, with Y pointing upwards.
-    private static final Vec3d[] REST = {
-        Vec3d.ZERO,
-        new Vec3d(0, .23, 0),
-        new Vec3d(-.2, 0, 0),
-        new Vec3d(.2, 0, 0),
-        new Vec3d(-.08, -.3, 0),
-        new Vec3d(.08, -.3, 0)
-    };
-    private static final Vec3d[] HALF = {
-        new Vec3d(.12, .15, .07),
-        new Vec3d(.1, .08, .08),
-        new Vec3d(.06, .14, .06),
-        new Vec3d(.06, .14, .06),
-        new Vec3d(.055, .15, .06),
-        new Vec3d(.055, .15, .06)
-    };
     private final RigidBodyPiece[] pieces = new RigidBodyPiece[6];
     private UUID thrower;
     private int impactCooldown;
@@ -68,8 +52,14 @@ public class PoppetEntity extends Entity {
     protected void initDataTracker(DataTracker.Builder builder) {
         builder.add(STACK, ItemStack.EMPTY);
         for (int i = 0; i < 6; i++) {
-            builder.add(POSITIONS.get(i), new Vector3f());
-            builder.add(ROTATIONS.get(i), new Quaternionf());
+            var part = PoppetModelDefinition.PARTS.get(i);
+            builder.add(
+                    POSITIONS.get(i),
+                    new Vector3f(
+                            (float) part.offset().x,
+                            (float) part.offset().y,
+                            (float) part.offset().z));
+            builder.add(ROTATIONS.get(i), new Quaternionf().rotationZ(part.restRoll()));
         }
     }
 
@@ -94,21 +84,27 @@ public class PoppetEntity extends Entity {
 
     private void initializeBodies(Vec3d velocity) {
         for (int i = 0; i < 6; i++) {
+            var part = PoppetModelDefinition.PARTS.get(i);
             pieces[i] =
                     new RigidBodyPiece(
-                            getEntityPos().add(REST[i]),
+                            getEntityPos().add(part.offset()),
                             velocity,
-                            HALF[i],
+                            part.half(),
                             i == 0 ? .8 : .2,
                             new Vec3d(.12, .03 * (i - 2), .08 * (i % 2 == 0 ? 1 : -1)));
+            pieces[i].orientation.rotationZ(part.restRoll());
             if (i > 0) {
-                pieces[i].parentAnchor =
-                        i == 1
-                                ? new Vec3d(0, .15, 0)
-                                : i < 4
-                                        ? new Vec3d(REST[i].x < 0 ? -.12 : .12, .1, 0)
-                                        : new Vec3d(REST[i].x, -.15, 0);
-                pieces[i].childAnchor = pieces[i].parentAnchor.subtract(REST[i]);
+                pieces[i].parentAnchor = part.joint();
+                Vec3d anchor = part.joint().subtract(part.offset());
+                Vector3f local =
+                        new Quaternionf(pieces[i].orientation)
+                                .conjugate()
+                                .transform(
+                                        new Vector3f(
+                                                (float) anchor.x,
+                                                (float) anchor.y,
+                                                (float) anchor.z));
+                pieces[i].childAnchor = new Vec3d(local.x, local.y, local.z);
             }
         }
     }
@@ -124,7 +120,7 @@ public class PoppetEntity extends Entity {
                         new RigidBodyPiece(
                                 getEntityPos().add(p.x(), p.y(), p.z()),
                                 Vec3d.ZERO,
-                                HALF[i],
+                                PoppetModelDefinition.PARTS.get(i).half(),
                                 1,
                                 Vec3d.ZERO);
                 body.orientation.set(partRotation(i));

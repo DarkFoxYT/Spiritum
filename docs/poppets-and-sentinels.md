@@ -37,6 +37,12 @@ all their bound players against the sentinel. Server PvP settings still apply.
 
 The Sentinel uses the supplied Blockbench model, texture and guard, aggro, walk,
 slash and thrust animations. Its source is in `tools/models/sentinel.bbmodel`;
-`tools/import_sentinel.py` converts it for the native renderer. The poppet retains
-its temporary model and texture. Tests: `tools/dev.ps1 -Task runGameTest`.
+`tools/import_sentinel.py` converts it for the native renderer.
+
+The poppet uses `tools/models/Poppet1.bbmodel` and its embedded texture.
+`tools/import_poppet.py` extracts the texture and shared model dimensions. Its head,
+arms and legs have separate physics bodies, joined to the torso at the model's neck,
+shoulder and hip pivots. Client rendering interpolates each body's position and rotation.
+
+Tests: `tools/dev.ps1 -Task runGameTest`.
 Build: `tools/dev.ps1 -Task build`.

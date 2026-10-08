@@ -129,6 +129,7 @@ public class AssetClientTests implements FabricClientGameTest {
                     client ->
                             client.crosshairTarget instanceof EntityHitResult hit
                                     && hit.getEntity().getId() == dollId);
+            context.takeScreenshot("poppet-ragdoll");
             context.getInput().pressKey(options -> options.useKey);
             context.waitFor(client -> client.world.getEntityById(dollId) == null);
             context.getInput().releaseKey(options -> options.sneakKey);
