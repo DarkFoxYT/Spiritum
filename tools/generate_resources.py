@@ -101,6 +101,7 @@ for name in all_blocks:
 items = {name:name for name in ('spirit_fragment','argent_nugget','spirit_gem','living_flesh','hexblade','hex_ash','calx_of_hades','argent_needle')}
 items.update({'argent_ingot':'argent','voodoo_poppet':'poppet'})
 items['bottle_of_hades']='bottle_of_hades'
+items['sentinel']='sentinel'
 items.update({name:name for name in ('summoners_ring','soulbind_ring','warding_ring')})
 for name, texture in items.items():
     asset('models/item/'+name, {'parent':'minecraft:item/handheld' if name == 'hexblade' else 'minecraft:item/generated','textures':{'layer0':'spiritum:item/'+texture}})
@@ -112,6 +113,8 @@ asset('items/soulbind_ring',{'model':{'type':'minecraft:condition','property':'m
 for image in sorted((SOURCE/'particle').glob('*.png')):
     asset('particles/'+image.stem,{'textures':['spiritum:'+image.stem]})
     write('assets/spiritum/textures/particle/'+image.name+'.mcmeta',{'texture':{'blur':True,'clamp':True}})
+for name in ('dominion_rune','dominion_rite','vigilance_rite'):
+    asset('particles/'+name,{'textures':['spiritum:'+name]})
 # Keep models ready for supplied assets whose gameplay has not been specified yet.
 for name in ('bottle_of_hades','empty_soulbind_ring','soulbind_ring','summoners_ring','warding_ring'):
     asset('models/item/'+name,{'parent':'minecraft:item/generated','textures':{'layer0':'spiritum:item/'+name}})
@@ -121,6 +124,7 @@ def shaped(name, pattern, key, output=None, count=1):
     data('recipe/'+name, {'type':'minecraft:crafting_shaped','category':'misc','pattern':pattern,'key':key,'result':{'id':output or 'spiritum:'+name,'count':count}})
 def shapeless(name, ingredients, output, count=1):
     data('recipe/'+name, {'type':'minecraft:crafting_shapeless','category':'misc','ingredients':ingredients,'result':{'id':output,'count':count}})
+shaped('hexstone',['sss','sas','sss'],{'s':'minecraft:stone','a':'spiritum:argent_nugget'},count=8)
 shaped('polished_hexstone',['HH','HH'],{'H':'spiritum:hexstone'},count=4)
 shaped('hexstone_bricks',['HH','HH'],{'H':'spiritum:polished_hexstone'},count=4)
 for base,prefix in [('hexstone','hexstone'),('polished_hexstone','polished_hexstone'),('hexstone_bricks','hexstone_brick')]:
@@ -132,6 +136,7 @@ shaped('hexed_candle',['S','H','H'],{'S':'minecraft:string','H':'spiritum:hexsto
 shaped('ritual_pedestal',['AA','HH','HH'],{'A':'spiritum:argent_ingot','H':'spiritum:hexstone'})
 shaped('alchemy_vat',['A A','A A','AAA'],{'A':'spiritum:argent_ingot'})
 shaped('voodoo_poppet',[' F ','FFF',' F '],{'F':'spiritum:living_flesh'})
+shaped('sentinel',['A A','AGA','A A'],{'A':'spiritum:argent_ingot','G':'spiritum:spirit_gem'})
 shaped('argent_needle',['N','N','N'],{'N':'spiritum:argent_nugget'})
 shaped('hexblade',[' A ',' A ','HSA'],{'A':'spiritum:argent_ingot','S':'minecraft:stick','H':'spiritum:hex_ash'})
 shaped('bottle_of_hades',[' C ','C C','CCC'],{'C':'spiritum:calx_of_hades'})
@@ -153,8 +158,9 @@ lang = {'itemGroup.spiritum':'Spiritum', 'message.spiritum.ritual_busy':'The ped
 for name in all_blocks: lang['block.spiritum.'+name] = name.replace('_',' ').title()
 for name in items: lang['item.spiritum.'+name] = name.replace('_',' ').title()
 for name in ('rain','clear_skies','thunder','daytime','nighttime','warding','libido','zombie_summoning','skeleton_summoning','abundance','argentic_transmutation'): lang['ritual.spiritum.'+name] = 'Rite of '+name.replace('_',' ').title()
-for name in ('leech_binding','imp_binding','lemure_binding','calling','withering'): lang['ritual.spiritum.'+name] = 'Rite of '+name.replace('_',' ').title()
-for name in ('leech_demon','imp_demon','lemure_demon','spirit_energy'): lang['entity.spiritum.'+name] = name.replace('_',' ').title()
+for name in ('leech_binding','imp_binding','lemure_binding','calling','withering','vigilance','dominion'): lang['ritual.spiritum.'+name] = 'Rite of '+name.replace('_',' ').title()
+for name in ('leech_demon','imp_demon','lemure_demon','spirit_energy','sentinel','poppet'): lang['entity.spiritum.'+name] = name.replace('_',' ').title()
+lang['entity.spiritum.poppet']='Voodoo Poppet'
 for name in ('leech','imp','soulbind_transfer'):
     data('damage_type/'+name,{'message_id':'spiritum.'+name,'scaling':'never','exhaustion':0.1})
     lang['death.attack.spiritum.'+name]='%1$s was consumed by a '+name+' demon'
@@ -173,16 +179,17 @@ lang.update({
     'viewer.spiritum.candles':'%s candles, fueled with fragments or gems',
     'viewer.spiritum.bound_candles':'%s ordinary + 1 player-bound candle',
     'viewer.spiritum.optional_candles':'2 ordinary + 0–4 player-bound candles',
+    'viewer.spiritum.vigilance_candles':'4 ordinary candles, plus up to 4 bound candles',
+    'viewer.spiritum.dominion_candles':'4 gem-fueled candles, plus up to 4 bound candles',
+    'viewer.spiritum.binding_return':'Returns the original bound gem upon completion.',
     'viewer.spiritum.instant':'Instant; flames are consumed in sequence.',
     'viewer.spiritum.persistent':'10-minute aura; keep its flames burning.',
-    'viewer.spiritum.calling_movement':'Moving cancels and spends the offerings.',
     'viewer.spiritum.bound_protection':'Bound players are protected.',
     'message.spiritum.bottle_captured':'Stored %s demons. Bottle: %s / %s.',
     'message.spiritum.bottle_released':'Released %s demons. %s remain in the bottle.',
     'tooltip.spiritum.bottle_of_hades':'Sneak-use in air to store your demons within 12 blocks; use on ground to release.',
     'tooltip.spiritum.bottle_contents':'Stored demons: %s / 10',
-    'message.spiritum.calling_started':'A Rite of Calling is summoning you. Remain still until it completes.',
-    'message.spiritum.calling_cancelled':'The Rite of Calling was interrupted. Its offerings are spent.',
+    'message.spiritum.calling_started':'A Rite of Calling is summoning you.',
     'message.spiritum.bound_gem_required':'This ring needs a player-bound Spirit Gem.',
     'container.spiritum.ring':'Ring',
     'message.spiritum.target_warded':'That player is protected by a Warding Ring.',
@@ -216,7 +223,8 @@ lang.update({
     'tooltip.spiritum.hex_ash':'Hexstone and spirit dust, tied to a realm beyond.',
     'tooltip.spiritum.calx_of_hades':'Otherworldly calx, an anchor for outer beings.',
     'tooltip.spiritum.hexblade':'Harvests fragments. Player kills bind its socketed gem.',
-    'tooltip.spiritum.voodoo_poppet':'Socket a bound gem; wield a needle in the other hand.',
+    'tooltip.spiritum.voodoo_poppet':'Use to throw; sneak-use the doll to pick up. Needles work held or thrown.',
+    'tooltip.spiritum.sentinel':'Place dormant argent armor. A nearby Rite of Vigilance awakens it to defend bound players.',
     'tooltip.spiritum.argent_needle':'Use with a bound poppet. Combine with a potion to coat.'
 })
 asset('lang/en_us',lang)
@@ -228,7 +236,9 @@ effects={
     'abundance':'Crops within 4 blocks grow 3× as fast.', 'argentic_transmutation':'Produces one argent nugget.',
     'leech_binding':'Summons a leech owned by the bound player.', 'imp_binding':'Summons an imp owned by the bound player.',
     'lemure_binding':'Summons a lemure owned by the bound player.', 'calling':'Teleports the online bound player here.',
-    'withering':'Wither I within 50 blocks.'}
+    'withering':'Wither I within 50 blocks.',
+    'vigilance':'Sentinels within 50 blocks defend attacked players bound by the candles.',
+    'dominion':'Unbound players mine blocks like obsidian and cannot use storage within 50 blocks.'}
 for name,effect in effects.items():lang['viewer.spiritum.effect.'+name]=effect
 asset('lang/en_us',lang)
 print('Generated JSON resources linked to supplied assets; no textures created.')

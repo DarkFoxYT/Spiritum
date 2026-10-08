@@ -83,7 +83,10 @@ public class HexedCandleBlock extends BlockWithEntity {
         if (flame == 0) return ActionResult.PASS;
         if (!world.isClient() && world.getBlockEntity(pos) instanceof CandleBlockEntity candle) {
             candle.light(flame);
-            if (flame == 5) candle.bind(SpiritBinding.player(stack).orElse(null));
+            if (flame == 5) {
+                candle.bind(SpiritBinding.player(stack).orElse(null));
+                candle.setFuelGem(stack);
+            }
             if (flame == 3)
                 stack.damage(
                         1,

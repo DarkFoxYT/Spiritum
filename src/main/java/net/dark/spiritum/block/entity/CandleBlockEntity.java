@@ -7,6 +7,7 @@ import net.dark.spiritum.registry.ModParticles;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.entity.effect.*;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
@@ -23,6 +24,10 @@ public class CandleBlockEntity extends BlockEntity {
     private int remainingTicks;
     private BlockPos ritualOwner;
     private UUID boundPlayer;
+    private ItemStack fuelGem = ItemStack.EMPTY;
+
+    public ItemStack getFuelGem() { return fuelGem.copy(); }
+    public void setFuelGem(ItemStack gem) { fuelGem = gem.copyWithCount(1); markDirty(); }
 
     public CandleBlockEntity(BlockPos pos, BlockState state) {
         super(ModContent.CANDLE_ENTITY, pos, state);
@@ -46,6 +51,7 @@ public class CandleBlockEntity extends BlockEntity {
         remainingTicks = flame == 3 ? 1200 : 0;
         ritualOwner = null;
         boundPlayer = null;
+        fuelGem = ItemStack.EMPTY;
         world.setBlockState(
                 pos, getCachedState().with(HexedCandleBlock.FLAME, flame), Block.NOTIFY_ALL);
         markDirty();
@@ -77,6 +83,7 @@ public class CandleBlockEntity extends BlockEntity {
         ritualOwner = null;
         remainingTicks = 0;
         boundPlayer = null;
+        fuelGem = ItemStack.EMPTY;
         world.playSound(null, pos, SoundEvents.BLOCK_CANDLE_EXTINGUISH, SoundCategory.BLOCKS, 1, 1);
         if (fragile) world.removeBlock(pos, false);
         else
@@ -139,6 +146,7 @@ public class CandleBlockEntity extends BlockEntity {
         remainingTicks = view.getInt("RemainingTicks", 0);
         ritualOwner = view.read("RitualOwner", BlockPos.CODEC).orElse(null);
         boundPlayer = view.read("BoundPlayer", Uuids.CODEC).orElse(null);
+        fuelGem = view.read("FuelGem", ItemStack.CODEC).orElse(ItemStack.EMPTY);
     }
 
     @Override
@@ -147,5 +155,6 @@ public class CandleBlockEntity extends BlockEntity {
         view.putInt("RemainingTicks", remainingTicks);
         view.putNullable("RitualOwner", BlockPos.CODEC, ritualOwner);
         view.putNullable("BoundPlayer", Uuids.CODEC, boundPlayer);
+        if (!fuelGem.isEmpty()) view.put("FuelGem", ItemStack.CODEC, fuelGem);
     }
 }

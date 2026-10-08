@@ -2,7 +2,7 @@
   "required": true,
   "package": "net.dark.spiritum.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": ["MobGoalsAccessor", "ItemPickupOwnerAccessor", "PlayerRingMixin", "ServerPlayerRingMixin", "PlayerRingSlotMixin", "RingDamageMixin", "CreativeRingPacketMixin"],
+  "mixins": ["MobGoalsAccessor", "ItemPickupOwnerAccessor", "PlayerRingMixin", "ServerPlayerRingMixin", "PlayerRingSlotMixin", "RingDamageMixin", "CreativeRingPacketMixin", "DominionMiningMixin", "DominionInventoryMixin"],
   "client": ["InventoryRingScreenMixin", "CreativeRingScreenMixin"],
   "injectors": {"defaultRequire": 1}
 }

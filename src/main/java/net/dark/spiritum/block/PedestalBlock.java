@@ -34,9 +34,7 @@ public class PedestalBlock extends BlockWithEntity {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
             World world, BlockState state, BlockEntityType<T> type) {
-        return world.isClient()
-                ? null
-                : validateTicker(type, ModContent.PEDESTAL_ENTITY, PedestalBlockEntity::tick);
+        return validateTicker(type, ModContent.PEDESTAL_ENTITY, PedestalBlockEntity::tick);
     }
 
     @Override

@@ -19,7 +19,7 @@ public record MagicRecipeView(OfferingRecipe recipe, boolean alchemy) {
             inputs.add(new ItemStack(ModContent.HEXED_CANDLE, recipe.candles()));
             int ordinary =
                     RitualCandles.requiresOwner(recipe) ? recipe.candles() - 1 : recipe.candles();
-            inputs.add(new ItemStack(ModContent.SPIRIT_FRAGMENT, ordinary));
+            inputs.add(new ItemStack(recipe.id().equals("dominion") ? ModContent.SPIRIT_GEM : ModContent.SPIRIT_FRAGMENT, ordinary));
             if (RitualCandles.requiresOwner(recipe)) {
                 ItemStack bound = new ItemStack(ModContent.SPIRIT_GEM);
                 bound.set(
@@ -52,6 +52,10 @@ public record MagicRecipeView(OfferingRecipe recipe, boolean alchemy) {
             notes.add(Text.translatable("viewer.spiritum.bound_candles", recipe.candles() - 1));
         else if (recipe.id().equals("withering"))
             notes.add(Text.translatable("viewer.spiritum.optional_candles"));
+        else if (recipe.id().equals("vigilance"))
+            notes.add(Text.translatable("viewer.spiritum.vigilance_candles"));
+        else if (recipe.id().equals("dominion"))
+            notes.add(Text.translatable("viewer.spiritum.dominion_candles"));
         else notes.add(Text.translatable("viewer.spiritum.candles", recipe.candles()));
         notes.add(
                 Text.translatable(
@@ -59,8 +63,8 @@ public record MagicRecipeView(OfferingRecipe recipe, boolean alchemy) {
                                 ? "viewer.spiritum.persistent"
                                 : "viewer.spiritum.instant"));
         notes.add(Text.translatable("viewer.spiritum.effect." + recipe.id()));
-        if (recipe.id().equals("calling"))
-            notes.add(Text.translatable("viewer.spiritum.calling_movement"));
+        if (recipe.id().endsWith("_binding"))
+            notes.add(Text.translatable("viewer.spiritum.binding_return"));
         else if (recipe.id().equals("withering"))
             notes.add(Text.translatable("viewer.spiritum.bound_protection"));
         return notes;

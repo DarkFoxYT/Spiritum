@@ -9,6 +9,7 @@ import java.util.*;
 public final class ModParticles {
     public static final SimpleParticleType HEXFLAME = register("hexflame_particle");
     public static final SimpleParticleType BIG_HEXFLAME = register("big_hexflame_particle");
+    public static final SimpleParticleType DOMINION_RUNE = register("dominion_rune");
     public static final Map<String, SimpleParticleType> SIGILS = new LinkedHashMap<>();
 
     static {
@@ -22,7 +23,7 @@ public final class ModParticles {
                         "abundance",
                         "binding",
                         "calling",
-                        "withering")) SIGILS.put(name, register(name + "_rite"));
+                        "withering", "dominion", "vigilance")) SIGILS.put(name, register(name + "_rite"));
     }
 
     private static SimpleParticleType register(String name) {

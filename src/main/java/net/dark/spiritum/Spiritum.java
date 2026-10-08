@@ -25,6 +25,7 @@ public class Spiritum implements ModInitializer {
         CandleHarvest.initialize();
         Warding.initialize();
         RingMagic.initialize();
+        net.dark.spiritum.magic.Dominion.initialize();
         // Sneaking with a held item normally bypasses block use; support bulk offerings explicitly.
         UseBlockCallback.EVENT.register(
                 (player, world, hand, hit) -> {

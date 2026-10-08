@@ -13,6 +13,7 @@ public final class RitualCandles {
     }
 
     public static boolean validCount(OfferingRecipe recipe, int count) {
+        if (recipe.id().equals("vigilance") || recipe.id().equals("dominion")) return count >= 4 && count <= 8;
         return recipe.id().equals("withering")
                 ? count >= 2 && count <= 6
                 : count == recipe.candles();
@@ -23,7 +24,8 @@ public final class RitualCandles {
         List<BlockPos> ordinary = new ArrayList<>(), bound = new ArrayList<>();
         for (BlockPos pos : available)
             if (world.getBlockEntity(pos) instanceof CandleBlockEntity candle
-                    && candle.availableFor(pedestal)) {
+                    && candle.availableFor(pedestal)
+                    && (!recipe.id().equals("dominion") || candle.flame() == 5)) {
                 (candle.getBoundPlayer() == null ? ordinary : bound).add(pos);
             }
         if (requiresOwner(recipe)) {
@@ -33,9 +35,10 @@ public final class RitualCandles {
             selected.add(bound.getFirst()); // The owner candle is extinguished last.
             return selected;
         }
-        if (recipe.id().equals("withering")) {
-            if (ordinary.size() < 2) return List.of();
-            List<BlockPos> selected = new ArrayList<>(ordinary.subList(0, 2));
+        if (recipe.id().equals("withering") || recipe.id().equals("vigilance") || recipe.id().equals("dominion")) {
+            int normal = recipe.candles();
+            if (ordinary.size() < normal) return List.of();
+            List<BlockPos> selected = new ArrayList<>(ordinary.subList(0, normal));
             selected.addAll(bound.subList(0, Math.min(4, bound.size())));
             return selected;
         }

@@ -5,12 +5,10 @@ import net.dark.spiritum.magic.RingMagic;
 import net.dark.spiritum.registry.ModContent;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
@@ -21,11 +19,16 @@ public class ArgentNeedleItem extends Item {
 
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand) {
-        ItemStack needle = user.getStackInHand(hand);
         ItemStack poppet =
                 user.getStackInHand(hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND);
         if (!poppet.isOf(ModContent.VOODOO_POPPET)) return ActionResult.PASS;
         if (world.isClient()) return ActionResult.SUCCESS;
+        return stab((ServerWorld)world, user, hand, poppet);
+    }
+
+    public ActionResult stab(ServerWorld world, PlayerEntity user, Hand hand, ItemStack poppet) {
+        ItemStack needle = user.getStackInHand(hand);
+        if (user.getItemCooldownManager().isCoolingDown(needle)) return ActionResult.FAIL;
         var bound = SpiritBinding.player(SpiritBinding.socket(poppet));
         var target =
                 bound.map(id -> world.getServer().getPlayerManager().getPlayer(id)).orElse(null);
@@ -61,7 +64,7 @@ public class ArgentNeedleItem extends Item {
         }
         InteractionEffects.atHand(user, false);
         InteractionEffects.atHand(target, true);
-        poppet.damage(1, user, hand == Hand.MAIN_HAND ? EquipmentSlot.OFFHAND : EquipmentSlot.MAINHAND);
+        poppet.damage(1, world, (net.minecraft.server.network.ServerPlayerEntity)user, item -> {});
         user.getItemCooldownManager().set(needle, 20);
         needle.decrement(1);
 

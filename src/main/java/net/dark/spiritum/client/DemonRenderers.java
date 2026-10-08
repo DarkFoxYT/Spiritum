@@ -28,6 +28,8 @@ public final class DemonRenderers {
     }
 
     public static void initialize() {
+        EntityRendererFactories.register(ModEntities.POPPET, PoppetRenderer::new);
+        EntityRendererFactories.register(ModEntities.SENTINEL, SentinelRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(LEECH, SuppliedDemonModels::leech);
         EntityModelLayerRegistry.registerModelLayer(IMP, SuppliedDemonModels::imp);
         EntityModelLayerRegistry.registerModelLayer(LEMURE, SuppliedDemonModels::lemure);

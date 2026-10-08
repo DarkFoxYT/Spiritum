@@ -101,6 +101,8 @@ public final class RitualEffects {
             Set<UUID> boundPlayers) {
         switch (rite.id()) {
             case "warding" -> Warding.add(world, pos);
+            case "vigilance" -> Vigilance.add(world, pos);
+            case "dominion" -> Dominion.add(world, pos);
             case "libido" -> {
                 if (elapsed % 1200 == 0) breed(world, pos);
             }
@@ -219,7 +221,7 @@ public final class RitualEffects {
     }
 
     public static boolean isHighRitual(String id) {
-        return id.endsWith("_binding") || id.equals("calling") || id.equals("withering");
+        return id.endsWith("_binding") || id.equals("calling") || id.equals("withering") || id.equals("dominion");
     }
 
     private static void setTimeWithinCurrentDay(ServerWorld world, long time) {

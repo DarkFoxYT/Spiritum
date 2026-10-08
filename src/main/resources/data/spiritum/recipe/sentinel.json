@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["A A", "AGA", "A A"],
+  "key": {"A": "spiritum:argent_ingot", "G": "spiritum:spirit_gem"},
+  "result": {"id": "spiritum:sentinel", "count": 1}
+}

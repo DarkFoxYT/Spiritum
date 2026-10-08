@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "id": "spiritum-test",
+  "version": "1.0.0",
+  "name": "Spiritum Gameplay Tests",
+  "environment": "*",
+  "entrypoints": {"fabric-gametest": ["net.dark.spiritum.GameplayTests"]}
+}
