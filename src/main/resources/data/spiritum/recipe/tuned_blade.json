@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": ["minecraft:netherite_sword", "spiritum:calx_of_hades", "spiritum:calx_of_hades", "spiritum:argent_ingot", "spiritum:argent_ingot"],
+  "result": {"id": "spiritum:tuned_blade", "count": 1}
+}

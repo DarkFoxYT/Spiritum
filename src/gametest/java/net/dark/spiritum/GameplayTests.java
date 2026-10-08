@@ -140,99 +140,50 @@ public class GameplayTests {
                 });
     }
 
-    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 140)
-    public void dominionRequiresGemCandlesAndProtectsStorage(TestContext test) {
-        var bound = player(test);
-        var pedestal = ritual(test, bound, "dominion", 4, 4);
-        var outsider = test.createMockPlayer(GameMode.SURVIVAL);
-        outsider.setPosition(test.getAbsolute(new Vec3d(5, 2, 3)));
-        test.setBlockState(6, 1, 3, Blocks.CHEST);
-        test.setBlockState(6, 1, 4, Blocks.CRAFTING_TABLE);
-        test.setBlockState(6, 1, 5, Blocks.ENDER_CHEST);
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 110)
+    public void dominionIsDisabled(TestContext test) {
+        floor(test);
+        var player = player(test);
+        test.setBlockState(3, 1, 3, ModContent.RITUAL_PEDESTAL);
+        BlockPos center = test.getAbsolutePos(new BlockPos(3, 1, 3));
+        var pedestal = (PedestalBlockEntity) test.getWorld().getBlockEntity(center);
+        int[][] positions = {{2, 2}, {2, 3}, {2, 4}, {3, 2}, {3, 4}};
+        for (int i = 0; i < positions.length; i++) {
+            int[] p = positions[i];
+            test.setBlockState(p[0], 1, p[1], ModContent.HEXED_CANDLE);
+            var candle =
+                    (CandleBlockEntity)
+                            test.getWorld()
+                                    .getBlockEntity(
+                                            test.getAbsolutePos(new BlockPos(p[0], 1, p[1])));
+            candle.light(5);
+            if (i == 4) candle.bind(player.getUuid());
+        }
+        player.setSneaking(true);
+        pedestal.insert(new ItemStack(Items.NETHER_STAR), player);
+        pedestal.insert(new ItemStack(ModContent.CALX_OF_HADES, 6), player);
+        pedestal.insert(new ItemStack(ModContent.ARGENT_INGOT, 3), player);
+        player.setSneaking(false);
         test.runAtTick(
-                15,
+                90,
                 () -> {
+                    test.assertTrue(
+                            MagicRecipes.ritual("dominion") == null,
+                            "Dominion has no available recipe");
+                    test.assertTrue(
+                            MagicRecipes.ritual("withering") != null,
+                            "Withering remains available");
                     test.assertEquals(
                             "",
                             pedestal.getActiveRitual(),
-                            "Fragments cannot substitute for Dominion's four gem candles");
-                    int[][] ordinary = {{2, 2}, {2, 3}, {2, 4}, {3, 2}};
-                    for (int[] p : ordinary)
-                        ((CandleBlockEntity)
-                                        test.getWorld()
-                                                .getBlockEntity(
-                                                        test.getAbsolutePos(
-                                                                new BlockPos(p[0], 1, p[1]))))
-                                .light(5);
-                });
-        test.runAtTick(
-                95,
-                () -> {
-                    test.assertTrue(pedestal.isSustained(), "Dominion activates with gem candles");
-                    BlockPos chest = test.getAbsolutePos(new BlockPos(6, 1, 3));
-                    BlockPos bench = test.getAbsolutePos(new BlockPos(6, 1, 4));
-                    BlockPos ender = test.getAbsolutePos(new BlockPos(6, 1, 5));
-                    var world = test.getWorld();
-                    float stone =
-                            Blocks.STONE
-                                    .getDefaultState()
-                                    .calcBlockBreakingDelta(outsider, world, chest);
-                    float obsidian =
-                            Blocks.OBSIDIAN
-                                    .getDefaultState()
-                                    .calcBlockBreakingDelta(outsider, world, chest);
-                    test.assertEquals(
-                            obsidian, stone, "Outsiders mine ordinary blocks like obsidian");
-                    test.assertTrue(
-                            Blocks.STONE
-                                            .getDefaultState()
-                                            .calcBlockBreakingDelta(bound, world, chest)
-                                    > stone,
-                            "Bound players keep ordinary mining speed");
-                    var use = net.fabricmc.fabric.api.event.player.UseBlockCallback.EVENT.invoker();
-                    test.assertEquals(
-                            ActionResult.FAIL,
-                            use.interact(
-                                    outsider,
-                                    world,
-                                    Hand.MAIN_HAND,
-                                    new net.minecraft.util.hit.BlockHitResult(
-                                            Vec3d.ofCenter(chest), Direction.WEST, chest, false)),
-                            "Chest use is blocked");
-                    test.assertEquals(
-                            ActionResult.FAIL,
-                            use.interact(
-                                    outsider,
-                                    world,
-                                    Hand.MAIN_HAND,
-                                    new net.minecraft.util.hit.BlockHitResult(
-                                            Vec3d.ofCenter(ender), Direction.WEST, ender, false)),
-                            "Ender chest use is blocked");
-                    test.assertEquals(
-                            ActionResult.PASS,
-                            use.interact(
-                                    outsider,
-                                    world,
-                                    Hand.MAIN_HAND,
-                                    new net.minecraft.util.hit.BlockHitResult(
-                                            Vec3d.ofCenter(bench), Direction.WEST, bench, false)),
-                            "Crafting tables remain usable");
-                    test.assertTrue(
-                            net.minecraft.inventory.Inventory.canPlayerUse(
-                                    world.getBlockEntity(chest), bound),
-                            "Bound player may use storage");
+                            "Former Dominion offerings cannot activate a rite");
+                    test.assertFalse(pedestal.isSustained(), "Dominion cannot sustain");
+                    Dominion.add(test.getWorld(), center);
                     test.assertFalse(
-                            net.minecraft.inventory.Inventory.canPlayerUse(
-                                    world.getBlockEntity(chest), outsider),
-                            "Existing menus are also revoked");
-                    test.assertFalse(
-                            Dominion.restricted(world, pedestal.getPos().add(51, 0, 0), outsider),
-                            "Protection ends beyond 50 blocks");
-                    test.removeBlock(new BlockPos(3, 1, 3));
-                    test.assertFalse(
-                            Dominion.restricted(world, chest, outsider),
-                            "Breaking pedestal revokes protection");
-                    test.getWorld().getServer().getPlayerManager().remove(bound);
+                            Dominion.restricted(test.getWorld(), center, player),
+                            "Old Dominion registrations cannot restrict players");
+                    Dominion.remove(test.getWorld(), center);
+                    test.getWorld().getServer().getPlayerManager().remove(player);
                     test.complete();
                 });
     }
@@ -335,6 +286,19 @@ public class GameplayTests {
         test.runAtTick(
                 85,
                 () -> {
+                    Vec3d center = doll.getBoundingBox().getCenter();
+                    Vec3d from = center.add(0, 0, 2);
+                    var hit =
+                            net.minecraft.entity.projectile.ProjectileUtil.raycast(
+                                    player,
+                                    from,
+                                    center.add(0, 0, -2),
+                                    doll.getBoundingBox().expand(2),
+                                    net.minecraft.entity.Entity::canHit,
+                                    16);
+                    test.assertTrue(
+                            hit != null && hit.getEntity() == doll,
+                            "Client interaction raycast can target the grounded poppet");
                     player.setStackInHand(Hand.MAIN_HAND, new ItemStack(ModContent.ARGENT_NEEDLE));
                     test.assertEquals(
                             ActionResult.SUCCESS,

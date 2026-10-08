@@ -76,8 +76,17 @@ public final class MagicRecipes {
                             2),
                     rite("calling", 3, false, Items.ENDER_PEARL, 2, ModContent.HEX_ASH, 2),
                     rite("withering", 2, true, Items.WITHER_ROSE, 2, Items.SOUL_SAND, 4),
-                    rite("vigilance", 4, true, ModContent.HEX_ASH, 6, Items.ECHO_SHARD, 2, ModContent.CALX_OF_HADES, 2),
-                    rite("dominion", 4, true, Items.NETHER_STAR, 1, ModContent.CALX_OF_HADES, 6, ModContent.ARGENT_INGOT, 3));
+                    rite(
+                            "vigilance",
+                            4,
+                            true,
+                            ModContent.HEX_ASH,
+                            6,
+                            Items.ECHO_SHARD,
+                            2,
+                            ModContent.CALX_OF_HADES,
+                            2));
+
     public static OfferingRecipe ritual(String id) {
         return RITUALS.stream().filter(r -> r.id().equals(id)).findFirst().orElse(null);
     }

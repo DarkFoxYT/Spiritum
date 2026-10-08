@@ -67,22 +67,29 @@ public final class ModContent {
     public static final Block HEXSTONE_STAIRS = stairs("hexstone_stairs", HEXSTONE);
     public static final Block HEXSTONE_SLAB = slab("hexstone_slab", HEXSTONE);
     public static final Block HEXSTONE_WALL = wall("hexstone_wall", HEXSTONE);
-    public static final Block POLISHED_HEXSTONE_STAIRS = stairs("polished_hexstone_stairs", POLISHED_HEXSTONE);
-    public static final Block POLISHED_HEXSTONE_SLAB = slab("polished_hexstone_slab", POLISHED_HEXSTONE);
-    public static final Block POLISHED_HEXSTONE_WALL = wall("polished_hexstone_wall", POLISHED_HEXSTONE);
-    public static final Block HEXSTONE_BRICK_STAIRS = stairs("hexstone_brick_stairs", HEXSTONE_BRICKS);
+    public static final Block POLISHED_HEXSTONE_STAIRS =
+            stairs("polished_hexstone_stairs", POLISHED_HEXSTONE);
+    public static final Block POLISHED_HEXSTONE_SLAB =
+            slab("polished_hexstone_slab", POLISHED_HEXSTONE);
+    public static final Block POLISHED_HEXSTONE_WALL =
+            wall("polished_hexstone_wall", POLISHED_HEXSTONE);
+    public static final Block HEXSTONE_BRICK_STAIRS =
+            stairs("hexstone_brick_stairs", HEXSTONE_BRICKS);
     public static final Block HEXSTONE_BRICK_SLAB = slab("hexstone_brick_slab", HEXSTONE_BRICKS);
     public static final Block HEXSTONE_BRICK_WALL = wall("hexstone_brick_wall", HEXSTONE_BRICKS);
 
     private static Block stairs(String name, Block base) {
         return block(name, new StairsBlock(base.getDefaultState(), settings(name, base)));
     }
+
     private static Block slab(String name, Block base) {
         return block(name, new SlabBlock(settings(name, base)));
     }
+
     private static Block wall(String name, Block base) {
         return block(name, new WallBlock(settings(name, base)));
     }
+
     public static final HexedCandleBlock HEXED_CANDLE =
             block(
                     "hexed_candle",
@@ -116,10 +123,16 @@ public final class ModContent {
     public static final Item CALX_OF_HADES = item("calx_of_hades");
     public static final Item VOODOO_POPPET =
             custom("voodoo_poppet", PoppetItem::new, new Item.Settings().maxDamage(6));
-    public static final Item SENTINEL = custom("sentinel", SentinelItem::new, new Item.Settings().maxCount(1));
+    public static final Item SENTINEL =
+            custom("sentinel", SentinelItem::new, new Item.Settings().maxCount(1));
     public static final Item ARGENT_NEEDLE =
             custom("argent_needle", ArgentNeedleItem::new, new Item.Settings().maxCount(1));
     public static final Item HEXBLADE = hexblade();
+    public static final Item TUNED_BLADE =
+            custom(
+                    "tuned_blade",
+                    TunedBladeItem::new,
+                    new Item.Settings().sword(ToolMaterial.NETHERITE, 3.0f, -2.4f).fireproof());
     public static final Item BOTTLE_OF_HADES =
             custom("bottle_of_hades", BottleOfHadesItem::new, new Item.Settings().maxCount(1));
     public static final Item SUMMONERS_RING =

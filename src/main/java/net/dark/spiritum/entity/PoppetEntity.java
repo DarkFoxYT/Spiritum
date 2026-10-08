@@ -286,8 +286,13 @@ public class PoppetEntity extends Entity {
     }
 
     @Override
+    public boolean canHit() {
+        return !isRemoved();
+    }
+
+    @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
-        if (player.isSpectator()) return ActionResult.PASS;
+        if (player.isSpectator() || isRemoved() || getStack().isEmpty()) return ActionResult.PASS;
         if (player.isSneaking()) {
             if (!getEntityWorld().isClient()) {
                 player.getInventory().offerOrDrop(getStack().copy());

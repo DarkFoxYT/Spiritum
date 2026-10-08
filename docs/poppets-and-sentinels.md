@@ -1,6 +1,7 @@
 # Poppets and sentinels
 
-Socket a player-bound Spirit Gem into a voodoo poppet, then use it to throw the doll.
+Socket a player-bound Spirit Gem into a voodoo poppet, then hold use to charge and release to throw the doll.
+A full charge takes one second; throw speed ranges from 0.25 to 0.9 blocks per tick.
 The bound player gets pushed in the same direction. The doll's physics are adapted
 from Asterion's ragdolls and run on the server.
 
@@ -34,6 +35,8 @@ range, and thrust forward for 10 damage at medium range. Stopping the rite, leav
 its range, or losing the target returns them to dormancy. Overlapping rites protect
 all their bound players against the sentinel. Server PvP settings still apply.
 
-Both entities use temporary models and textures. To regenerate the textures, run
-`tools/generate_temp_assets.ps1`. Tests: `tools/dev.ps1 -Task runGameTest`.
+The Sentinel uses the supplied Blockbench model, texture and guard, aggro, walk,
+slash and thrust animations. Its source is in `tools/models/sentinel.bbmodel`;
+`tools/import_sentinel.py` converts it for the native renderer. The poppet retains
+its temporary model and texture. Tests: `tools/dev.ps1 -Task runGameTest`.
 Build: `tools/dev.ps1 -Task build`.

@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:has_component",
+    "component": "minecraft:container",
+    "on_true": {"type": "minecraft:model", "model": "spiritum:item/tuned_blade_socketed"},
+    "on_false": {"type": "minecraft:model", "model": "spiritum:item/tuned_blade"}
+  }
+}

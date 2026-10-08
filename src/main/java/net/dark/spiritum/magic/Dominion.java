@@ -28,6 +28,7 @@ public final class Dominion {
     }
 
     public static boolean restricted(World world, BlockPos block, PlayerEntity player) {
+        if (MagicRecipes.ritual("dominion") == null) return false;
         boolean covered = false;
         for (BlockPos pos : RITES.getOrDefault(world, Set.of())) {
             if (!world.isChunkLoaded(pos) || pos.getSquaredDistance(block) > 2500) continue;

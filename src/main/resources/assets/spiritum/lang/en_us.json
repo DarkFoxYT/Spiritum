@@ -64,7 +64,7 @@
   "viewer.spiritum.thirty_seconds": "Finish within 30 seconds.",
   "viewer.spiritum.candles": "%s candles, fueled with fragments or gems",
   "viewer.spiritum.bound_candles": "%s ordinary + 1 player-bound candle",
-  "viewer.spiritum.optional_candles": "2 ordinary + 0–4 player-bound candles",
+  "viewer.spiritum.optional_candles": "2 ordinary + 0\u00e2\u20ac\u201c4 player-bound candles",
   "viewer.spiritum.instant": "Instant; flames are consumed in sequence.",
   "viewer.spiritum.persistent": "10-minute aura; keep its flames burning.",
   "viewer.spiritum.bound_protection": "Bound players are protected.",
@@ -104,7 +104,7 @@
   "tooltip.spiritum.hex_ash": "Hexstone and spirit dust, tied to a realm beyond.",
   "tooltip.spiritum.calx_of_hades": "Otherworldly calx, an anchor for outer beings.",
   "tooltip.spiritum.hexblade": "Harvests fragments. Player kills bind its socketed gem.",
-  "tooltip.spiritum.voodoo_poppet": "Use to throw; sneak-use the doll to pick up. Needles work held or thrown.",
+  "tooltip.spiritum.voodoo_poppet": "Hold use to charge, release to throw. Sneak-right-click the doll to pick it up; use a needle to stab it.",
   "tooltip.spiritum.argent_needle": "Use with a bound poppet. Combine with a potion to coat.",
   "viewer.spiritum.effect.rain": "Rain for 10 minutes.",
   "viewer.spiritum.effect.clear_skies": "Clear skies for 10 minutes.",
@@ -115,7 +115,7 @@
   "viewer.spiritum.effect.libido": "Breeds animals within 15 blocks each minute.",
   "viewer.spiritum.effect.zombie_summoning": "Summons a zombie.",
   "viewer.spiritum.effect.skeleton_summoning": "Summons a skeleton.",
-  "viewer.spiritum.effect.abundance": "Crops within 4 blocks grow 3× as fast.",
+  "viewer.spiritum.effect.abundance": "Crops within 4 blocks grow 3\u00c3\u2014 as fast.",
   "viewer.spiritum.effect.argentic_transmutation": "Produces one argent nugget.",
   "viewer.spiritum.effect.leech_binding": "Summons a leech owned by the bound player.",
   "viewer.spiritum.effect.imp_binding": "Summons an imp owned by the bound player.",
@@ -132,5 +132,7 @@
   "ritual.spiritum.dominion": "Rite of Dominion",
   "viewer.spiritum.dominion_candles": "4 gem-fueled candles, plus up to 4 bound candles",
   "viewer.spiritum.binding_return": "Returns the original bound gem upon completion.",
-  "viewer.spiritum.effect.dominion": "Unbound players mine blocks like obsidian and cannot use storage within 50 blocks."
+  "viewer.spiritum.effect.dominion": "Unbound players mine blocks like obsidian and cannot use storage within 50 blocks.",
+  "item.spiritum.tuned_blade": "Tuned Blade",
+  "tooltip.spiritum.tuned_blade": "Socket a bound gem, then hold use to turn toward its online player. Sneak-use to remove the gem."
 }

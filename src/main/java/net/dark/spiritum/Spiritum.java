@@ -17,6 +17,10 @@ public class Spiritum implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry.playS2C()
+                .register(
+                        net.dark.spiritum.network.TunedBladeTargetPayload.ID,
+                        net.dark.spiritum.network.TunedBladeTargetPayload.CODEC);
         ModContent.initialize();
         net.dark.spiritum.recipe.AlchemyRecipe.initialize();
         ModEntities.initialize();
@@ -25,7 +29,6 @@ public class Spiritum implements ModInitializer {
         CandleHarvest.initialize();
         Warding.initialize();
         RingMagic.initialize();
-        net.dark.spiritum.magic.Dominion.initialize();
         // Sneaking with a held item normally bypasses block use; support bulk offerings explicitly.
         UseBlockCallback.EVENT.register(
                 (player, world, hand, hit) -> {

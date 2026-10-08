@@ -4,5 +4,14 @@
   "version": "1.0.0",
   "name": "Spiritum Gameplay Tests",
   "environment": "*",
-  "entrypoints": {"fabric-gametest": ["net.dark.spiritum.GameplayTests", "net.dark.spiritum.AnimationTests"]}
+  "entrypoints": {
+    "fabric-gametest": [
+      "net.dark.spiritum.GameplayTests",
+      "net.dark.spiritum.AnimationTests",
+      "net.dark.spiritum.ItemUseTests"
+    ],
+    "fabric-client-gametest": [
+      "net.dark.spiritum.client.AssetClientTests"
+    ]
+  }
 }
