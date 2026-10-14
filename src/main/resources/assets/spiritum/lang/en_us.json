@@ -40,6 +40,7 @@
   "ritual.spiritum.libido": "Rite of Libido",
   "ritual.spiritum.zombie_summoning": "Rite of Zombie Summoning",
   "ritual.spiritum.skeleton_summoning": "Rite of Skeleton Summoning",
+  "ritual.spiritum.boat_summoning": "Rite of Boat Summoning",
   "ritual.spiritum.abundance": "Rite of Abundance",
   "ritual.spiritum.argentic_transmutation": "Rite of Argentic Transmutation",
   "ritual.spiritum.leech_binding": "Rite of Leech Binding",
@@ -76,7 +77,7 @@
   "message.spiritum.bound_gem_required": "This ring needs a player-bound Spirit Gem.",
   "container.spiritum.ring": "Ring",
   "message.spiritum.target_warded": "That player is protected by a Warding Ring.",
-  "tooltip.spiritum.summoners_ring": "Equipped: +20% demon damage, +50% demon defense; -1 entity interaction range.",
+  "tooltip.spiritum.summoners_ring": "Equipped: +50% demon damage, +50% demon defense; -0.5 entity interaction range.",
   "tooltip.spiritum.soulbind_ring": "Equip with a bound gem to share half their damage; +15% attack within 16 blocks.",
   "tooltip.spiritum.warding_ring": "Equipped: immune to voodoo and Calling; demon damage reduced by 50%.",
   "message.spiritum.calling_complete": "The Rite of Calling has brought you to its pedestal.",
@@ -115,6 +116,7 @@
   "viewer.spiritum.effect.libido": "Breeds animals within 15 blocks each minute.",
   "viewer.spiritum.effect.zombie_summoning": "Summons a zombie.",
   "viewer.spiritum.effect.skeleton_summoning": "Summons a skeleton.",
+  "viewer.spiritum.effect.boat_summoning": "Summons an oak boat.",
   "viewer.spiritum.effect.abundance": "Crops within 4 blocks grow 3\u00c3\u2014 as fast.",
   "viewer.spiritum.effect.argentic_transmutation": "Produces one argent nugget.",
   "viewer.spiritum.effect.leech_binding": "Summons a leech owned by the bound player.",
@@ -133,6 +135,6 @@
   "viewer.spiritum.dominion_candles": "4 gem-fueled candles, plus up to 4 bound candles",
   "viewer.spiritum.binding_return": "Returns the original bound gem upon completion.",
   "viewer.spiritum.effect.dominion": "Unbound players mine blocks like obsidian and cannot use storage within 50 blocks.",
-  "item.spiritum.tuned_blade": "Tuned Blade",
+  "item.spiritum.tuned_blade": "Tuning Blade",
   "tooltip.spiritum.tuned_blade": "Socket a bound gem, then hold use to turn toward its online player. Sneak-use to remove the gem."
 }

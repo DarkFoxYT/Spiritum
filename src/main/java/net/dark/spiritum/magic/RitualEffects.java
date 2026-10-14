@@ -42,6 +42,8 @@ public final class RitualEffects {
                     EntityType.ZOMBIE.spawn(world, pos.up(), SpawnReason.TRIGGERED);
             case "skeleton_summoning" ->
                     EntityType.SKELETON.spawn(world, pos.up(), SpawnReason.TRIGGERED);
+            case "boat_summoning" ->
+                EntityType.OAK_BOAT.spawn(world, pos.up(), SpawnReason.TRIGGERED);
             case "argentic_transmutation" ->
                     world.spawnEntity(
                             new ItemEntity(

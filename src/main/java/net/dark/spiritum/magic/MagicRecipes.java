@@ -33,6 +33,7 @@ public final class MagicRecipes {
                             1),
                     rite("zombie_summoning", 2, false, Items.ROTTEN_FLESH, 3),
                     rite("skeleton_summoning", 2, false, Items.BONE, 3),
+                    rite("boat_summoning", 2, false, Items.OAK_PLANKS, 3),
                     rite(
                             "abundance",
                             3,
@@ -43,7 +44,7 @@ public final class MagicRecipes {
                             1,
                             Items.GLOWSTONE_DUST,
                             1),
-                    rite("argentic_transmutation", 4, false, Items.IRON_BLOCK, 1),
+                    rite("argentic_transmutation", 3, false, Items.IRON_INGOT, 1),
                     rite(
                             "leech_binding",
                             4,
@@ -71,12 +72,12 @@ public final class MagicRecipes {
                             ModContent.SPIRIT_FRAGMENT,
                             1,
                             ModContent.CALX_OF_HADES,
-                            3,
+                            2,
                             ModContent.HEX_ASH,
                             2),
                     rite("calling", 3, false, Items.ENDER_PEARL, 2, ModContent.HEX_ASH, 2),
-                    rite("withering", 2, true, Items.WITHER_ROSE, 2, Items.SOUL_SAND, 4),
-                    rite(
+                    rite("withering", 2, true, Items.WITHER_ROSE, 2, Items.SOUL_SAND, 4)
+                    /*rite(
                             "vigilance",
                             4,
                             true,
@@ -85,7 +86,7 @@ public final class MagicRecipes {
                             Items.ECHO_SHARD,
                             2,
                             ModContent.CALX_OF_HADES,
-                            2));
+                            2)*/);
 
     public static OfferingRecipe ritual(String id) {
         return RITUALS.stream().filter(r -> r.id().equals(id)).findFirst().orElse(null);

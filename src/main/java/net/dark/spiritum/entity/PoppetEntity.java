@@ -273,7 +273,7 @@ public class PoppetEntity extends Entity {
         target.damage(
                 targetWorld,
                 targetWorld.getDamageSources().indirectMagic(this, owner),
-                (float) Math.min(10, speed * 4));
+                (float) Math.min(5, speed * 4));
     }
 
     @Override

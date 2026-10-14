@@ -3,11 +3,12 @@
   "category": "misc",
   "pattern": [
     "  A",
-    "AH ",
-    "SA "
+    "aH ",
+    "Sa "
   ],
   "key": {
     "A": "spiritum:argent_ingot",
+    "a": "spiritum:argent_nugget",
     "S": "minecraft:stick",
     "H": "spiritum:hex_ash"
   },

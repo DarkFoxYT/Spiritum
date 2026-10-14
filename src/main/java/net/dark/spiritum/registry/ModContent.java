@@ -8,6 +8,10 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.component.type.AttributeModifierSlot;
+import net.minecraft.component.type.AttributeModifiersComponent;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.*;
 import net.minecraft.registry.*;
 import net.minecraft.text.Text;
@@ -123,8 +127,8 @@ public final class ModContent {
     public static final Item CALX_OF_HADES = item("calx_of_hades");
     public static final Item VOODOO_POPPET =
             custom("voodoo_poppet", PoppetItem::new, new Item.Settings().maxDamage(6));
-    public static final Item SENTINEL =
-            custom("sentinel", SentinelItem::new, new Item.Settings().maxCount(1));
+    /*public static final Item SENTINEL =
+            custom("sentinel", SentinelItem::new, new Item.Settings().maxCount(1));*/
     public static final Item ARGENT_NEEDLE =
             custom("argent_needle", ArgentNeedleItem::new, new Item.Settings().maxCount(1));
     public static final Item HEXBLADE = hexblade();
@@ -132,7 +136,7 @@ public final class ModContent {
             custom(
                     "tuned_blade",
                     TunedBladeItem::new,
-                    new Item.Settings().sword(ToolMaterial.NETHERITE, 3.0f, -2.4f).fireproof());
+                    new Item.Settings().sword(ToolMaterial.NETHERITE, 3.5f, -2.6f).fireproof());
     public static final Item BOTTLE_OF_HADES =
             custom("bottle_of_hades", BottleOfHadesItem::new, new Item.Settings().maxCount(1));
     public static final Item SUMMONERS_RING =

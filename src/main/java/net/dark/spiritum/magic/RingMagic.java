@@ -51,7 +51,7 @@ public final class RingMagic {
                 player,
                 EntityAttributes.ENTITY_INTERACTION_RANGE,
                 REACH,
-                -1,
+                -0.5,
                 EntityAttributeModifier.Operation.ADD_VALUE,
                 summoner(player));
         var ring = equipped(player);
@@ -95,7 +95,7 @@ public final class RingMagic {
     /** A 50% defense increase divides received damage by 1.5. */
     public static float adjust(LivingEntity victim, DamageSource source, float amount) {
         if (source.getSource() instanceof OwnedDemonEntity demon) {
-            if (summoner(demon.getOwner())) amount *= 1.2f;
+            if (summoner(demon.getOwner())) amount *= 1.5f;
             if (victim instanceof PlayerEntity player && warded(player)) amount *= .5f;
         }
         if (victim instanceof OwnedDemonEntity demon && summoner(demon.getOwner())) amount /= 1.5f;

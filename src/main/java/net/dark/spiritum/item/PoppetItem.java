@@ -37,7 +37,7 @@ public class PoppetItem extends GemSocketItem {
     }
 
     public static float throwSpeed(int chargeTicks) {
-        return .25f + .65f * Math.min(1, Math.max(0, chargeTicks) / 20f);
+        return .5f + .65f * Math.min(1, Math.max(0, chargeTicks) / 20f);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class PoppetItem extends GemSocketItem {
                         .map(id -> world.getServer().getPlayerManager().getPlayer(id))
                         .orElse(null);
         if (target != null && target.isAlive() && !RingMagic.warded(target)) {
-            target.addVelocity(direction.multiply(speed * .45));
+            target.addVelocity(direction.multiply(speed).multiply(1.5));
             target.velocityDirty = true;
             target.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(target));
         }
