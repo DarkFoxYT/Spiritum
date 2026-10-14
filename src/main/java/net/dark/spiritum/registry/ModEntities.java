@@ -11,7 +11,7 @@ public final class ModEntities {
                     .dimensions(.6f, .8f).maxTrackingRange(10).trackingTickInterval(1));
     public static final EntityType<SentinelEntity> SENTINEL = register("sentinel",
             EntityType.Builder.create(SentinelEntity::new, SpawnGroup.CREATURE)
-                    .dimensions(.7f, 2f).maxTrackingRange(10));
+                    .dimensions(.7f, 2f).maxTrackingRange(10).trackingTickInterval(1));
     private static <T extends Entity> EntityType<T> register(
             String id, EntityType.Builder<T> builder) {
         var key = RegistryKey.of(RegistryKeys.ENTITY_TYPE, ModContent.id(id));

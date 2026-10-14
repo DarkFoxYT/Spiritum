@@ -1,1 +1,26 @@
-{"parent": "minecraft:item/handheld", "textures": {"layer0": "spiritum:item/tuning_blade"}}
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {"layer0": "spiritum:item/tuning_blade"},
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [0, -90, 55],
+      "translation": [0, 8, 1],
+      "scale": [1.7, 1.7, 1.7]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [0, 90, -55],
+      "translation": [0, 8, 1],
+      "scale": [1.7, 1.7, 1.7]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, -90, 25],
+      "translation": [2.26, 6.4, 2.26],
+      "scale": [1.36, 1.36, 1.36]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, 90, -25],
+      "translation": [2.26, 6.4, 2.26],
+      "scale": [1.36, 1.36, 1.36]
+    }
+  }
+}

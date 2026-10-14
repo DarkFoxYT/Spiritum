@@ -245,11 +245,18 @@ public class GameplayTests {
                     test.assertEquals(
                             2, sentinel.attackPose(), "Medium-range attacker triggers thrust");
                     test.assertTrue(
-                            sentinel.getVelocity().horizontalLengthSquared() > .1,
-                            "Thrust launches armor forward");
+                            sentinel.getVelocity().horizontalLengthSquared() < .01,
+                            "Thrust winds up before moving");
                 });
         test.runAtTick(
-                100,
+                107,
+                () -> {
+                    test.assertTrue(
+                            sentinel.getVelocity().horizontalLengthSquared() > .08,
+                            "Thrust moves armor forward after windup: " + sentinel.getVelocity());
+                });
+        test.runAtTick(
+                118,
                 () -> {
                     test.assertEquals(
                             0f,
