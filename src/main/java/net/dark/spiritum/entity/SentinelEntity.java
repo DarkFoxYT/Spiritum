@@ -34,6 +34,10 @@ public class SentinelEntity extends PathAwareEntity {
     private Vec3d home;
     private float homeYaw;
     private static final double THRUST_SPEED = .55;
+    public static final int SLASH_DURATION = 25;
+    public static final int THRUST_DURATION = 43;
+    private static final int THRUST_START = 20;
+    private static final int THRUST_END = 30;
 
     public SentinelEntity(EntityType<? extends SentinelEntity> type, World world) {
         super(type, world);
@@ -141,15 +145,20 @@ public class SentinelEntity extends PathAwareEntity {
         if (attackTicks > 0) {
             attackTicks--;
             dataTracker.set(ATTACK_TICKS, attackTicks);
-            if (attackPose() == 2 && !thrustHit)
+            int elapsed = THRUST_DURATION - attackTicks;
+            boolean thrusting = attackPose() == 2 && elapsed >= THRUST_START && elapsed < THRUST_END;
+            if (thrusting && !thrustHit) {
                 setVelocity(thrustDirection.multiply(THRUST_SPEED).add(0, getVelocity().y, 0));
-            if (attackPose() == 1 && attackTicks == 5 && distance <= 6.25 && canSee(target))
+                velocityDirty = true;
+            } else setVelocity(0, getVelocity().y, 0);
+            if (attackPose() == 1 && attackTicks == SLASH_DURATION - 13 && distance <= 6.25 && canSee(target))
                 hit(world, target, 12, .8);
-            if (attackPose() == 2
+            if (thrusting
                     && !thrustHit
                     && getBoundingBox().expand(.4).intersects(target.getBoundingBox())) {
                 hit(world, target, 10, .5);
                 thrustHit = true;
+                setVelocity(0, getVelocity().y, 0);
             }
             if (attackTicks == 0) dataTracker.set(ATTACK, 0);
             return;
@@ -157,22 +166,21 @@ public class SentinelEntity extends PathAwareEntity {
         if (cooldown == 0 && canSee(target) && distance <= 6.25) {
             getNavigation().stop();
             dataTracker.set(ATTACK, 1);
-            attackTicks = 12;
+            attackTicks = SLASH_DURATION;
             cooldown = 30;
             dataTracker.set(ATTACK_TICKS, attackTicks);
             playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1, .7f);
         } else if (cooldown == 0 && canSee(target) && distance >= 9 && distance <= 100) {
             getNavigation().stop();
             dataTracker.set(ATTACK, 2);
-            attackTicks = 10;
+            attackTicks = THRUST_DURATION;
             cooldown = 50;
             thrustHit = false;
             dataTracker.set(ATTACK_TICKS, attackTicks);
             Vec3d direction = target.getEntityPos().subtract(getEntityPos());
             direction = new Vec3d(direction.x, 0, direction.z).normalize();
             thrustDirection = direction;
-            setVelocity(direction.multiply(THRUST_SPEED).add(0, .12, 0));
-            velocityDirty = true;
+            setVelocity(0, getVelocity().y, 0);
             playSound(SoundEvents.ENTITY_IRON_GOLEM_ATTACK, 1, 1.2f);
         } else getNavigation().startMovingTo(target, 1);
     }

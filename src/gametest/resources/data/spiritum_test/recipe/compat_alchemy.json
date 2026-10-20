@@ -1,0 +1,14 @@
+{
+  "type": "spiritum:alchemy",
+  "ingredients": [
+    { "item": "minecraft:diamond", "count": 1 },
+    { "item": "minecraft:diamond", "count": 2 },
+    { "item": "minecraft:emerald", "count": 1 }
+  ],
+  "result": {
+    "id": "minecraft:red_dye",
+    "count": 4,
+    "components": { "minecraft:custom_data": { "compat_test": true } }
+  },
+  "byproducts": [ { "id": "minecraft:glass_bottle", "count": 2 } ]
+}

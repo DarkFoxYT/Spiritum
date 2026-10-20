@@ -43,6 +43,8 @@ public class PoppetEntity extends Entity {
     private final RigidBodyPiece[] pieces = new RigidBodyPiece[6];
     private UUID thrower;
     private int impactCooldown;
+    private int restTicks;
+    private boolean sleeping;
 
     public PoppetEntity(EntityType<? extends PoppetEntity> type, World world) {
         super(type, world);
@@ -83,6 +85,8 @@ public class PoppetEntity extends Entity {
     }
 
     private void initializeBodies(Vec3d velocity) {
+        restTicks = 0;
+        sleeping = false;
         for (int i = 0; i < 6; i++) {
             var part = PoppetModelDefinition.PARTS.get(i);
             pieces[i] =
@@ -135,6 +139,15 @@ public class PoppetEntity extends Entity {
         }
         if (pieces[0] == null) initializeBodies(getVelocity());
         if (impactCooldown > 0) impactCooldown--;
+        if (sleeping) {
+            if (hasSupport(world) && getVelocity().lengthSquared() < 1e-6
+                    && Arrays.stream(pieces).allMatch(part -> world.isSpaceEmpty(this, part.bounds())))
+                return;
+            sleeping = false;
+            restTicks = 0;
+            for (RigidBodyPiece part : pieces) part.velocity = part.velocity.add(getVelocity());
+        }
+        Vec3d[] previousPositions = Arrays.stream(pieces).map(part -> part.position).toArray(Vec3d[]::new);
         double impact = 0;
         // Substeps keep fast throws from tunneling through walls.
         for (int step = 0; step < 4; step++) {
@@ -166,7 +179,7 @@ public class PoppetEntity extends Entity {
                     part.velocity =
                             new Vec3d(
                                     part.velocity.x * .8,
-                                    -part.velocity.y * .15,
+                                    Math.abs(part.velocity.y) < .08 ? 0 : -part.velocity.y * .15,
                                     part.velocity.z * .8);
                     part.angularVelocity = part.angularVelocity.multiply(.7);
                 }
@@ -179,6 +192,29 @@ public class PoppetEntity extends Entity {
                 }
             }
             for (int iteration = 0; iteration < 6; iteration++) solveJoints(world);
+            // Damp contact motion after joint impulses, which otherwise keep reawakening the doll.
+            for (RigidBodyPiece part : pieces) {
+                if (supported(world, part)) {
+                    part.velocity = new Vec3d(part.velocity.x * .65,
+                            Math.abs(part.velocity.y) < .08 ? 0 : part.velocity.y,
+                            part.velocity.z * .65);
+                    part.angularVelocity = part.angularVelocity.multiply(.5);
+                }
+            }
+        }
+        boolean resting = hasSupport(world);
+        for (int i = 0; i < pieces.length; i++) {
+            resting &= pieces[i].position.squaredDistanceTo(previousPositions[i]) < .0004
+                    && pieces[i].velocity.lengthSquared() < .0025
+                    && pieces[i].angularVelocity.lengthSquared() < .0025;
+        }
+        restTicks = resting ? restTicks + 1 : 0;
+        if (restTicks >= 20) {
+            sleeping = true;
+            for (RigidBodyPiece part : pieces) {
+                part.velocity = Vec3d.ZERO;
+                part.angularVelocity = Vec3d.ZERO;
+            }
         }
         setPosition(pieces[0].position);
         setVelocity(pieces[0].velocity);
@@ -193,6 +229,16 @@ public class PoppetEntity extends Entity {
                             world, getX(), world.getBottomY() + 1, getZ(), getStack().copy()));
             discard();
         }
+    }
+
+    private boolean supported(ServerWorld world, RigidBodyPiece part) {
+        Vec3d down = new Vec3d(0, -.02, 0);
+        return adjustMovementForCollisions(this, down, part.bounds(), world, List.of()).y > -.019;
+    }
+
+    private boolean hasSupport(ServerWorld world) {
+        for (RigidBodyPiece part : pieces) if (supported(world, part)) return true;
+        return false;
     }
 
     /**
@@ -317,6 +363,7 @@ public class PoppetEntity extends Entity {
         view.put("Poppet", ItemStack.CODEC, getStack());
         view.putNullable("Thrower", Uuids.CODEC, thrower);
         view.putInt("ImpactCooldown", impactCooldown);
+        view.putBoolean("Sleeping", sleeping);
         if (pieces[0] != null)
             for (int i = 0; i < 6; i++) {
                 WriteView part = view.get("Part" + i);
@@ -351,6 +398,7 @@ public class PoppetEntity extends Entity {
                             part.getFloat("W", 1))
                     .normalize();
         }
+        sleeping = view.getBoolean("Sleeping", false);
         syncPose();
     }
 }

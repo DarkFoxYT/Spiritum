@@ -3,6 +3,6 @@
   "package": "net.dark.spiritum.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": ["MobGoalsAccessor", "ItemPickupOwnerAccessor", "PlayerRingMixin", "ServerPlayerRingMixin", "PlayerRingSlotMixin", "RingDamageMixin", "CreativeRingPacketMixin"],
-  "client": ["InventoryRingScreenMixin", "CreativeRingScreenMixin", "TunedBladeCameraMixin"],
+  "client": ["InventoryRingScreenMixin", "CreativeRingScreenMixin", "TunedBladeCameraMixin", "TunedBladeArmMixin"],
   "injectors": {"defaultRequire": 1}
 }

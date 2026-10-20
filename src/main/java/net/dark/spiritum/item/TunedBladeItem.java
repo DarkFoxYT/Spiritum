@@ -42,7 +42,7 @@ public class TunedBladeItem extends GemSocketItem {
 
     @Override
     public UseAction getUseAction(ItemStack stack) {
-        return UseAction.BOW;
+        return UseAction.NONE;
     }
 
     @Override

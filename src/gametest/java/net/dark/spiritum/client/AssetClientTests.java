@@ -1,6 +1,7 @@
 package net.dark.spiritum.client;
 
 import net.dark.spiritum.entity.PoppetEntity;
+import net.dark.spiritum.entity.SentinelEntity;
 import net.dark.spiritum.item.SpiritBinding;
 import net.dark.spiritum.network.TunedBladeTargetPayload;
 import net.dark.spiritum.registry.*;
@@ -8,8 +9,14 @@ import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.client.model.Dilation;
+import net.minecraft.client.model.TexturedModelData;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.render.entity.model.PlayerEntityModel;
+import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Arm;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -25,13 +32,42 @@ public class AssetClientTests implements FabricClientGameTest {
                     state.awake = true;
                     for (int attack = 0; attack <= 2; attack++) {
                         state.attack = attack;
-                        for (int frame = 0; frame < 30; frame++) {
+                        int duration = attack == 1 ? SentinelEntity.SLASH_DURATION : SentinelEntity.THRUST_DURATION;
+                        for (int frame = 0; frame <= duration * 2; frame++) {
                             state.awakeTime = frame;
                             state.attackRemaining =
-                                    Math.max(0, (attack == 1 ? 12 : 10) - frame * .5f);
+                                    Math.max(0, duration - frame * .5f);
                             state.limbSwingAnimationProgress = frame * .2f;
                             state.limbSwingAmplitude = .8f;
                             model.setAngles(state);
+                            var main = model.getRootPart().getChild("main");
+                            if (Math.abs(main.originX) > .001 || Math.abs(main.originZ) > .001)
+                                throw new AssertionError("Sentinel animation must stay on its hitbox");
+                        }
+                    }
+                    for (boolean slim : new boolean[] {false, true}) {
+                        PlayerEntityModel playerModel = new PlayerEntityModel(
+                                TexturedModelData.of(PlayerEntityModel.getTexturedModelData(Dilation.NONE, slim), 64, 64).createModel(), slim);
+                        for (Arm mainArm : Arm.values()) {
+                            for (Hand hand : Hand.values()) {
+                                PlayerEntityRenderState playerState = new PlayerEntityRenderState();
+                                playerState.mainArm = mainArm;
+                                playerState.activeHand = hand;
+                                playerState.isUsingItem = true;
+                                playerState.rightArmPose = BipedEntityModel.ArmPose.ITEM;
+                                playerState.leftArmPose = BipedEntityModel.ArmPose.ITEM;
+                                Arm heldArm = hand == Hand.MAIN_HAND ? mainArm : mainArm.getOpposite();
+                                if (heldArm == Arm.RIGHT) playerState.rightHandItem = new ItemStack(ModContent.TUNED_BLADE);
+                                else playerState.leftHandItem = new ItemStack(ModContent.TUNED_BLADE);
+                                playerModel.setAngles(playerState);
+                                var armPart = heldArm == Arm.RIGHT ? playerModel.rightArm : playerModel.leftArm;
+                                if (Math.abs(armPart.pitch + Math.PI / 2 - playerModel.head.pitch) > .001)
+                                    throw new AssertionError("Active blade arm points forward for either hand");
+                                playerState.isUsingItem = false;
+                                playerModel.setAngles(playerState);
+                                if (Math.abs(armPart.pitch + Math.PI / 2) < .1)
+                                    throw new AssertionError("Releasing blade restores the ordinary arm pose");
+                            }
                         }
                     }
                 });
@@ -65,6 +101,8 @@ public class AssetClientTests implements FabricClientGameTest {
             context.takeScreenshot("sentinel-and-supplied-assets");
             context.getInput().holdKey(options -> options.useKey);
             context.waitFor(client -> client.player.isUsingItem());
+            context.waitTicks(5);
+            context.takeScreenshot("tuned-blade-pointing");
             float before = context.computeOnClient(client -> client.player.getYaw());
             server.runOnServer(
                     s ->
