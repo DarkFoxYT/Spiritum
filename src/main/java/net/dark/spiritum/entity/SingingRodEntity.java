@@ -62,6 +62,14 @@ public class SingingRodEntity extends PathAwareEntity {
 
     @Override
     public void tick() {
+        if (getEntityWorld() instanceof ServerWorld server
+                && !group().isEmpty()
+                && server.getPersistentStateManager()
+                        .getOrCreate(net.dark.spiritum.magic.DissolvedRodGroups.TYPE)
+                        .contains(group())) {
+            discard();
+            return;
+        }
         super.tick();
         Resonance.watch(this);
     }
@@ -72,6 +80,12 @@ public class SingingRodEntity extends PathAwareEntity {
         getNavigation().stop();
         setVelocity(0, getVelocity().y, 0);
         if (age % 10 == 0) Resonance.particles(world, this);
+    }
+
+    @Override
+    public void onDeath(net.minecraft.entity.damage.DamageSource source) {
+        super.onDeath(source);
+        Resonance.dissolve(this);
     }
 
     @Override

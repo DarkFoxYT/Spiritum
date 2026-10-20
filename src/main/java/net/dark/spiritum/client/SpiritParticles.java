@@ -30,9 +30,25 @@ public final class SpiritParticles {
                     }
                 });
         var factories = ParticleFactoryRegistry.getInstance();
-        factories.register(ModParticles.DOMINION_RUNE, sprites ->
-                (type, world, x, y, z, nx, ny, nz, random) ->
-                        new DominionRune(world,x,y,z,sprites.getSprite(random),nx,ny,nz));
+        factories.register(
+                ModParticles.RETROSONUS,
+                sprites ->
+                        (type, world, x, y, z, vx, vy, vz, random) ->
+                                new SpiritParticle(
+                                        world,
+                                        x,
+                                        y,
+                                        z,
+                                        sprites.getSprite(random),
+                                        "retrosonus_particle",
+                                        false,
+                                        true));
+        factories.register(
+                ModParticles.DOMINION_RUNE,
+                sprites ->
+                        (type, world, x, y, z, nx, ny, nz, random) ->
+                                new DominionRune(
+                                        world, x, y, z, sprites.getSprite(random), nx, ny, nz));
         factories.register(
                 ModParticles.HEXFLAME,
                 sprites ->
@@ -94,17 +110,40 @@ public final class SpiritParticles {
     private static final class DominionRune extends BillboardParticle {
         private final org.joml.Quaternionf rotation;
         private final RenderType renderType = SpiritParticleShaders.type("dominion_rune", false);
-        DominionRune(ClientWorld world, double x, double y, double z, Sprite sprite, double nx, double ny, double nz) {
-            super(world,x,y,z,sprite);
-            org.joml.Vector3f normal=new org.joml.Vector3f((float)nx,(float)ny,(float)nz);
-            if(normal.lengthSquared()<.01f) normal.set(0,0,1);
-            rotation=new org.joml.Quaternionf().rotationTo(new org.joml.Vector3f(0,0,1),normal.normalize());
-            maxAge=20; scale=.3f; collidesWithWorld=false;
-            velocityX=velocityY=velocityZ=0;
-            MinecraftClient.getInstance().getTextureManager().getTexture(renderType.textureAtlasLocation());
+
+        DominionRune(
+                ClientWorld world,
+                double x,
+                double y,
+                double z,
+                Sprite sprite,
+                double nx,
+                double ny,
+                double nz) {
+            super(world, x, y, z, sprite);
+            org.joml.Vector3f normal = new org.joml.Vector3f((float) nx, (float) ny, (float) nz);
+            if (normal.lengthSquared() < .01f) normal.set(0, 0, 1);
+            rotation =
+                    new org.joml.Quaternionf()
+                            .rotationTo(new org.joml.Vector3f(0, 0, 1), normal.normalize());
+            maxAge = 20;
+            scale = .3f;
+            collidesWithWorld = false;
+            velocityX = velocityY = velocityZ = 0;
+            MinecraftClient.getInstance()
+                    .getTextureManager()
+                    .getTexture(renderType.textureAtlasLocation());
         }
-        @Override public Rotator getRotator() { return (orientation,camera,delta)->orientation.set(rotation); }
-        @Override protected RenderType getRenderType() { return renderType; }
+
+        @Override
+        public Rotator getRotator() {
+            return (orientation, camera, delta) -> orientation.set(rotation);
+        }
+
+        @Override
+        protected RenderType getRenderType() {
+            return renderType;
+        }
     }
 
     private static final class SpiritParticle extends BillboardParticle {

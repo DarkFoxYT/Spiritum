@@ -99,9 +99,14 @@ public class AssetClientTests implements FabricClientGameTest {
             server.runOnServer(
                     s -> {
                         var level = s.getOverworld();
-                        var sentinel = ModEntities.SINGING_ROD.create(level, SpawnReason.COMMAND);
-                        sentinel.setPosition(0, -59, 0);
-                        level.spawnEntity(sentinel);
+                        String group = java.util.UUID.randomUUID().toString();
+                        for (int[] p : new int[][] {{-2, -2}, {2, -2}, {2, 2}, {-2, 2}}) {
+                            var rod = ModEntities.SINGING_ROD.create(level, SpawnReason.COMMAND);
+                            rod.assign(java.util.UUID.randomUUID(), group);
+                            rod.seal();
+                            rod.setPosition(p[0], -59, p[1]);
+                            level.spawnEntity(rod);
+                        }
                         level.setBlockState(
                                 new BlockPos(3, -59, 0),
                                 ModContent.RITUAL_PEDESTAL.getDefaultState());
@@ -118,6 +123,7 @@ public class AssetClientTests implements FabricClientGameTest {
                     });
             world.getClientWorld().waitForChunksRender();
             context.waitTicks(5);
+            context.waitTicks(12);
             context.takeScreenshot("retrosonus-and-singing-rod");
             context.getInput().holdKey(options -> options.useKey);
             context.waitFor(client -> client.player.isUsingItem());

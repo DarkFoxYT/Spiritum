@@ -33,11 +33,12 @@ public class SentinelEntity extends PathAwareEntity {
     private Vec3d thrustDirection = Vec3d.ZERO;
     private Vec3d home;
     private float homeYaw;
-    private static final double THRUST_SPEED = 1.55;
-    public static final int SLASH_DURATION = 20;
-    public static final int THRUST_DURATION = 43;
-    private static final int THRUST_START = 20;
-    private static final int THRUST_END = 30;
+    private static final double THRUST_SPEED = 1.55 * 1.5;
+    public static final int SLASH_DURATION = 13;
+    public static final int THRUST_DURATION = 29;
+    public static final int AWAKEN_DURATION = 13;
+    private static final int THRUST_START = 13;
+    private static final int THRUST_END = 20;
 
     public SentinelEntity(EntityType<? extends SentinelEntity> type, World world) {
         super(type, world);
@@ -146,13 +147,16 @@ public class SentinelEntity extends PathAwareEntity {
             attackTicks--;
             dataTracker.set(ATTACK_TICKS, attackTicks);
             int elapsed = THRUST_DURATION - attackTicks;
-            boolean thrusting = attackPose() == 2 && elapsed >= THRUST_START && elapsed < THRUST_END;
+            boolean thrusting =
+                    attackPose() == 2 && elapsed >= THRUST_START && elapsed < THRUST_END;
             if (thrusting && !thrustHit) {
                 setVelocity(thrustDirection.multiply(THRUST_SPEED).add(0, getVelocity().y, 0));
                 velocityDirty = true;
             } else setVelocity(0, getVelocity().y, 0);
-            if (attackPose() == 1 && attackTicks == SLASH_DURATION - 13 && distance <= 6.25 && canSee(target))
-                hit(world, target, 12, .8);
+            if (attackPose() == 1
+                    && attackTicks == SLASH_DURATION - 9
+                    && distance <= 6.25
+                    && canSee(target)) hit(world, target, 12, .8);
             if (thrusting
                     && !thrustHit
                     && getBoundingBox().expand(.4).intersects(target.getBoundingBox())) {
@@ -167,14 +171,14 @@ public class SentinelEntity extends PathAwareEntity {
             getNavigation().stop();
             dataTracker.set(ATTACK, 1);
             attackTicks = SLASH_DURATION;
-            cooldown = 30;
+            cooldown = 20;
             dataTracker.set(ATTACK_TICKS, attackTicks);
             playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1, .7f);
         } else if (cooldown == 0 && canSee(target) && distance >= 9 && distance <= 100) {
             getNavigation().stop();
             dataTracker.set(ATTACK, 2);
             attackTicks = THRUST_DURATION;
-            cooldown = 50;
+            cooldown = 33;
             thrustHit = false;
             dataTracker.set(ATTACK_TICKS, attackTicks);
             Vec3d direction = target.getEntityPos().subtract(getEntityPos());

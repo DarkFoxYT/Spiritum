@@ -10,7 +10,7 @@ public final class ModEntities {
             register(
                     "singing_rod",
                     EntityType.Builder.create(SingingRodEntity::new, SpawnGroup.MISC)
-                            .dimensions(.25f, 2f)
+                            .dimensions(.25f, 4f)
                             .maxTrackingRange(64)
                             .trackingTickInterval(1));
     public static final EntityType<PoppetEntity> POPPET =

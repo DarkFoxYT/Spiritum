@@ -11,10 +11,11 @@ an empty socketed gem to the slain player. Already-bound gems keep their binding
 Without Resonance, hold use to track an online bound player just as with a Tuned
 Blade. Sneak-use removes the gem.
 
-Resonance is a single-level enchantment for Tuned Blades and Retrosonus, available
+Resonance is a single-level enchantment exclusive to Retrosonus, available
 through enchanting, random enchanted loot and librarian trades. It replaces
-tracking with rod placement. Right-click a block's top face to place a Singing
-Rod; each placement costs one durability and has a half-second cooldown.
+tracking with rod placement. Right-click a supporting block to place a Singing
+Rod on its collision surface, including partial blocks such as slabs and fences.
+Each placement costs one durability and has a half-second cooldown.
 
 Four rods placed around an open area form a barrier. Each new rod must be within
 32 blocks of the other rods and within four blocks vertically. The four corners
@@ -24,9 +25,13 @@ players can maintain separate barriers, and completed sets are independent.
 The barrier allows entry but prevents living entities and occupied vehicles from
 walking or flying out at any height. Pearls and other teleports can escape. Each
 rod has 10 HP, 15 armor (full iron armor), no armor toughness and no collision
-pushing. Destroying any rod breaks the barrier immediately. Remaining rods from
-a broken completed set do not join new sets. Rod ownership and barrier groups
+pushing. The supplied model is four blocks tall, with a matching hitbox.
+Destroying any rod removes its whole group immediately. Unloaded group members
+are removed when loaded, even after a server restart. Rod ownership and barrier groups
 persist across world saves. A barrier needs all four rods loaded and alive.
+
+Barrier particles use the supplied Retrosonus sprite with an emissive core and
+the mod's additive bloom pass; no shader pack is required.
 
 Focused tests: set `JAVA_TOOL_OPTIONS` to
 `-Dfabric-api.gametest.filter=spiritum-test:resonance_tests_*`, then run

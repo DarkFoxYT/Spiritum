@@ -17,6 +17,62 @@ import net.minecraft.util.math.*;
 import java.util.*;
 
 public class ResonanceTests {
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 25)
+    public void rodsStandOnPartialBlockSurfaces(TestContext test) {
+        test.setBlockState(2, 0, 2, net.minecraft.block.Blocks.STONE_SLAB);
+        test.setBlockState(5, 0, 2, net.minecraft.block.Blocks.OAK_FENCE);
+        var player = test.createMockCreativeServerPlayerInWorld();
+        player.setPosition(test.getAbsolute(new Vec3d(1, 1, 1)));
+        var blade = new ItemStack(ModContent.RETROSONUS);
+        blade.addEnchantment(
+                test.getWorld()
+                        .getRegistryManager()
+                        .getOrThrow(RegistryKeys.ENCHANTMENT)
+                        .getOrThrow(Resonance.ENCHANTMENT),
+                1);
+        player.setStackInHand(Hand.MAIN_HAND, blade);
+        for (int x : new int[] {2, 5}) {
+            var block = test.getAbsolutePos(new BlockPos(x, 0, 2));
+            Vec3d point = Vec3d.ofBottomCenter(block).add(x == 5 ? .125 : 0, .5, 0);
+            var hit =
+                    new net.minecraft.util.hit.BlockHitResult(
+                            point, x == 5 ? Direction.EAST : Direction.UP, block, false);
+            player.getItemCooldownManager().set(blade, 0);
+            test.assertEquals(
+                    ActionResult.SUCCESS,
+                    blade.getItem().useOnBlock(new ItemUsageContext(player, Hand.MAIN_HAND, hit)),
+                    "Partial block supports a rod");
+        }
+        test.runAtTick(
+                15,
+                () -> {
+                    var rods =
+                            test.getWorld()
+                                    .getEntitiesByClass(
+                                            SingingRodEntity.class,
+                                            new Box(test.getAbsolutePos(BlockPos.ORIGIN))
+                                                    .expand(12),
+                                            r -> player.getUuid().equals(r.owner()));
+                    test.assertEquals(2, rods.size(), "Both partial-block rods remain placed");
+                    for (var rod : rods) {
+                        double expected =
+                                test.getAbsolutePos(BlockPos.ORIGIN).getY()
+                                        + (rod.getX() < test.getAbsolute(new Vec3d(4, 0, 0)).x
+                                                ? .5
+                                                : 1.5);
+                        test.assertTrue(
+                                Math.abs(rod.getY() - expected) < .001,
+                                "Rod stays on the actual slab or fence surface");
+                        test.assertEquals(
+                                4f,
+                                rod.getHeight(),
+                                "Rod hitbox matches supplied four-block model");
+                    }
+                    test.getWorld().getServer().getPlayerManager().remove(player);
+                    test.complete();
+                });
+    }
+
     @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 100)
     public void retrosonusBindsEmptyGemOnPlayerKill(TestContext test) {
         var attacker = test.createMockCreativeServerPlayerInWorld();
@@ -121,6 +177,14 @@ public class ResonanceTests {
         cow.setPosition(start);
         rods.getFirst()
                 .damage(test.getWorld(), test.getWorld().getDamageSources().genericKill(), 100);
+        test.assertTrue(
+                rods.stream().allMatch(SingingRodEntity::isRemoved),
+                "Killing one rod removes the entire group");
+        var lateRod = test.spawnEntity(ModEntities.SINGING_ROD, new Vec3d(3, 1, 3));
+        lateRod.assign(UUID.randomUUID(), rods.getFirst().group());
+        lateRod.tick();
+        test.assertTrue(
+                lateRod.isRemoved(), "An unloaded group member disappears when loaded later");
         cow.move(MovementType.SELF, new Vec3d(5, 0, 0));
         test.assertEquals(
                 start.x + 5, cow.getX(), "Destroying a rod breaks the barrier immediately");
@@ -136,6 +200,14 @@ public class ResonanceTests {
                         .getOrThrow(RegistryKeys.ENCHANTMENT)
                         .getOrThrow(Resonance.ENCHANTMENT);
         blade.addEnchantment(enchantment, 1);
+        test.assertFalse(
+                enchantment.value().isAcceptableItem(new ItemStack(ModContent.TUNED_BLADE)),
+                "Resonance cannot enchant a Tuned Blade");
+        var oldTunedBlade = new ItemStack(ModContent.TUNED_BLADE);
+        oldTunedBlade.addEnchantment(enchantment, 1);
+        test.assertFalse(
+                Resonance.enchanted(oldTunedBlade),
+                "Legacy Resonance on a Tuned Blade no longer disables tracking");
         test.assertTrue(Resonance.enchanted(blade), "Resonance enchantment loads and applies");
         var attributes = blade.get(DataComponentTypes.ATTRIBUTE_MODIFIERS);
         test.assertEquals(

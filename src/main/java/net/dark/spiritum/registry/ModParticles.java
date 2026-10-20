@@ -10,6 +10,7 @@ public final class ModParticles {
     public static final SimpleParticleType HEXFLAME = register("hexflame_particle");
     public static final SimpleParticleType BIG_HEXFLAME = register("big_hexflame_particle");
     public static final SimpleParticleType DOMINION_RUNE = register("dominion_rune");
+    public static final SimpleParticleType RETROSONUS = register("retrosonus_particle");
     public static final Map<String, SimpleParticleType> SIGILS = new LinkedHashMap<>();
 
     static {

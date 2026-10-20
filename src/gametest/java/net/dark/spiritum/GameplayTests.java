@@ -261,14 +261,14 @@ public class GameplayTests {
                             "Thrust winds up before moving");
                 });
         test.runAtTick(
-                107,
+                100,
                 () -> {
                     test.assertTrue(
-                            sentinel.getVelocity().horizontalLengthSquared() > .08,
-                            "Thrust moves armor forward after windup: " + sentinel.getVelocity());
+                            sentinel.getZ() > test.getAbsolute(new Vec3d(6, 1, 2)).z + 1,
+                            "Faster thrust moves armor forward after its shorter windup");
                 });
         test.runAtTick(
-                118,
+                110,
                 () -> {
                     test.assertEquals(
                             0f,

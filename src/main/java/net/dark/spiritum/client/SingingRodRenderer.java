@@ -18,16 +18,16 @@ public class SingingRodRenderer extends EntityRenderer<SingingRodEntity, EntityR
         ModelData data = new ModelData();
         data.getRoot()
                 .addChild(
-                        "rod",
+                        "group",
                         ModelPartBuilder.create()
-                                .uv(0, 0)
-                                .cuboid(-2, 0, -2, 4, 2, 4)
-                                .uv(0, 0)
-                                .cuboid(-1, 2, -1, 2, 28, 2)
-                                .uv(0, 0)
-                                .cuboid(-2, 30, -2, 4, 2, 4),
-                        ModelTransform.NONE);
-        model = TexturedModelData.of(data, 16, 64).createModel();
+                                .uv(8, 16)
+                                .cuboid(-2, -62, -2, 4, 2, 4)
+                                .uv(0, 1)
+                                .cuboid(-1, -60, -1, 2, 60, 2)
+                                .uv(8, 22)
+                                .cuboid(-2, 0, -2, 4, 2, 4),
+                        ModelTransform.origin(0, 22, 0));
+        model = TexturedModelData.of(data, 64, 64).createModel();
         shadowRadius = .15f;
     }
 
@@ -42,13 +42,18 @@ public class SingingRodRenderer extends EntityRenderer<SingingRodEntity, EntityR
             MatrixStack matrices,
             OrderedRenderCommandQueue queue,
             CameraRenderState camera) {
+        matrices.push();
+        matrices.translate(0, 1.5, 0);
+        matrices.scale(-1, -1, 1);
         queue.submitModelPart(
                 model,
                 matrices,
-                RenderLayers.entityCutout(Identifier.ofVanilla("textures/block/iron_block.png")),
+                RenderLayers.entityCutout(
+                        Identifier.of("spiritum", "textures/entity/singing_rod.png")),
                 state.light,
                 OverlayTexture.DEFAULT_UV,
                 null);
+        matrices.pop();
         super.render(state, matrices, queue, camera);
     }
 }

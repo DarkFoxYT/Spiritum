@@ -3,7 +3,6 @@ package net.dark.spiritum.client;
 import com.google.gson.*;
 
 import net.dark.spiritum.entity.SentinelEntity;
-
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.util.math.MathHelper;
@@ -125,14 +124,18 @@ public final class SentinelModel extends EntityModel<SentinelRenderer.State> {
         play("aggro_pose", 0, 1);
         if (state.attack != 0) {
             String name = state.attack == 1 ? "attack1" : "attack2";
-            float duration = state.attack == 1 ? SentinelEntity.SLASH_DURATION : SentinelEntity.THRUST_DURATION;
+            float duration =
+                    state.attack == 1
+                            ? SentinelEntity.SLASH_DURATION
+                            : SentinelEntity.THRUST_DURATION;
             play(name, (1 - state.attackRemaining / duration) * clips.get(name).length(), 1);
-        } else if (state.awakeTime < 20) {
-            play("aggro", state.awakeTime / 20, 1);
+        } else if (state.awakeTime < SentinelEntity.AWAKEN_DURATION) {
+            play("aggro", state.awakeTime / SentinelEntity.AWAKEN_DURATION, 1);
         } else {
             play(
                     "walk",
-                    ((state.limbSwingAnimationProgress / ((float) Math.PI * 2)) % 1) * clips.get("walk").length(),
+                    ((state.limbSwingAnimationProgress / ((float) Math.PI * 2)) % 1)
+                            * clips.get("walk").length(),
                     Math.min(1, state.limbSwingAmplitude));
         }
         ModelPart head = root.getChild("main").getChild("body").getChild("head");
@@ -146,7 +149,8 @@ public final class SentinelModel extends EntityModel<SentinelRenderer.State> {
             ModelPart part = track.part();
             if (track.rotation()) {
                 ModelTransform origin = part.getDefaultTransform();
-                part.pitch = MathHelper.lerp(weight, part.pitch, origin.pitch() + radians(value[0]));
+                part.pitch =
+                        MathHelper.lerp(weight, part.pitch, origin.pitch() + radians(value[0]));
                 part.yaw = MathHelper.lerp(weight, part.yaw, origin.yaw() + radians(value[1]));
                 part.roll = MathHelper.lerp(weight, part.roll, origin.roll() + radians(value[2]));
             } else {

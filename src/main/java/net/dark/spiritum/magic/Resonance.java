@@ -1,11 +1,12 @@
 package net.dark.spiritum.magic;
 
 import net.dark.spiritum.entity.SingingRodEntity;
+import net.dark.spiritum.registry.ModContent;
 import net.dark.spiritum.registry.ModEntities;
+import net.dark.spiritum.registry.ModParticles;
 import net.minecraft.enchantment.*;
 import net.minecraft.entity.*;
 import net.minecraft.item.*;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.*;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -30,9 +31,27 @@ public final class Resonance {
     }
 
     public static boolean enchanted(ItemStack stack) {
-        return stack.getEnchantments().getEnchantmentEntries().stream()
-                .anyMatch(
-                        entry -> entry.getKey().matchesKey(ENCHANTMENT) && entry.getIntValue() > 0);
+        return stack.isOf(ModContent.RETROSONUS)
+                && stack.getEnchantments().getEnchantmentEntries().stream()
+                        .anyMatch(
+                                entry ->
+                                        entry.getKey().matchesKey(ENCHANTMENT)
+                                                && entry.getIntValue() > 0);
+    }
+
+    public static void dissolve(SingingRodEntity broken) {
+        if (broken.getEntityWorld().isClient() || broken.group().isEmpty()) return;
+        ((ServerWorld) broken.getEntityWorld())
+                .getPersistentStateManager()
+                .getOrCreate(DissolvedRodGroups.TYPE)
+                .add(broken.group());
+        Set<Integer> ids = LOADED_RODS.get(broken.getEntityWorld());
+        if (ids == null) return;
+        for (int id : new ArrayList<>(ids)) {
+            var entity = broken.getEntityWorld().getEntityById(id);
+            if (entity instanceof SingingRodEntity rod && rod.group().equals(broken.group()))
+                rod.discard();
+        }
     }
 
     private static List<SingingRodEntity> nearby(World world, Box area) {
@@ -56,11 +75,29 @@ public final class Resonance {
         if (player.getItemCooldownManager().isCoolingDown(context.getStack()))
             return ActionResult.FAIL;
         if (!(context.getWorld() instanceof ServerWorld world)) return ActionResult.SUCCESS;
-        if (context.getSide() != Direction.UP
+        if (context.getSide() == Direction.DOWN
                 || !player.canModifyBlocks()
                 || !world.canEntityModifyAt(player, context.getBlockPos()))
             return ActionResult.FAIL;
-        Vec3d position = context.getHitPos();
+        BlockPos block = context.getBlockPos();
+        Vec3d hit = context.getHitPos();
+        double surface =
+                world
+                        .getBlockState(block)
+                        .getCollisionShape(world, block)
+                        .getBoundingBoxes()
+                        .stream()
+                        .filter(
+                                box ->
+                                        hit.x - block.getX() >= box.minX - .00001
+                                                && hit.x - block.getX() <= box.maxX + .00001
+                                                && hit.z - block.getZ() >= box.minZ - .00001
+                                                && hit.z - block.getZ() <= box.maxZ + .00001)
+                        .mapToDouble(box -> box.maxY)
+                        .max()
+                        .orElse(Double.NaN);
+        if (!Double.isFinite(surface)) return ActionResult.FAIL;
+        Vec3d position = new Vec3d(hit.x, block.getY() + surface, hit.z);
         var rod = ModEntities.SINGING_ROD.create(world, SpawnReason.TRIGGERED);
         if (rod == null) return ActionResult.FAIL;
         rod.refreshPositionAndAngles(position.x, position.y, position.z, 0, 0);
@@ -181,7 +218,7 @@ public final class Resonance {
             for (int j = 0; j <= steps; j++) {
                 Vec3d p = a.lerp(b, (double) j / steps);
                 world.spawnParticles(
-                        ParticleTypes.END_ROD,
+                        ModParticles.RETROSONUS,
                         p.x,
                         p.y + 1 + (world.getTime() / 10 % 4),
                         p.z,
