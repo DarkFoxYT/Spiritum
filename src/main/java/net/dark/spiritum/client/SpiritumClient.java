@@ -53,7 +53,7 @@ public class SpiritumClient implements ClientModInitializer {
                     var id = Registries.ITEM.getId(stack.getItem());
                     if (!id.getNamespace().equals("spiritum")) return;
                     if (stack.isOf(ModContent.VOODOO_POPPET)
-                            /*|| stack.isOf(ModContent.SENTINEL)*/
+                            || stack.isOf(ModContent.SENTINEL)
                             || stack.getItem() instanceof net.dark.spiritum.item.TunedBladeItem)
                         lines.add(
                                 Text.translatable("tooltip.spiritum." + id.getPath())

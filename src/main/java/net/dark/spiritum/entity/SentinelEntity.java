@@ -33,8 +33,8 @@ public class SentinelEntity extends PathAwareEntity {
     private Vec3d thrustDirection = Vec3d.ZERO;
     private Vec3d home;
     private float homeYaw;
-    private static final double THRUST_SPEED = .55;
-    public static final int SLASH_DURATION = 25;
+    private static final double THRUST_SPEED = 1.55;
+    public static final int SLASH_DURATION = 20;
     public static final int THRUST_DURATION = 43;
     private static final int THRUST_START = 20;
     private static final int THRUST_END = 30;
@@ -95,7 +95,7 @@ public class SentinelEntity extends PathAwareEntity {
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
         if (player.isSneaking() && !player.isSpectator() && !isRemoved()) {
             if (!getEntityWorld().isClient()) {
-                //player.getInventory().offerOrDrop(new ItemStack(ModContent.SENTINEL));
+                player.getInventory().offerOrDrop(new ItemStack(ModContent.SENTINEL));
                 discard();
             }
             return ActionResult.SUCCESS;

@@ -21,9 +21,9 @@ public final class ModEntities {
                             .maxTrackingRange(10)
                             .trackingTickInterval(1));
 
-    /*public static final EntityType<SentinelEntity> SENTINEL = register("sentinel",
+    public static final EntityType<SentinelEntity> SENTINEL = register("sentinel",
     EntityType.Builder.create(SentinelEntity::new, SpawnGroup.CREATURE)
-            .dimensions(.7f, 2f).maxTrackingRange(10));*/
+            .dimensions(.7f, 2f).maxTrackingRange(10));
     private static <T extends Entity> EntityType<T> register(
             String id, EntityType.Builder<T> builder) {
         var key = RegistryKey.of(RegistryKeys.ENTITY_TYPE, ModContent.id(id));
@@ -58,7 +58,7 @@ public final class ModEntities {
 
     public static void initialize() {
         FabricDefaultAttributeRegistry.register(SINGING_ROD, SingingRodEntity.attributes());
-        // FabricDefaultAttributeRegistry.register(SENTINEL, SentinelEntity.attributes());
+         FabricDefaultAttributeRegistry.register(SENTINEL, SentinelEntity.attributes());
         FabricDefaultAttributeRegistry.register(LEECH, OwnedDemonEntity.attributes(10, 2));
         FabricDefaultAttributeRegistry.register(IMP, OwnedDemonEntity.attributes(10, 4));
         FabricDefaultAttributeRegistry.register(LEMURE, OwnedDemonEntity.attributes(15, 0));

@@ -140,5 +140,6 @@
   "viewer.spiritum.binding_return": "Returns the original bound gem upon completion.",
   "viewer.spiritum.effect.dominion": "Unbound players mine blocks like obsidian and cannot use storage within 50 blocks.",
   "item.spiritum.tuned_blade": "Tuning Blade",
-  "tooltip.spiritum.tuned_blade": "Socket a bound gem, then hold use to turn toward its online player. Sneak-use to remove the gem."
+  "tooltip.spiritum.tuned_blade": "Socket a bound gem, then hold use to turn toward its online player. Sneak-use to remove the gem.",
+  "tooltip.spiritum.retrosonus": "Socket a bound gem, then hold use to turn toward its online player. Sneak-use to remove the gem."
 }

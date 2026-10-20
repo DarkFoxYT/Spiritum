@@ -11,7 +11,7 @@ public class SentinelItem extends Item {
         super(settings);
     }
 
-    /*@Override
+    @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         if (!(context.getWorld() instanceof ServerWorld world)) return ActionResult.SUCCESS;
         var sentinel = ModEntities.SENTINEL.create(world, SpawnReason.TRIGGERED);
@@ -21,7 +21,7 @@ public class SentinelItem extends Item {
                 pos.getX() + .5,
                 pos.getY(),
                 pos.getZ() + .5,
-                context.getPlayer() == null ? 0 : -context.getPlayer().getYaw(),
+                context.getPlayer() == null ? 0 : context.getPlayer().getYaw()+180,
                 0);
         sentinel.setHome(sentinel.getEntityPos(), sentinel.getYaw());
         if (!world.isSpaceEmpty(sentinel, sentinel.getBoundingBox())
@@ -29,5 +29,5 @@ public class SentinelItem extends Item {
         if (context.getPlayer() == null || !context.getPlayer().isCreative())
             context.getStack().decrement(1);
         return ActionResult.SUCCESS;
-    }*/
+    }
 }
