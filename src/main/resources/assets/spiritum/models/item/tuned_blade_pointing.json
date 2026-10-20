@@ -1,25 +1,31 @@
 {
-  "parent": "spiritum:item/tuned_blade",
-  "display": {
-    "firstperson_righthand": {
-      "rotation": [0, -90, 135],
-      "translation": [-3, 0, -10],
-      "scale": [1.36, 1.36, 1.36]
-    },
-    "firstperson_lefthand": {
-      "rotation": [0, 90, -135],
-      "translation": [-3, 0, -10],
-      "scale": [1.36, 1.36, 1.36]
-    },
-    "thirdperson_righthand": {
-      "rotation": [0, -90, 45],
-      "translation": [0, 8, 1],
-      "scale": [1.7, 1.7, 1.7]
-    },
-    "thirdperson_lefthand": {
-      "rotation": [0, 90, -45],
-      "translation": [0, 8, 1],
-      "scale": [1.7, 1.7, 1.7]
-    }
-  }
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"parent": "minecraft:item/generated",
+	"textures": {
+    "layer0": "spiritum:item/tuning_blade",
+    "particle": "spiritum:item/tuning_blade"
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [-90, 0, 45],
+			"translation": [-1, -1.25, -13],
+			"scale": [1.6, 1.6, 1.6]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [-90, 0, -45],
+			"translation": [-1, -1.25, -13],
+			"scale": [1.6, 1.6, 1.6]
+		},
+		"firstperson_righthand": {
+			"rotation": [-90, 0, 45],
+			"translation": [-8.5, 0.25, -9],
+			"scale": [2, 2, 2]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-90, 0, -45],
+			"translation": [-8.5, 0.25, -9],
+			"scale": [2, 2, 2]
+		}
+	}
 }
