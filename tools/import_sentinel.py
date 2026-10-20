@@ -55,9 +55,7 @@ for animation in source["animations"]:
                 tracks.append({"path": paths[uuid], "channel": channel, "frames": [
                     {"time": f["time"], "value": vector([f["data_points"][0][axis] for axis in ("x", "y", "z")]),
                      "smooth": f["interpolation"] == "catmullrom"} for f in frames]})
-                # Horizontal root motion belongs to the entity's collision-aware movement.
-                # The source thrust moves main by 103 model units; applying it again in
-                # the renderer detaches the armor from its hitbox and snaps it back.
+                # Keep horizontal movement in entity physics so the armor stays on its hitbox.
                 if paths[uuid] == ["main"] and channel == "position":
                     for frame in tracks[-1]["frames"]:
                         frame["value"][0] = frame["value"][2] = 0.0
