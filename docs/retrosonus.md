@@ -40,7 +40,3 @@ persist across world saves. A barrier needs all four rods loaded and alive.
 
 Barrier particles use the supplied Retrosonus sprite with an emissive core and
 the mod's additive bloom pass; no shader pack is required.
-
-Focused tests: set `JAVA_TOOL_OPTIONS` to
-`-Dfabric-api.gametest.filter=spiritum-test:resonance_tests_*`, then run
-`tools/dev.ps1 -Task runGameTest`.

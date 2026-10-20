@@ -1,8 +1,7 @@
 param(
-    [ValidateSet('build','runClient','runGameTest','runClientGameTest','clean')]
+    [ValidateSet('build','runClient','clean')]
     [string]$Task = 'build',
     [switch]$SafeJvm,
-    [switch]$Backslot,
     [ValidateSet('none','jei','rei')]
     [string]$Viewer = 'none'
 )
@@ -31,7 +30,6 @@ try {
     try {
         Write-Host "Using JDK: $selectedJdk"
         $gradleArguments = @($Task, '--console=plain', "-Pviewer=$Viewer")
-        if ($Backslot) { $gradleArguments += '-PbackslotCompat=true' }
         if ($SafeJvm) { $gradleArguments += '-Dorg.gradle.jvmargs=-Xmx1G -XX:TieredStopAtLevel=1' }
         & './gradlew.bat' @gradleArguments
         if ($LASTEXITCODE -ne 0) { throw "Gradle $Task failed with exit code $LASTEXITCODE" }

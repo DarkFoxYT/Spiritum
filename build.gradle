@@ -18,33 +18,13 @@ loom {
     }
 }
 
-if (file('src/gametest').isDirectory()) {
-    fabricApi {
-        configureTests {
-            createSourceSet = true
-            modId = 'spiritum-test'
-            enableGameTests = true
-            enableClientGameTests = true
-        }
-    }
-}
-
 repositories {
-    maven { url 'https://api.modrinth.com/maven' }
     maven { url 'https://maven.blamejared.com' }
     maven { url 'https://maven.shedaniel.me' }
     maven { url 'https://maven.architectury.dev' }
 }
 
 dependencies {
-    if (project.findProperty('backslotCompat') == 'true') {
-        modLocalRuntime 'maven.modrinth:backslot-mod:SZG2ulwC'
-        def bundle = configurations.detachedConfiguration(
-                dependencies.create('maven.modrinth:backslot-mod:SZG2ulwC'))
-        modLocalRuntime files(zipTree(bundle.singleFile).matching {
-            include 'META-INF/jars/*.jar'
-        }.files)
-    }
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
