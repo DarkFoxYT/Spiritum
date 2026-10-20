@@ -1,0 +1,6 @@
+{
+  "fabric:load_conditions": [{"condition": "fabric:all_mods_loaded", "values": ["waywardalchemist"]}],
+  "type": "minecraft:crafting_shapeless", "category": "equipment",
+  "ingredients": ["spiritum:tuned_blade", "waywardalchemist:philophers_ash", "waywardalchemist:philophers_ash", "spiritum:argent_ingot", "spiritum:argent_ingot"],
+  "result": {"id": "spiritum:retrosonus", "count": 1}
+}

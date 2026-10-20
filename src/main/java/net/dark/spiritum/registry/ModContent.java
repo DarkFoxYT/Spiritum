@@ -171,6 +171,40 @@ public final class ModContent {
                                                     AttributeModifierSlot.MAINHAND)
                                             .build())
                             .fireproof());
+    public static final Item RETROSONUS =
+            custom(
+                    "retrosonus",
+                    RetrosonusItem::new,
+                    new Item.Settings()
+                            .sword(SpiritumToolMaterials.TUNED_BLADE, 4, -2.6f)
+                            .attributeModifiers(
+                                    AttributeModifiersComponent.builder()
+                                            .add(
+                                                    EntityAttributes.ATTACK_DAMAGE,
+                                                    new EntityAttributeModifier(
+                                                            Item.BASE_ATTACK_DAMAGE_MODIFIER_ID,
+                                                            8,
+                                                            EntityAttributeModifier.Operation
+                                                                    .ADD_VALUE),
+                                                    AttributeModifierSlot.MAINHAND)
+                                            .add(
+                                                    EntityAttributes.ATTACK_SPEED,
+                                                    new EntityAttributeModifier(
+                                                            Item.BASE_ATTACK_SPEED_MODIFIER_ID,
+                                                            -2.6,
+                                                            EntityAttributeModifier.Operation
+                                                                    .ADD_VALUE),
+                                                    AttributeModifierSlot.MAINHAND)
+                                            .add(
+                                                    EntityAttributes.ENTITY_INTERACTION_RANGE,
+                                                    new EntityAttributeModifier(
+                                                            id("retrosonus_reach"),
+                                                            .5,
+                                                            EntityAttributeModifier.Operation
+                                                                    .ADD_VALUE),
+                                                    AttributeModifierSlot.MAINHAND)
+                                            .build())
+                            .fireproof());
     public static final Item BOTTLE_OF_HADES =
             custom("bottle_of_hades", BottleOfHadesItem::new, new Item.Settings().maxCount(1));
     public static final Item SUMMONERS_RING =

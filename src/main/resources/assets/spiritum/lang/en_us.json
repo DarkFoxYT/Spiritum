@@ -1,4 +1,8 @@
 {
+  "item.spiritum.retrosonus": "Retrosonus",
+  "entity.spiritum.singing_rod": "Singing Rod",
+  "enchantment.spiritum.resonance": "Resonance",
+  "message.spiritum.resonance_shape": "Place four rods around an open area to form a barrier.",
   "itemGroup.spiritum": "Spiritum",
   "message.spiritum.ritual_busy": "The pedestal is channeling. Snuff a ritual candle to interrupt it.",
   "message.spiritum.active_ritual": "Active rite: %s. Snuff a candle to end it.",

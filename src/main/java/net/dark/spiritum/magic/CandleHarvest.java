@@ -19,9 +19,13 @@ public final class CandleHarvest {
                     ItemStack weapon = source.getWeaponStack();
                     boolean hexblade =
                             source.isDirect() && weapon != null && weapon.isOf(ModContent.HEXBLADE);
-                    if (hexblade && entity instanceof PlayerEntity player) {
+                    boolean retrosonus =
+                            source.isDirect()
+                                    && weapon != null
+                                    && weapon.isOf(ModContent.RETROSONUS);
+                    if ((hexblade || retrosonus) && entity instanceof PlayerEntity player) {
                         ItemStack gem = SpiritBinding.socket(weapon);
-                        if (!gem.isEmpty()) {
+                        if (!gem.isEmpty() && (hexblade || SpiritBinding.player(gem).isEmpty())) {
                             SpiritBinding.bind(gem, player);
                             SpiritBinding.socket(weapon, gem);
                         }

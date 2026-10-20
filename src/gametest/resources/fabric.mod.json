@@ -7,6 +7,7 @@
   "entrypoints": {
     "fabric-gametest": [
       "net.dark.spiritum.GameplayTests",
+      "net.dark.spiritum.ResonanceTests",
       "net.dark.spiritum.AnimationTests",
       "net.dark.spiritum.MotionTests",
       "net.dark.spiritum.ItemUseTests", "net.dark.spiritum.CandleHarvestTests"

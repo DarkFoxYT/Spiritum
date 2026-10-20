@@ -1,6 +1,5 @@
 package net.dark.spiritum.mixin;
 
-import net.dark.spiritum.registry.ModContent;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.state.BipedEntityRenderState;
@@ -26,7 +25,8 @@ public abstract class TunedBladeArmMixin {
     private void spiritum$pointBlade(BipedEntityRenderState state, CallbackInfo ci) {
         if (!state.isUsingItem) return;
         Arm arm = state.activeHand == Hand.MAIN_HAND ? state.mainArm : state.mainArm.getOpposite();
-        if (!state.getItemStackForArm(arm).isOf(ModContent.TUNED_BLADE)) return;
+        if (!(state.getItemStackForArm(arm).getItem()
+                instanceof net.dark.spiritum.item.TunedBladeItem)) return;
         ModelPart heldArm = arm == Arm.RIGHT ? rightArm : leftArm;
         ModelPart supportingArm = arm == Arm.RIGHT ? leftArm : rightArm;
         float side = arm == Arm.RIGHT ? 1 : -1;

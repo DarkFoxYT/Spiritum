@@ -78,7 +78,7 @@ public class AssetClientTests implements FabricClientGameTest {
             server.runOnServer(
                     s -> {
                         var level = s.getOverworld();
-                        var sentinel = ModEntities.SENTINEL.create(level, SpawnReason.COMMAND);
+                        var sentinel = ModEntities.SINGING_ROD.create(level, SpawnReason.COMMAND);
                         sentinel.setPosition(0, -59, 0);
                         level.spawnEntity(sentinel);
                         level.setBlockState(
@@ -91,18 +91,18 @@ public class AssetClientTests implements FabricClientGameTest {
                                 ModContent.HEXED_CANDLE.getDefaultState());
                         var player = s.getPlayerManager().getPlayerList().getFirst();
                         player.setStackInHand(
-                                Hand.MAIN_HAND, new ItemStack(ModContent.TUNED_BLADE));
+                                Hand.MAIN_HAND, new ItemStack(ModContent.RETROSONUS));
                         ItemStack gem = new ItemStack(ModContent.SPIRIT_GEM);
                         SpiritBinding.bind(gem, player);
                         SpiritBinding.socket(player.getMainHandStack(), gem);
                     });
             world.getClientWorld().waitForChunksRender();
             context.waitTicks(5);
-            context.takeScreenshot("sentinel-and-supplied-assets");
+            context.takeScreenshot("retrosonus-and-singing-rod");
             context.getInput().holdKey(options -> options.useKey);
             context.waitFor(client -> client.player.isUsingItem());
             context.waitTicks(5);
-            context.takeScreenshot("tuned-blade-pointing");
+            context.takeScreenshot("retrosonus-tracking");
             float before = context.computeOnClient(client -> client.player.getYaw());
             server.runOnServer(
                     s ->

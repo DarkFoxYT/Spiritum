@@ -1,10 +1,12 @@
 package net.dark.spiritum.item;
 
+import net.dark.spiritum.magic.Resonance;
 import net.dark.spiritum.network.TunedBladeTargetPayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.consume.UseAction;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.*;
@@ -23,6 +25,8 @@ public class TunedBladeItem extends GemSocketItem {
 
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand) {
+        if (Resonance.enchanted(user.getStackInHand(hand)) && !user.isSneaking())
+            return ActionResult.PASS;
         ItemStack gem = SpiritBinding.socket(user.getStackInHand(hand));
         if (gem.isEmpty() || user.isSneaking()) return super.use(world, user, hand);
         var binding = SpiritBinding.player(gem);
@@ -32,6 +36,14 @@ public class TunedBladeItem extends GemSocketItem {
             return ActionResult.PASS;
         user.setCurrentHand(hand);
         return ActionResult.CONSUME;
+    }
+
+    @Override
+    public ActionResult useOnBlock(ItemUsageContext context) {
+        if (context.getPlayer() == null
+                || context.getPlayer().isSneaking()
+                || !Resonance.enchanted(context.getStack())) return ActionResult.PASS;
+        return Resonance.place(context);
     }
 
     @Override
@@ -47,6 +59,10 @@ public class TunedBladeItem extends GemSocketItem {
     @Override
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
         if (!(user instanceof ServerPlayerEntity player)) return;
+        if (Resonance.enchanted(stack)) {
+            player.stopUsingItem();
+            return;
+        }
         var target =
                 SpiritBinding.player(SpiritBinding.socket(stack))
                         .map(

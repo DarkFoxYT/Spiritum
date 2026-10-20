@@ -1,7 +1,6 @@
 package net.dark.spiritum.client;
 
 import net.dark.spiritum.network.TunedBladeTargetPayload;
-import net.dark.spiritum.registry.ModContent;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.MathHelper;
@@ -28,7 +27,9 @@ public final class TunedBladeGuidance {
         if (client.isPaused()
                 || player == null
                 || !player.isUsingItem()
-                || !player.getActiveItem().isOf(ModContent.TUNED_BLADE)
+                || !(player.getActiveItem().getItem()
+                        instanceof net.dark.spiritum.item.TunedBladeItem)
+                || net.dark.spiritum.magic.Resonance.enchanted(player.getActiveItem())
                 || now - receivedAt > 250_000_000L) return;
         // Rotate the local camera each frame; ordinary movement packets report the resulting look.
         float step = 30 * seconds;

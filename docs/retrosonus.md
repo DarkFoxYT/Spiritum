@@ -1,0 +1,33 @@
+# Retrosonus
+
+Craft Retrosonus with one Tuned Blade, two argent ingots and two
+`waywardalchemist:philophers_ash`. The recipe loads when Wayward Alchemist is
+installed. Retrosonus has 9 total attack damage, 1.4 attack speed and +0.5 entity
+interaction range. It retains the Tuned Blade's durability, enchantability,
+calx-of-Hades repair ingredient and sword sweeping attacks.
+
+Retrosonus accepts empty or player-bound Spirit Gems. A direct player kill binds
+an empty socketed gem to the slain player. Already-bound gems keep their binding.
+Without Resonance, hold use to track an online bound player just as with a Tuned
+Blade. Sneak-use removes the gem.
+
+Resonance is a single-level enchantment for Tuned Blades and Retrosonus, available
+through enchanting, random enchanted loot and librarian trades. It replaces
+tracking with rod placement. Right-click a block's top face to place a Singing
+Rod; each placement costs one durability and has a half-second cooldown.
+
+Four rods placed around an open area form a barrier. Each new rod must be within
+32 blocks of the other rods and within four blocks vertically. The four corners
+must form a convex enclosure. New sets belong to the placing player; several
+players can maintain separate barriers, and completed sets are independent.
+
+The barrier allows entry but prevents living entities and occupied vehicles from
+walking or flying out at any height. Pearls and other teleports can escape. Each
+rod has 10 HP, 15 armor (full iron armor), no armor toughness and no collision
+pushing. Destroying any rod breaks the barrier immediately. Remaining rods from
+a broken completed set do not join new sets. Rod ownership and barrier groups
+persist across world saves. A barrier needs all four rods loaded and alive.
+
+Focused tests: set `JAVA_TOOL_OPTIONS` to
+`-Dfabric-api.gametest.filter=spiritum-test:resonance_tests_*`, then run
+`tools/dev.ps1 -Task runGameTest`.
