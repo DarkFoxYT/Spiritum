@@ -1,0 +1,6 @@
+{
+  "parent": "spiritum:item/hexblade",
+  "textures": {
+    "layer0": "spiritum:item/hexblade_active"
+  }
+}
