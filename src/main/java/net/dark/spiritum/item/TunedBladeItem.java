@@ -2,7 +2,6 @@ package net.dark.spiritum.item;
 
 import net.dark.spiritum.network.TunedBladeTargetPayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.component.ComponentMap;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -42,7 +41,7 @@ public class TunedBladeItem extends GemSocketItem {
 
     @Override
     public UseAction getUseAction(ItemStack stack) {
-        return UseAction.NONE;
+        return UseAction.CROSSBOW;
     }
 
     @Override

@@ -15,6 +15,47 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.GameMode;
 
 public class ItemUseTests {
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 10)
+    public void bladesUseCustomRepairsAndSwordEnchantments(TestContext test) {
+        ItemStack tuned = new ItemStack(ModContent.TUNED_BLADE);
+        ItemStack hex = new ItemStack(ModContent.HEXBLADE);
+        test.assertTrue(
+                tuned.isIn(net.minecraft.registry.tag.ItemTags.SWORDS),
+                "Tuned Blade supports sweeping attacks and sword enchantments");
+        test.assertTrue(
+                tuned.get(DataComponentTypes.ENCHANTABLE).value() > 0,
+                "Tuned Blade is enchantable");
+        test.assertTrue(
+                hex.get(DataComponentTypes.REPAIRABLE)
+                        .matches(new ItemStack(ModContent.ARGENT_NUGGET)),
+                "Hexblade repairs with argent nuggets");
+        test.assertFalse(
+                hex.get(DataComponentTypes.REPAIRABLE)
+                        .matches(new ItemStack(net.minecraft.item.Items.IRON_INGOT)),
+                "Hexblade no longer repairs with iron");
+        test.assertTrue(
+                tuned.get(DataComponentTypes.REPAIRABLE)
+                        .matches(new ItemStack(ModContent.CALX_OF_HADES)),
+                "Tuned Blade repairs with calx of Hades");
+        test.assertFalse(
+                tuned.get(DataComponentTypes.REPAIRABLE)
+                        .matches(new ItemStack(net.minecraft.item.Items.NETHERITE_INGOT)),
+                "Tuned Blade no longer repairs with netherite");
+        double range =
+                tuned.get(DataComponentTypes.ATTRIBUTE_MODIFIERS)
+                        .applyOperations(
+                                net.minecraft.entity.attribute.EntityAttributes
+                                        .ENTITY_INTERACTION_RANGE,
+                                3,
+                                net.minecraft.entity.EquipmentSlot.MAINHAND);
+        test.assertEquals(3.5, range, "Tuned Blade adds half a block of entity reach");
+        test.assertEquals(
+                net.minecraft.item.consume.UseAction.CROSSBOW,
+                tuned.getUseAction(),
+                "Tracking uses a two-handed pose");
+        test.complete();
+    }
+
     @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 50)
     public void poppetChargesThenThrowsOnRelease(TestContext test) {
         for (int x = 0; x < 8; x++)

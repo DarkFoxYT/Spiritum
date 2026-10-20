@@ -128,7 +128,7 @@ public final class ModContent {
     public static final Item VOODOO_POPPET =
             custom("voodoo_poppet", PoppetItem::new, new Item.Settings().maxDamage(6));
     /*public static final Item SENTINEL =
-            custom("sentinel", SentinelItem::new, new Item.Settings().maxCount(1));*/
+    custom("sentinel", SentinelItem::new, new Item.Settings().maxCount(1));*/
     public static final Item ARGENT_NEEDLE =
             custom("argent_needle", ArgentNeedleItem::new, new Item.Settings().maxCount(1));
     public static final Item HEXBLADE = hexblade();
@@ -136,7 +136,41 @@ public final class ModContent {
             custom(
                     "tuned_blade",
                     TunedBladeItem::new,
-                    new Item.Settings().sword(ToolMaterial.NETHERITE, 3.5f, -2.6f).fireproof());
+                    new Item.Settings()
+                            .sword(SpiritumToolMaterials.TUNED_BLADE, 3.5f, -2.6f)
+                            .attributeModifiers(
+                                    AttributeModifiersComponent.builder()
+                                            .add(
+                                                    EntityAttributes.ATTACK_DAMAGE,
+                                                    new net.minecraft.entity.attribute
+                                                            .EntityAttributeModifier(
+                                                            Item.BASE_ATTACK_DAMAGE_MODIFIER_ID,
+                                                            SpiritumToolMaterials.TUNED_BLADE
+                                                                            .attackDamageBonus()
+                                                                    + 3.5,
+                                                            EntityAttributeModifier.Operation
+                                                                    .ADD_VALUE),
+                                                    AttributeModifierSlot.MAINHAND)
+                                            .add(
+                                                    EntityAttributes.ATTACK_SPEED,
+                                                    new net.minecraft.entity.attribute
+                                                            .EntityAttributeModifier(
+                                                            Item.BASE_ATTACK_SPEED_MODIFIER_ID,
+                                                            -2.6,
+                                                            EntityAttributeModifier.Operation
+                                                                    .ADD_VALUE),
+                                                    AttributeModifierSlot.MAINHAND)
+                                            .add(
+                                                    EntityAttributes.ENTITY_INTERACTION_RANGE,
+                                                    new net.minecraft.entity.attribute
+                                                            .EntityAttributeModifier(
+                                                            id("tuned_blade_reach"),
+                                                            .5,
+                                                            EntityAttributeModifier.Operation
+                                                                    .ADD_VALUE),
+                                                    AttributeModifierSlot.MAINHAND)
+                                            .build())
+                            .fireproof());
     public static final Item BOTTLE_OF_HADES =
             custom("bottle_of_hades", BottleOfHadesItem::new, new Item.Settings().maxCount(1));
     public static final Item SUMMONERS_RING =
@@ -155,7 +189,7 @@ public final class ModContent {
                         new GemSocketItem(
                                 new Item.Settings()
                                         .registryKey(key)
-                                        .sword(ToolMaterial.IRON, 3.0f, -2.4f)));
+                                        .sword(SpiritumToolMaterials.HEXBLADE, 3.0f, -2.4f)));
         ITEMS.add(item);
         return item;
     }

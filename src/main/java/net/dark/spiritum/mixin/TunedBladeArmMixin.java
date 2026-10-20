@@ -19,14 +19,22 @@ public abstract class TunedBladeArmMixin {
     @Shadow public ModelPart rightArm;
     @Shadow public ModelPart leftArm;
 
-    @Inject(method = "setAngles(Lnet/minecraft/client/render/entity/state/BipedEntityRenderState;)V", at = @At("TAIL"))
+    @Inject(
+            method =
+                    "setAngles(Lnet/minecraft/client/render/entity/state/BipedEntityRenderState;)V",
+            at = @At("TAIL"))
     private void spiritum$pointBlade(BipedEntityRenderState state, CallbackInfo ci) {
         if (!state.isUsingItem) return;
         Arm arm = state.activeHand == Hand.MAIN_HAND ? state.mainArm : state.mainArm.getOpposite();
         if (!state.getItemStackForArm(arm).isOf(ModContent.TUNED_BLADE)) return;
         ModelPart heldArm = arm == Arm.RIGHT ? rightArm : leftArm;
+        ModelPart supportingArm = arm == Arm.RIGHT ? leftArm : rightArm;
+        float side = arm == Arm.RIGHT ? 1 : -1;
         heldArm.pitch = -(float) Math.PI / 2 + head.pitch;
-        heldArm.yaw = head.yaw;
+        heldArm.yaw = head.yaw - .3f * side;
         heldArm.roll = 0;
+        supportingArm.pitch = heldArm.pitch;
+        supportingArm.yaw = head.yaw + .6f * side;
+        supportingArm.roll = 0;
     }
 }
