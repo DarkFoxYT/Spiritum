@@ -48,9 +48,9 @@ public class SingingRodRenderer extends EntityRenderer<SingingRodEntity, EntityR
         queue.submitModelPart(
                 model,
                 matrices,
-                RenderLayers.entityCutout(
+                RenderLayers.entityTranslucentEmissive(
                         Identifier.of("spiritum", "textures/entity/singing_rod.png")),
-                state.light,
+                LightmapTextureManager.MAX_LIGHT_COORDINATE,
                 OverlayTexture.DEFAULT_UV,
                 null);
         matrices.pop();

@@ -25,10 +25,17 @@ public abstract class InventoryRingScreenMixin extends HandledScreen<PlayerScree
         context.fill(left + 1, top + 1, left + 18, top + 18, 0xFFFFFFFF);
         context.fill(left + 1, top + 1, left + 17, top + 17, 0xFF8B8B8B);
         if (!handler.slots.get(46).hasStack()) {
-            context.fill(left + 6, top + 4, left + 12, top + 5, 0xFF555555);
-            context.fill(left + 4, top + 6, left + 5, top + 12, 0xFF555555);
-            context.fill(left + 13, top + 6, left + 14, top + 12, 0xFF555555);
-            context.fill(left + 6, top + 13, left + 12, top + 14, 0xFF555555);
+            context.drawTexture(
+                    net.minecraft.client.gl.RenderPipelines.GUI_TEXTURED,
+                    net.minecraft.util.Identifier.of("spiritum", "textures/item/ring_icon.png"),
+                    left + 1,
+                    top + 1,
+                    0,
+                    0,
+                    16,
+                    16,
+                    16,
+                    16);
         }
     }
 

@@ -4,15 +4,34 @@
     "property": "minecraft:display_context",
     "cases": [
       {
-        "when": ["gui", "ground", "fixed"],
-        "model": {"type": "minecraft:model", "model": "spiritum:item/tuned_blade_icon"}
+        "when": [
+          "gui",
+          "ground"
+        ],
+        "model": {
+          "type": "minecraft:model",
+          "model": "spiritum:item/tuned_blade_icon"
+        }
+      },
+      {
+        "when": "fixed",
+        "model": {
+          "type": "minecraft:model",
+          "model": "spiritum:item/tuned_blade_back"
+        }
       }
     ],
     "fallback": {
       "type": "minecraft:condition",
       "property": "minecraft:using_item",
-      "on_true": {"type": "minecraft:model", "model": "spiritum:item/tuned_blade_pointing"},
-      "on_false": {"type": "minecraft:model", "model": "spiritum:item/tuned_blade"}
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "spiritum:item/tuned_blade_pointing"
+      },
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "spiritum:item/tuned_blade"
+      }
     }
   }
 }

@@ -1,9 +1,37 @@
 {
   "model": {
-    "type": "minecraft:condition",
-    "property": "minecraft:has_component",
-    "component": "minecraft:container",
-    "on_true": {"type": "minecraft:model", "model": "spiritum:item/hexblade_active"},
-    "on_false": {"type": "minecraft:model", "model": "spiritum:item/hexblade"}
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": "fixed",
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:has_component",
+          "component": "minecraft:container",
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "spiritum:item/hexblade_active_back"
+          },
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "spiritum:item/hexblade_back"
+          }
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:condition",
+      "property": "minecraft:has_component",
+      "component": "minecraft:container",
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "spiritum:item/hexblade_active"
+      },
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "spiritum:item/hexblade"
+      }
+    }
   }
 }

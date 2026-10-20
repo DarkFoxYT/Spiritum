@@ -40,5 +40,17 @@ public abstract class CreativeRingScreenMixin extends HandledScreen<ScreenHandle
         context.fill(left, top, left + 18, top + 18, 0xFF373737);
         context.fill(left + 1, top + 1, left + 18, top + 18, 0xFFFFFFFF);
         context.fill(left + 1, top + 1, left + 17, top + 17, 0xFF8B8B8B);
+        if (!handler.slots.get(46).hasStack())
+            context.drawTexture(
+                    net.minecraft.client.gl.RenderPipelines.GUI_TEXTURED,
+                    net.minecraft.util.Identifier.of("spiritum", "textures/item/ring_icon.png"),
+                    left + 1,
+                    top + 1,
+                    0,
+                    0,
+                    16,
+                    16,
+                    16,
+                    16);
     }
 }

@@ -1,25 +1,57 @@
 {
   "model": {
-    "type": "minecraft:condition",
-    "property": "minecraft:has_component",
-    "component": "minecraft:potion_contents",
-    "on_true": {
-      "type": "minecraft:model",
-      "model": "spiritum:item/argent_needle_coated",
-      "tints": [
-        {
-          "type": "minecraft:constant",
-          "value": 16777215
-        },
-        {
-          "type": "minecraft:potion",
-          "default": 16777215
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": "fixed",
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:has_component",
+          "component": "minecraft:potion_contents",
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "spiritum:item/argent_needle_coated_back",
+            "tints": [
+              {
+                "type": "minecraft:constant",
+                "value": 16777215
+              },
+              {
+                "type": "minecraft:potion",
+                "default": 16777215
+              }
+            ]
+          },
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "spiritum:item/argent_needle_back"
+          }
         }
-      ]
-    },
-    "on_false": {
-      "type": "minecraft:model",
-      "model": "spiritum:item/argent_needle"
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:condition",
+      "property": "minecraft:has_component",
+      "component": "minecraft:potion_contents",
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "spiritum:item/argent_needle_coated",
+        "tints": [
+          {
+            "type": "minecraft:constant",
+            "value": 16777215
+          },
+          {
+            "type": "minecraft:potion",
+            "default": 16777215
+          }
+        ]
+      },
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "spiritum:item/argent_needle"
+      }
     }
   }
 }
