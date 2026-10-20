@@ -128,7 +128,7 @@ public final class ModContent {
     public static final Item VOODOO_POPPET =
             custom("voodoo_poppet", PoppetItem::new, new Item.Settings().maxDamage(6));
     public static final Item SENTINEL =
-    custom("sentinel", SentinelItem::new, new Item.Settings().maxCount(1));
+            custom("sentinel", SentinelItem::new, new Item.Settings().maxCount(1));
     public static final Item ARGENT_NEEDLE =
             custom("argent_needle", ArgentNeedleItem::new, new Item.Settings().maxCount(1));
     public static final Item HEXBLADE = hexblade();
@@ -171,6 +171,21 @@ public final class ModContent {
                                                     AttributeModifierSlot.MAINHAND)
                                             .build())
                             .fireproof());
+    public static final Item EXALTED_INGOT = item("exalted_ingot");
+    public static final Item RETROSONUS_UPGRADE_TEMPLATE =
+            custom(
+                    "retrosonus_upgrade_smithing_template",
+                    settings ->
+                            new SmithingTemplateItem(
+                                    Text.translatable("item.spiritum.tuned_blade"),
+                                    Text.translatable("item.spiritum.exalted_ingot"),
+                                    Text.translatable("item.spiritum.retrosonus_upgrade.base_slot"),
+                                    Text.translatable(
+                                            "item.spiritum.retrosonus_upgrade.addition_slot"),
+                                    java.util.List.of(),
+                                    java.util.List.of(),
+                                    settings),
+                    new Item.Settings().rarity(net.minecraft.util.Rarity.RARE));
     public static final Item RETROSONUS =
             custom(
                     "retrosonus",

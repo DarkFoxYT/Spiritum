@@ -22,6 +22,47 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 public class AssetClientTests implements FabricClientGameTest {
+    private static boolean upgradeRecipesHiddenInJei() {
+        try {
+            var field =
+                    net.dark.spiritum.client.compat.SpiritumJeiPlugin.class.getDeclaredField(
+                            "runtime");
+            field.setAccessible(true);
+            var runtime = (mezz.jei.api.runtime.IJeiRuntime) field.get(null);
+            if (runtime == null) return false;
+            var manager = runtime.getRecipeManager();
+            var smithing = mezz.jei.api.constants.RecipeTypes.SMITHING;
+            boolean registered =
+                    manager.createRecipeLookup(smithing)
+                            .includeHidden()
+                            .get()
+                            .anyMatch(
+                                    recipe ->
+                                            recipe.id()
+                                                    .getValue()
+                                                    .equals(ModContent.id("retrosonus")));
+            boolean hidden =
+                    manager.createRecipeLookup(smithing)
+                            .get()
+                            .noneMatch(
+                                    recipe ->
+                                            recipe.id()
+                                                    .getValue()
+                                                    .equals(ModContent.id("retrosonus")));
+            boolean ingotHidden =
+                    manager.createRecipeLookup(mezz.jei.api.constants.RecipeTypes.CRAFTING)
+                            .get()
+                            .noneMatch(
+                                    recipe ->
+                                            recipe.id()
+                                                    .getValue()
+                                                    .equals(ModContent.id("exalted_ingot")));
+            return registered && hidden && ingotHidden;
+        } catch (ReflectiveOperationException e) {
+            throw new AssertionError("Cannot inspect JEI upgrade recipes", e);
+        }
+    }
+
     @Override
     public void runTest(ClientGameTestContext context) {
         context.runOnClient(
@@ -117,11 +158,16 @@ public class AssetClientTests implements FabricClientGameTest {
                                 ModContent.HEXED_CANDLE.getDefaultState());
                         var player = s.getPlayerManager().getPlayerList().getFirst();
                         player.setStackInHand(Hand.MAIN_HAND, new ItemStack(ModContent.RETROSONUS));
+                        player.getInventory().setStack(1, new ItemStack(ModContent.EXALTED_INGOT));
+                        player.getInventory()
+                                .setStack(2, new ItemStack(ModContent.RETROSONUS_UPGRADE_TEMPLATE));
                         ItemStack gem = new ItemStack(ModContent.SPIRIT_GEM);
                         SpiritBinding.bind(gem, player);
                         SpiritBinding.socket(player.getMainHandStack(), gem);
                     });
             world.getClientWorld().waitForChunksRender();
+            if (net.fabricmc.loader.api.FabricLoader.getInstance().isModLoaded("jei"))
+                context.waitFor(client -> upgradeRecipesHiddenInJei());
             context.waitTicks(5);
             context.waitTicks(12);
             context.takeScreenshot("retrosonus-and-singing-rod");

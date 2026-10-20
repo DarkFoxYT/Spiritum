@@ -1,8 +1,16 @@
 # Retrosonus
 
-Craft Retrosonus with one Tuned Blade, two argent ingots and two
-`waywardalchemist:philophers_ash`. The recipe loads when Wayward Alchemist is
-installed. Retrosonus has 9 total attack damage, 1.4 attack speed and +0.5 entity
+Upgrade a Tuned Blade to Retrosonus at a smithing table with a Retrosonus Upgrade
+Smithing Template and one Exalted Ingot. The template is uncraftable and has no
+duplication recipe. It is available through creative mode or commands for server
+distribution. Smithing preserves the blade's name, enchantments, wear and socketed gem.
+
+Craft one Exalted Ingot shapelessly with three
+`waywardalchemist:philophers_ash` and two argent ingots. This ingot recipe loads
+when Wayward Alchemist is installed. Both the ingot recipe and the Retrosonus
+smithing recipe are hidden in JEI, while remaining usable at their workstations.
+
+Retrosonus has 9 total attack damage, 1.4 attack speed and +0.5 entity
 interaction range. It retains the Tuned Blade's durability, enchantability,
 calx-of-Hades repair ingredient and sword sweeping attacks.
 

@@ -1,4 +1,8 @@
 {
+  "item.spiritum.exalted_ingot": "Exalted Ingot",
+  "item.spiritum.retrosonus_upgrade_smithing_template": "Retrosonus Upgrade Smithing Template",
+  "item.spiritum.retrosonus_upgrade.base_slot": "Place a Tuned Blade here",
+  "item.spiritum.retrosonus_upgrade.addition_slot": "Place an Exalted Ingot here",
   "item.spiritum.retrosonus": "Retrosonus",
   "entity.spiritum.singing_rod": "Singing Rod",
   "enchantment.spiritum.resonance": "Resonance",

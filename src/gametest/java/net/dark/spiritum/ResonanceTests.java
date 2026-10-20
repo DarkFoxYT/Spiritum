@@ -17,6 +17,53 @@ import net.minecraft.util.math.*;
 import java.util.*;
 
 public class ResonanceTests {
+    @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 15)
+    public void smithingUpgradePreservesBladeComponents(TestContext test) {
+        var blade = new ItemStack(ModContent.TUNED_BLADE);
+        blade.set(
+                DataComponentTypes.CUSTOM_NAME,
+                net.minecraft.text.Text.literal("A familiar blade"));
+        blade.setDamage(123);
+        var player = test.createMockCreativeServerPlayerInWorld();
+        var gem = new ItemStack(ModContent.SPIRIT_GEM);
+        SpiritBinding.bind(gem, player);
+        SpiritBinding.socket(blade, gem);
+        var input =
+                new net.minecraft.recipe.input.SmithingRecipeInput(
+                        new ItemStack(ModContent.RETROSONUS_UPGRADE_TEMPLATE),
+                        blade,
+                        new ItemStack(ModContent.EXALTED_INGOT));
+        var recipe =
+                test.getWorld()
+                        .getRecipeManager()
+                        .getFirstMatch(
+                                net.minecraft.recipe.RecipeType.SMITHING, input, test.getWorld())
+                        .orElseThrow();
+        test.assertEquals(
+                ModContent.id("retrosonus"),
+                recipe.id().getValue(),
+                "New smithing recipe matches the template, blade and ingot");
+        var result = recipe.value().craft(input, test.getWorld().getRegistryManager());
+        test.assertTrue(result.isOf(ModContent.RETROSONUS), "Smithing produces Retrosonus");
+        test.assertEquals(123, result.getDamage(), "Smithing preserves existing wear");
+        test.assertEquals(
+                blade.getCustomName(), result.getCustomName(), "Smithing preserves custom name");
+        test.assertTrue(
+                ItemStack.areEqual(gem, SpiritBinding.socket(result)),
+                "Smithing preserves the original bound gem");
+        test.assertFalse(
+                recipe.value()
+                        .matches(
+                                new net.minecraft.recipe.input.SmithingRecipeInput(
+                                        ItemStack.EMPTY,
+                                        blade,
+                                        new ItemStack(ModContent.EXALTED_INGOT)),
+                                test.getWorld()),
+                "Template is required");
+        test.getWorld().getServer().getPlayerManager().remove(player);
+        test.complete();
+    }
+
     @GameTest(structure = "spiritum-test:ritual_space", maxTicks = 25)
     public void rodsStandOnPartialBlockSurfaces(TestContext test) {
         test.setBlockState(2, 0, 2, net.minecraft.block.Blocks.STONE_SLAB);

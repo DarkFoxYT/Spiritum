@@ -25,6 +25,27 @@ public final class SpiritumJeiPlugin implements IModPlugin {
     @Override
     public void onRuntimeAvailable(mezz.jei.api.runtime.IJeiRuntime available) {
         runtime = available;
+        hideUpgradeRecipe(
+                available.getRecipeManager(),
+                mezz.jei.api.constants.RecipeTypes.CRAFTING,
+                "exalted_ingot");
+        hideUpgradeRecipe(
+                available.getRecipeManager(),
+                mezz.jei.api.constants.RecipeTypes.SMITHING,
+                "retrosonus");
+    }
+
+    private static <T extends net.minecraft.recipe.Recipe<?>> void hideUpgradeRecipe(
+            mezz.jei.api.recipe.IRecipeManager manager,
+            mezz.jei.api.recipe.types.IRecipeHolderType<T> type,
+            String id) {
+        var recipes =
+                manager.createRecipeLookup(type)
+                        .includeHidden()
+                        .get()
+                        .filter(recipe -> recipe.id().getValue().equals(ModContent.id(id)))
+                        .toList();
+        manager.hideRecipes(type, recipes);
     }
 
     @Override
