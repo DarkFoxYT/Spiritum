@@ -10,7 +10,8 @@ coated needles retain their potion tint. The back models avoid inheriting the
 large first-person tracking transforms.
 
 BackSlot keeps its own equipment component, independent of the ring slot. Selecting
-a socketed blade from BackSlot supports tracking through the normal held-item path.
+a socketed Tuned Blade from BackSlot supports tracking through the normal held-item path.
+Retrosonus supports its built-in rod placement instead of tracking.
 The inventory ring slot uses `textures/item/ring_icon.png` when empty, including
 the creative inventory tab. Singing rods use an emissive render layer and remain
 bright at night.

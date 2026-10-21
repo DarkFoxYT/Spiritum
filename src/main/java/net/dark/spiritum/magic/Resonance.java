@@ -4,10 +4,8 @@ import net.dark.spiritum.entity.SingingRodEntity;
 import net.dark.spiritum.registry.ModContent;
 import net.dark.spiritum.registry.ModEntities;
 import net.dark.spiritum.registry.ModParticles;
-import net.minecraft.enchantment.*;
 import net.minecraft.entity.*;
 import net.minecraft.item.*;
-import net.minecraft.registry.*;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.*;
@@ -19,8 +17,6 @@ import java.util.*;
 public final class Resonance {
     private static final Map<World, Set<Integer>> LOADED_RODS =
             Collections.synchronizedMap(new WeakHashMap<>());
-    public static final RegistryKey<Enchantment> ENCHANTMENT =
-            RegistryKey.of(RegistryKeys.ENCHANTMENT, Identifier.of("spiritum", "resonance"));
 
     private Resonance() {}
 
@@ -30,13 +26,8 @@ public final class Resonance {
                 .add(rod.getId());
     }
 
-    public static boolean enchanted(ItemStack stack) {
-        return stack.isOf(ModContent.RETROSONUS)
-                && stack.getEnchantments().getEnchantmentEntries().stream()
-                        .anyMatch(
-                                entry ->
-                                        entry.getKey().matchesKey(ENCHANTMENT)
-                                                && entry.getIntValue() > 0);
+    public static boolean enabled(ItemStack stack) {
+        return stack.isOf(ModContent.RETROSONUS);
     }
 
     public static void dissolve(SingingRodEntity broken) {
@@ -134,7 +125,7 @@ public final class Resonance {
         if (!world.spawnEntity(rod)) return ActionResult.FAIL;
         watch(rod);
         if (completed.size() == 4) completed.forEach(SingingRodEntity::seal);
-        player.getItemCooldownManager().set(context.getStack(), 10);
+        player.getItemCooldownManager().set(context.getStack(), 100);
         context.getStack()
                 .damage(
                         1,

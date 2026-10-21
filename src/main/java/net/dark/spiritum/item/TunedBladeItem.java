@@ -25,8 +25,7 @@ public class TunedBladeItem extends GemSocketItem {
 
     @Override
     public ActionResult use(World world, PlayerEntity user, Hand hand) {
-        if (Resonance.enchanted(user.getStackInHand(hand)) && !user.isSneaking())
-            return ActionResult.PASS;
+        if (Resonance.enabled(user.getStackInHand(hand))) return super.use(world, user, hand);
         ItemStack gem = SpiritBinding.socket(user.getStackInHand(hand));
         if (gem.isEmpty() || user.isSneaking()) return super.use(world, user, hand);
         var binding = SpiritBinding.player(gem);
@@ -42,7 +41,7 @@ public class TunedBladeItem extends GemSocketItem {
     public ActionResult useOnBlock(ItemUsageContext context) {
         if (context.getPlayer() == null
                 || context.getPlayer().isSneaking()
-                || !Resonance.enchanted(context.getStack())) return ActionResult.PASS;
+                || !Resonance.enabled(context.getStack())) return ActionResult.PASS;
         return Resonance.place(context);
     }
 
@@ -59,7 +58,7 @@ public class TunedBladeItem extends GemSocketItem {
     @Override
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
         if (!(user instanceof ServerPlayerEntity player)) return;
-        if (Resonance.enchanted(stack)) {
+        if (Resonance.enabled(stack)) {
             player.stopUsingItem();
             return;
         }

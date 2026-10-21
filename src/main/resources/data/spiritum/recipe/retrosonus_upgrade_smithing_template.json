@@ -1,0 +1,12 @@
+{
+  "fabric:load_conditions": [{"condition": "fabric:all_mods_loaded", "values": ["waywardalchemist"]}],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["DAD", "DHD", "DDD"],
+  "key": {
+    "D": "minecraft:diamond",
+    "A": "waywardalchemist:philosophers_ash",
+    "H": "spiritum:hexstone"
+  },
+  "result": {"id": "spiritum:retrosonus_upgrade_smithing_template", "count": 1}
+}

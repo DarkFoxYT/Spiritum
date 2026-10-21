@@ -29,7 +29,7 @@ public final class TunedBladeGuidance {
                 || !player.isUsingItem()
                 || !(player.getActiveItem().getItem()
                         instanceof net.dark.spiritum.item.TunedBladeItem)
-                || net.dark.spiritum.magic.Resonance.enchanted(player.getActiveItem())
+                || net.dark.spiritum.magic.Resonance.enabled(player.getActiveItem())
                 || now - receivedAt > 250_000_000L) return;
         // Rotate the local camera each frame; ordinary movement packets report the resulting look.
         float step = 30 * seconds;
