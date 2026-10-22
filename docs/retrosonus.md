@@ -28,19 +28,20 @@ its tracking ability.
 Resonance is built into every Retrosonus and needs no enchantment.
 Right-click a supporting block to place a Singing
 Rod on its collision surface, including partial blocks such as slabs and fences.
-Each placement costs one durability and has a five-second (100-tick) cooldown.
-The old enchantment definition remains readable for existing saved items, but
-it is no longer offered through enchanting, random loot or librarian trades.
+Each placement costs one durability. The first three rods have a five-second
+(100-tick) cooldown; the fourth starts a 30-second (600-tick) cooldown.
+The Resonance enchantment has been removed.
 
 Four rods placed around an open area form a barrier. Each new rod must be within
-32 blocks of the other rods and within four blocks vertically. The four corners
+96 blocks of the other rods and within four blocks vertically. The four corners
 must form a convex enclosure. New sets belong to the placing player; several
-players can maintain separate barriers, and completed sets are independent.
+players can maintain separate barriers. Placing a rod after completing a set
+removes the previous set and starts a new one.
 
 The barrier allows entry but prevents living entities and occupied vehicles from
 walking or flying out at any height. Pearls and other teleports can escape. Each
 rod has 10 HP, 15 armor (full iron armor), no armor toughness and no collision
-pushing. The supplied model is four blocks tall, with a matching hitbox.
+pushing. Rods ignore movement and have their velocity cleared every tick. The supplied model is four blocks tall, with a matching hitbox.
 Destroying any rod removes its whole group immediately. Unloaded group members
 are removed when loaded, even after a server restart. Rod ownership and barrier groups
 persist across world saves. A barrier needs all four rods loaded and alive.

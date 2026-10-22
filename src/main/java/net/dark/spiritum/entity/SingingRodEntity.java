@@ -70,7 +70,10 @@ public class SingingRodEntity extends PathAwareEntity {
             discard();
             return;
         }
+        setNoGravity(true);
+        setVelocity(0, 0, 0);
         super.tick();
+        setVelocity(0, 0, 0);
         Resonance.watch(this);
     }
 
@@ -78,7 +81,7 @@ public class SingingRodEntity extends PathAwareEntity {
     protected void mobTick(ServerWorld world) {
         super.mobTick(world);
         getNavigation().stop();
-        setVelocity(0, getVelocity().y, 0);
+        setVelocity(0, 0, 0);
         if (age % 10 == 0) Resonance.particles(world, this);
     }
 
@@ -87,6 +90,9 @@ public class SingingRodEntity extends PathAwareEntity {
         super.onDeath(source);
         Resonance.dissolve(this);
     }
+
+    @Override
+    public void move(MovementType type, net.minecraft.util.math.Vec3d movement) {}
 
     @Override
     public boolean isPushable() {

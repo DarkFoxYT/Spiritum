@@ -48,7 +48,7 @@ public final class Resonance {
     private static List<SingingRodEntity> nearby(World world, Box area) {
         Set<Integer> ids = LOADED_RODS.get(world);
         if (ids == null || ids.isEmpty()) return List.of();
-        Box bounds = area.expand(64);
+        Box bounds = area.expand(192);
         List<SingingRodEntity> result = new ArrayList<>();
         ids.removeIf(
                 id -> {
@@ -96,24 +96,61 @@ public final class Resonance {
         var candidates = nearby(world, rod.getBoundingBox());
         if (candidates.stream().anyMatch(r -> r.squaredDistanceTo(position) < 1))
             return ActionResult.FAIL;
+        var ownership =
+                world.getServer()
+                        .getOverworld()
+                        .getPersistentStateManager()
+                        .getOrCreate(RodOwnership.TYPE);
+        var previous = ownership.get(player.getUuid());
+        long now = world.getServer().getOverworld().getTime();
+        if (previous != null && previous.readyAt() > now) return ActionResult.FAIL;
         List<SingingRodEntity> group = new ArrayList<>();
-        for (var other : candidates) {
-            if (!other.sealed()
-                    && player.getUuid().equals(other.owner())
-                    && !other.group().isEmpty()
-                    && other.squaredDistanceTo(position) <= 32 * 32
-                    && Math.abs(other.getY() - position.y) <= 4) {
-                group = candidates.stream().filter(r -> r.group().equals(other.group())).toList();
-                if (group.size() < 4
-                        && group.stream()
-                                .allMatch(
-                                        r ->
-                                                r.squaredDistanceTo(position) <= 32 * 32
-                                                        && Math.abs(r.getY() - position.y) <= 4))
-                    break;
-                group = List.of();
+        for (var otherWorld : world.getServer().getWorlds()) {
+            for (int entityId : new ArrayList<>(LOADED_RODS.getOrDefault(otherWorld, Set.of()))) {
+                var entity = otherWorld.getEntityById(entityId);
+                if (entity instanceof SingingRodEntity other
+                        && other.isAlive()
+                        && player.getUuid().equals(other.owner())
+                        && !otherWorld
+                                .getPersistentStateManager()
+                                .getOrCreate(DissolvedRodGroups.TYPE)
+                                .contains(other.group())) {
+                    if (previous == null || previous.group().equals(other.group()))
+                        group.add(other);
+                }
             }
         }
+        boolean dissolved = false;
+        if (previous != null) {
+            for (var otherWorld : world.getServer().getWorlds()) {
+                if (otherWorld
+                        .getPersistentStateManager()
+                        .getOrCreate(DissolvedRodGroups.TYPE)
+                        .contains(previous.group())) {
+                    dissolved = true;
+                    break;
+                }
+            }
+        }
+        boolean replace =
+                dissolved
+                        || previous != null && previous.complete()
+                        || group.stream().anyMatch(SingingRodEntity::sealed);
+        if (!replace && previous != null && group.size() < previous.count())
+            return ActionResult.FAIL;
+        if (!replace
+                && (group.size() >= 4
+                        || group.stream()
+                                .anyMatch(
+                                        r ->
+                                                r.getEntityWorld() != world
+                                                        || r.squaredDistanceTo(position) > 96 * 96
+                                                        || Math.abs(r.getY() - position.y) > 4))) {
+            player.sendMessage(Text.translatable("message.spiritum.resonance_shape"), true);
+            return ActionResult.FAIL;
+        }
+        var oldRods = new ArrayList<>(group);
+        if (replace) group = List.of();
         String id = group.isEmpty() ? UUID.randomUUID().toString() : group.getFirst().group();
         rod.assign(player.getUuid(), id);
         List<SingingRodEntity> completed = new ArrayList<>(group);
@@ -123,9 +160,23 @@ public final class Resonance {
             return ActionResult.FAIL;
         }
         if (!world.spawnEntity(rod)) return ActionResult.FAIL;
+        if (replace) {
+            if (previous != null) {
+                for (var otherWorld : world.getServer().getWorlds())
+                    otherWorld
+                            .getPersistentStateManager()
+                            .getOrCreate(DissolvedRodGroups.TYPE)
+                            .add(previous.group());
+            }
+            oldRods.forEach(Resonance::dissolve);
+        }
         watch(rod);
+        ownership.put(
+                player.getUuid(),
+                new RodOwnership.Group(
+                        id, completed.size(), completed.size() == 4 ? now + 600 : now + 100));
         if (completed.size() == 4) completed.forEach(SingingRodEntity::seal);
-        player.getItemCooldownManager().set(context.getStack(), 100);
+        player.getItemCooldownManager().set(context.getStack(), completed.size() == 4 ? 600 : 100);
         context.getStack()
                 .damage(
                         1,
