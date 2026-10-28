@@ -13,8 +13,8 @@ Smithing preserves the blade's name, enchantments, wear and socketed gem.
 
 Craft one Exalted Ingot shapelessly with three
 `waywardalchemist:philosophers_ash` and two argent ingots. The ingot and template recipes load
-when Wayward Alchemist is installed. Both the ingot recipe and the Retrosonus
-smithing recipe are hidden in JEI, while remaining usable at their workstations.
+when Wayward Alchemist is installed. The ingot, template and Retrosonus
+smithing recipes are hidden in JEI, while remaining usable at their workstations.
 
 Retrosonus has 9 total attack damage, 1.4 attack speed and +0.5 entity
 interaction range. It retains the Tuned Blade's durability, enchantability,
@@ -33,7 +33,7 @@ Each placement costs one durability. The first three rods have a five-second
 The Resonance enchantment has been removed.
 
 Four rods placed around an open area form a barrier. Each new rod must be within
-96 blocks of the other rods and within four blocks vertically. The four corners
+96 blocks of the other rods and within 12 blocks vertically. The four corners
 must form a convex enclosure. New sets belong to the placing player; several
 players can maintain separate barriers. Placing a rod after completing a set
 removes the previous set and starts a new one.

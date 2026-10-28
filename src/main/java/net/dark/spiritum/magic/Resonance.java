@@ -145,7 +145,7 @@ public final class Resonance {
                                         r ->
                                                 r.getEntityWorld() != world
                                                         || r.squaredDistanceTo(position) > 96 * 96
-                                                        || Math.abs(r.getY() - position.y) > 4))) {
+                                                        || Math.abs(r.getY() - position.y) > 12))) {
             player.sendMessage(Text.translatable("message.spiritum.resonance_shape"), true);
             return ActionResult.FAIL;
         }
