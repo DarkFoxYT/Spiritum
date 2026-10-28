@@ -12,13 +12,6 @@
           "type": "minecraft:model",
           "model": "spiritum:item/retrosonus_icon"
         }
-      },
-      {
-        "when": "fixed",
-        "model": {
-          "type": "minecraft:model",
-          "model": "spiritum:item/retrosonus_back"
-        }
       }
     ],
     "fallback": {

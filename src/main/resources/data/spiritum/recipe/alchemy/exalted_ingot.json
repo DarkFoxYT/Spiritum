@@ -1,0 +1,17 @@
+{
+  "type": "spiritum:alchemy",
+  "ingredients": [
+    {
+      "item": "waywardalchemist:philosopher_ash",
+      "count": 2
+    },
+    {
+      "item": "spirtum:argent_ingot",
+      "count": 2
+    }
+  ],
+  "result": {
+    "id": "spiritum:exalted_ingot",
+    "count": 1
+  }
+}

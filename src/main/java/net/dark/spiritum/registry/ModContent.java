@@ -269,7 +269,9 @@ public final class ModContent {
                 FabricItemGroup.builder()
                         .displayName(Text.translatable("itemGroup.spiritum"))
                         .icon(() -> new ItemStack(SPIRIT_GEM))
-                        .entries((context, entries) -> ITEMS.forEach(entries::add))
+                        .entries((context, entries) ->
+                            entries.add(HEXSTONE)
+                        )
                         .build());
     }
 
