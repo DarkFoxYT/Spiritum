@@ -2,8 +2,8 @@ package net.dark.spiritum.block.entity;
 
 import net.dark.spiritum.block.HexedCandleBlock;
 import net.dark.spiritum.magic.InteractionEffects;
-import net.dark.spiritum.registry.ModContent;
-import net.dark.spiritum.registry.ModParticles;
+import net.dark.spiritum.registry.SpiritumContent;
+import net.dark.spiritum.registry.SpiritumParticles;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
@@ -30,7 +30,7 @@ public class CandleBlockEntity extends BlockEntity {
     public void setFuelGem(ItemStack gem) { fuelGem = gem.copyWithCount(1); markDirty(); }
 
     public CandleBlockEntity(BlockPos pos, BlockState state) {
-        super(ModContent.CANDLE_ENTITY, pos, state);
+        super(SpiritumContent.CANDLE_ENTITY, pos, state);
     }
 
     public int flame() {
@@ -92,10 +92,12 @@ public class CandleBlockEntity extends BlockEntity {
         markDirty();
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, CandleBlockEntity candle) {
+    @SuppressWarnings("unused")
+    public static void tickClient(World world, BlockPos pos, BlockState state, CandleBlockEntity candle) {
+    }
+    public static void tickServer(World world, BlockPos pos, @SuppressWarnings("unused") BlockState state, CandleBlockEntity candle) {
         int flame = candle.flame();
         if (flame == 0) return;
-        ServerWorld server = (ServerWorld) world;
         if (flame == 3 && --candle.remainingTicks <= 0) {
             candle.snuff();
             return;
@@ -104,12 +106,13 @@ public class CandleBlockEntity extends BlockEntity {
         boolean highRitual = candle.ritualOwner != null
                 && world.getBlockEntity(candle.ritualOwner) instanceof PedestalBlockEntity pedestal
                 && net.dark.spiritum.magic.RitualEffects.isHighRitual(pedestal.getActiveRitual());
-        if (world.getTime() % 5 == 0)
+
+        if (world.getTime() % 5 == 0 && world instanceof ServerWorld server)
             server.spawnParticles(
                     flame == 5 || highRitual
-                            ? ModParticles.BIG_HEXFLAME
+                            ? SpiritumParticles.BIG_HEXFLAME
                             : flame == 2 ? ParticleTypes.SOUL_FIRE_FLAME : flame >= 4
-                                    ? ModParticles.HEXFLAME
+                                    ? SpiritumParticles.HEXFLAME
                                     : ParticleTypes.FLAME,
                     pos.getX() + .5,
                     pos.getY() + .97,
@@ -125,10 +128,11 @@ public class CandleBlockEntity extends BlockEntity {
                     world.getEntitiesByClass(
                             LivingEntity.class,
                             new Box(pos).expand(3),
-                            e -> e.isAlive() && e.squaredDistanceTo(center) <= 9)) {
-                if (flame == 1) entity.setOnFireFor(3);
+                            e -> e.isAlive() && e.squaredDistanceTo(center) <= 9 && !e.isSpectator())) {
+                if (flame == 1)
+                    entity.setOnFireFor(3);
                 else
-                    entity.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 80, 0));
+                    entity.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 80, 0,true,true));
             }
         }
         if (candle.ritualOwner != null

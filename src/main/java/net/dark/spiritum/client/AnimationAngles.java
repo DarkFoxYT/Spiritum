@@ -8,6 +8,10 @@ public final class AnimationAngles {
         return (float) ((ticks % 180L + (double) tickProgress) * 2.0);
     }
 
+    public static float vat(long ticks, float tickProgress,float factor) {
+        return (float) ((ticks % (360/factor) + (double) tickProgress) * factor);
+    }
+
     public static float sigil(long ticks) {
         return (float) ((ticks * .008d) % (Math.PI * 2));
     }

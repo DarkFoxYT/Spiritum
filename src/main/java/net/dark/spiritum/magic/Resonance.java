@@ -1,9 +1,9 @@
 package net.dark.spiritum.magic;
 
 import net.dark.spiritum.entity.SingingRodEntity;
-import net.dark.spiritum.registry.ModContent;
-import net.dark.spiritum.registry.ModEntities;
-import net.dark.spiritum.registry.ModParticles;
+import net.dark.spiritum.registry.SpiritumContent;
+import net.dark.spiritum.registry.SpiritumEntities;
+import net.dark.spiritum.registry.SpiritumParticles;
 import net.minecraft.entity.*;
 import net.minecraft.item.*;
 import net.minecraft.server.world.ServerWorld;
@@ -27,7 +27,7 @@ public final class Resonance {
     }
 
     public static boolean enabled(ItemStack stack) {
-        return stack.isOf(ModContent.RETROSONUS);
+        return stack.isOf(SpiritumContent.RETROSONUS);
     }
 
     public static void dissolve(SingingRodEntity broken) {
@@ -89,7 +89,7 @@ public final class Resonance {
                         .orElse(Double.NaN);
         if (!Double.isFinite(surface)) return ActionResult.FAIL;
         Vec3d position = new Vec3d(hit.x, block.getY() + surface, hit.z);
-        var rod = ModEntities.SINGING_ROD.create(world, SpawnReason.TRIGGERED);
+        var rod = SpiritumEntities.SINGING_ROD.create(world, SpawnReason.TRIGGERED);
         if (rod == null) return ActionResult.FAIL;
         rod.refreshPositionAndAngles(position.x, position.y, position.z, 0, 0);
         if (!world.isSpaceEmpty(rod, rod.getBoundingBox())) return ActionResult.FAIL;
@@ -174,9 +174,9 @@ public final class Resonance {
         ownership.put(
                 player.getUuid(),
                 new RodOwnership.Group(
-                        id, completed.size(), completed.size() == 4 ? now + 600 : now + 100));
+                        id, completed.size(), completed.size() == 4 ? now + 300 : now + 30));
         if (completed.size() == 4) completed.forEach(SingingRodEntity::seal);
-        player.getItemCooldownManager().set(context.getStack(), completed.size() == 4 ? 200 : 30);
+        player.getItemCooldownManager().set(context.getStack(), completed.size() == 4 ? 300 : 30);
         context.getStack()
                 .damage(
                         1,
@@ -238,7 +238,7 @@ public final class Resonance {
                 Vec3d a = polygon.get(i), b = polygon.get((i + 1) % 4);
                 double before = cross(a, b, start), after = cross(a, b, start.add(movement));
                 if (after < 0)
-                    fraction = Math.min(fraction, Math.max(0, before / (before - after) - .0001));
+                    fraction = Math.clamp(before / (before - after) - .0001, 0, fraction);
             }
             movement = new Vec3d(movement.x * fraction, movement.y, movement.z * fraction);
         }
@@ -256,13 +256,13 @@ public final class Resonance {
         if (polygon.isEmpty()) return;
         for (int i = 0; i < 4; i++) {
             Vec3d a = polygon.get(i), b = polygon.get((i + 1) % 4);
-            int steps = Math.min(32, Math.max(2, (int) a.distanceTo(b) * 2));
+            int steps = Math.clamp((int) a.distanceTo(b) * 2L, 2, 32);
             for (int j = 0; j <= steps; j++) {
                 Vec3d p = a.lerp(b, (double) j / steps);
                 world.spawnParticles(
-                        ModParticles.RETROSONUS,
+                        SpiritumParticles.RETROSONUS,
                         p.x,
-                        p.y + 1 + (world.getTime() / 10 % 4),
+                        p.y + ((double) world.getTime() / 10 % 4),
                         p.z,
                         1,
                         0,

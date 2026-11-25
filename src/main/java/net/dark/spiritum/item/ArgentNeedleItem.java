@@ -2,7 +2,7 @@ package net.dark.spiritum.item;
 
 import net.dark.spiritum.magic.InteractionEffects;
 import net.dark.spiritum.magic.RingMagic;
-import net.dark.spiritum.registry.ModContent;
+import net.dark.spiritum.registry.SpiritumContent;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -21,7 +21,7 @@ public class ArgentNeedleItem extends Item {
     public ActionResult use(World world, PlayerEntity user, Hand hand) {
         ItemStack poppet =
                 user.getStackInHand(hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND);
-        if (!poppet.isOf(ModContent.VOODOO_POPPET)) return ActionResult.PASS;
+        if (!poppet.isOf(SpiritumContent.VOODOO_POPPET)) return ActionResult.PASS;
         if (world.isClient()) return ActionResult.SUCCESS;
         return stab((ServerWorld)world, user, hand, poppet);
     }

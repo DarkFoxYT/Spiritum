@@ -1,16 +1,19 @@
 package net.dark.spiritum.block.entity;
 
+import net.dark.spiritum.block.HexedCandleBlock;
 import net.dark.spiritum.magic.*;
-import net.dark.spiritum.magic.RingMagic;
-import net.dark.spiritum.registry.ModContent;
-import net.minecraft.block.*;
+import net.dark.spiritum.registry.SpiritumContent;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.*;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Uuids;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -18,14 +21,14 @@ import java.util.*;
 public class PedestalBlockEntity extends OfferingBlockEntity {
     private String activeRitual = "";
     private int elapsed;
-    private int extinguished;
+    private final List<Integer> extinguished = new ArrayList<>();
     private boolean sustained;
     private UUID boundPlayer;
     private final Set<UUID> boundPlayers = new LinkedHashSet<>();
     private final List<BlockPos> candles = new ArrayList<>();
 
     public PedestalBlockEntity(BlockPos pos, BlockState state) {
-        super(ModContent.PEDESTAL_ENTITY, pos, state);
+        super(SpiritumContent.PEDESTAL_ENTITY, pos, state);
     }
 
     public String getActiveRitual() {
@@ -43,10 +46,7 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
     }
 
     public void insert(ItemStack stack, PlayerEntity player) {
-        if (!activeRitual.isEmpty()) {
-
-            return;
-        }
+        if (!activeRitual.isEmpty()) return;
         int amount = player.isSneaking() ? stack.getCount() : 1;
         add(stack.copyWithCount(amount));
         if (!player.isCreative()) stack.decrement(amount);
@@ -54,10 +54,7 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
     }
 
     public void extract(PlayerEntity player) {
-        if (!activeRitual.isEmpty()) {
-
-            return;
-        }
+        if (!activeRitual.isEmpty()) return;
         if (offerings.isEmpty()) return;
         if (player.isSneaking()) {
             for (ItemStack stack : offerings) player.getInventory().offerOrDrop(stack);
@@ -88,10 +85,19 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
         if (bindings.size() > 1 && !recipe.id().equals("withering") && !recipe.id().equals("vigilance") && !recipe.id().equals("dominion")) return false;
         boundPlayer = bindings.stream().findFirst().orElse(null);
         if (RitualCandles.requiresOwner(recipe) && boundPlayer == null) return false;
-        if (recipe.id().equals("calling")) {
+        if (recipe.id().getPath().equals("calling")) {
             var player = world.getServer().getPlayerManager().getPlayer(boundPlayer);
-            if (player == null || !player.isAlive() || RingMagic.warded(player)) return false;
-            player.sendMessage(Text.translatable("message.spiritum.calling_started"), false);
+            if (player == null || !player.isAlive() || RingMagic.warded(player)) {
+                /*if (world.getServer().getPlayerManager().getPlayerList().stream().anyMatch(p -> RingMagic.soulBound(p,boundPlayer))) {
+                    player = world.getServer().getPlayerManager().getPlayerList().stream()
+                        .filter(p -> RingMagic.soulBound(p, boundPlayer)).findFirst().orElse(null);
+                    if (player == null || !player.isAlive()) return false;
+
+                    bindings.clear();
+                    bindings.add(player.getUuid());
+                } else*/ return false;
+            }
+            player.sendMessage(Text.translatable("message.spiritum.calling_started"), true);
         }
         boundPlayers.clear();
         boundPlayers.addAll(bindings);
@@ -99,16 +105,16 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
         candles.addAll(selected);
         for (BlockPos candlePos : candles)
             ((CandleBlockEntity) world.getBlockEntity(candlePos)).claim(pos);
-        activeRitual = recipe.id();
+        activeRitual = recipe.id().toString();
         elapsed = 0;
-        extinguished = 0;
+        extinguished.clear();
         sustained = false;
         changed();
         return true;
     }
 
     private boolean intact() {
-        for (int i = extinguished; i < candles.size(); i++) {
+        for (int i = extinguished.size(); i < candles.size(); i++) {
             BlockPos candlePos = candles.get(i);
             if (!world.isChunkLoaded(candlePos)
                     || !(world.getBlockEntity(candlePos) instanceof CandleBlockEntity candle)
@@ -127,7 +133,7 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
                 candle.release(pos);
         activeRitual = "";
         elapsed = 0;
-        extinguished = 0;
+        extinguished.clear();
         sustained = false;
         candles.clear();
         boundPlayer = null;
@@ -136,7 +142,7 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
     }
 
     public static void tick(
-            World world, BlockPos pos, BlockState state, PedestalBlockEntity pedestal) {
+        World world, BlockPos pos, @SuppressWarnings("unused") BlockState state, PedestalBlockEntity pedestal) {
         if (world.isClient()) {
             if (pedestal.isSustained() && pedestal.activeRitual.equals("dominion")) Dominion.add(world, pos);
             else Dominion.remove(world, pos);
@@ -164,7 +170,20 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
             }
             return;
         }
-        OfferingRecipe recipe = MagicRecipes.ritual(pedestal.activeRitual);
+        if (Identifier.tryParse(pedestal.activeRitual).getPath().equals("calling")) {
+            var player = world.getServer().getPlayerManager().getPlayer(pedestal.boundPlayer);
+            if (player == null || !player.isAlive() || RingMagic.warded(player))
+                /*if (world.getServer().getPlayerManager().getPlayerList().stream().anyMatch(p -> RingMagic.soulBound(p,pedestal.boundPlayer))) {
+                    player = world.getServer().getPlayerManager().getPlayerList().stream()
+                        .filter(p -> RingMagic.soulBound(p, pedestal.boundPlayer)).findFirst().orElse(null);
+                    if (player == null || !player.isAlive()) pedestal.stop();
+                } else */pedestal.stop();
+            /*else {
+                pedestal.boundPlayers.clear();
+                pedestal.boundPlayers.add(pedestal.boundPlayer);
+            }*/
+        }
+        OfferingRecipe recipe = MagicRecipes.ritual(Identifier.tryParse(pedestal.activeRitual));
         if (recipe == null || !pedestal.intact()) {
             pedestal.stop();
             return;
@@ -188,17 +207,19 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
             pedestal.sustained = true;
             pedestal.elapsed = 0;
             pedestal.changed();
-        } else if (!recipe.persistent() && pedestal.elapsed >= 40 + 20 * pedestal.extinguished) {
-            BlockPos next = pedestal.candles.get(pedestal.extinguished);
+        } else if (!recipe.persistent() && pedestal.elapsed >= 40 + 20 * pedestal.extinguished.size()) {
+            BlockPos next = pedestal.candles.get(pedestal.extinguished.size());
             ItemStack boundGem = ((CandleBlockEntity) world.getBlockEntity(next)).getFuelGem();
+            pedestal.extinguished.add(((CandleBlockEntity) world.getBlockEntity(next)).flame());
             ((CandleBlockEntity) world.getBlockEntity(next)).snuff();
-            pedestal.extinguished++;
             pedestal.changed();
-            if (pedestal.extinguished == pedestal.candles.size()) {
+            if (pedestal.extinguished.size() == pedestal.candles.size()) {
                 if (recipe.matches(pedestal.offerings)) {
                     recipe.consume(pedestal.offerings);
                     RitualEffects.trigger(server, pos, recipe, pedestal.boundPlayers);
-                    if (recipe.id().endsWith("_binding") && !boundGem.isEmpty())
+                    if (!recipe.outputStack().isEmpty())
+                        Block.dropStack(world, pos.up(), recipe.outputStack());
+                    if (recipe.id().getPath().endsWith("_binding") && !boundGem.isEmpty())
                         Block.dropStack(world, pos.up(), boundGem);
                 }
                 pedestal.stop();
@@ -218,7 +239,8 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
         super.readData(view);
         activeRitual = view.getString("Ritual", "");
         elapsed = view.getInt("Elapsed", 0);
-        extinguished = view.getInt("Extinguished", 0);
+        extinguished.clear();
+        extinguished.addAll(Arrays.stream(view.getOptionalIntArray("Extinguished").orElse(new int[0])).boxed().toList());
         sustained = view.getBoolean("Sustained", false);
         boundPlayer = view.read("BoundPlayer", Uuids.CODEC).orElse(null);
         boundPlayers.clear();
@@ -226,14 +248,17 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
         if (boundPlayers.isEmpty() && boundPlayer != null) boundPlayers.add(boundPlayer);
         candles.clear();
         view.getTypedListView("Candles", BlockPos.CODEC).forEach(candles::add);
-        OfferingRecipe recipe = MagicRecipes.ritual(activeRitual);
+        OfferingRecipe recipe = MagicRecipes.ritual(Identifier.tryParse(activeRitual));
+
+        List<Integer> candlesType = new ArrayList<>(candles.stream().map(pos -> world.getBlockState(pos).get(HexedCandleBlock.FLAME,0)).toList());
+        candlesType.addAll(extinguished);
+
         if (recipe == null
-                || !RitualCandles.validCount(recipe, candles.size())
-                || extinguished < 0
-                || extinguished >= candles.size()) {
+                || !RitualCandles.validCount(recipe, candlesType)
+                || extinguished.size() >= candles.size()) {
             activeRitual = "";
             candles.clear();
-            extinguished = 0;
+            extinguished.clear();
             sustained = false;
         }
     }
@@ -243,7 +268,7 @@ public class PedestalBlockEntity extends OfferingBlockEntity {
         super.writeData(view);
         view.putString("Ritual", activeRitual);
         view.putInt("Elapsed", elapsed);
-        view.putInt("Extinguished", extinguished);
+        view.putIntArray("Extinguished", extinguished.stream().mapToInt(Integer::intValue).toArray());
         view.putBoolean("Sustained", sustained);
         view.putNullable("BoundPlayer", Uuids.CODEC, boundPlayer);
         var bindings = view.getListAppender("BoundPlayers", Uuids.CODEC);

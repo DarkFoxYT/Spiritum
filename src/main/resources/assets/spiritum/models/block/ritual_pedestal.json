@@ -5,8 +5,8 @@
     64
   ],
   "textures": {
-    "0": "spiritum:block/rkitual_pedestal",
-    "particle": "spiritum:block/rkitual_pedestal"
+    "0": "spiritum:block/ritual_pedestal",
+    "particle": "spiritum:block/ritual_block"
   },
   "elements": [
     {
@@ -63,15 +63,6 @@
             8.75,
             9,
             11
-          ],
-          "texture": "#0"
-        },
-        "up": {
-          "uv": [
-            6,
-            8.75,
-            3,
-            5.75
           ],
           "texture": "#0"
         },

@@ -1,7 +1,7 @@
 package net.dark.spiritum.entity;
 
 import net.dark.spiritum.magic.Vigilance;
-import net.dark.spiritum.registry.ModContent;
+import net.dark.spiritum.registry.SpiritumContent;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.*;
 import net.minecraft.entity.data.*;
@@ -97,10 +97,10 @@ public class SentinelEntity extends PathAwareEntity {
         if (player.isSneaking() && !player.isSpectator() && !isRemoved()) {
             if (!getEntityWorld().isClient()) {
                 if (Vigilance.permits(this, null, player.getUuid())) {
-                    player.getInventory().offerOrDrop(new ItemStack(ModContent.SENTINEL));
+                    player.getInventory().offerOrDrop(new ItemStack(SpiritumContent.SENTINEL));
                     discard();
                 } else if (Vigilance.active(this.getEntityWorld(), this.getBlockPos()) == null) {
-                    player.getInventory().offerOrDrop(new ItemStack(ModContent.SENTINEL));
+                    player.getInventory().offerOrDrop(new ItemStack(SpiritumContent.SENTINEL));
                     discard();
 
                 }

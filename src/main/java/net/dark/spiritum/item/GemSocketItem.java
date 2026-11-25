@@ -1,13 +1,12 @@
 package net.dark.spiritum.item;
 
 import net.dark.spiritum.magic.InteractionEffects;
-import net.dark.spiritum.registry.ModContent;
+import net.dark.spiritum.registry.SpiritumContent;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraft.screen.slot.Slot;
@@ -21,7 +20,7 @@ public class GemSocketItem extends Item {
         super(settings);
     }
 
-    protected boolean acceptsGem(ItemStack stack) { return stack.isOf(ModContent.SPIRIT_GEM); }
+    protected boolean acceptsGem(ItemStack stack) { return stack.isOf(SpiritumContent.SPIRIT_GEM); }
 
     protected boolean canRemoveGem() { return true; }
 

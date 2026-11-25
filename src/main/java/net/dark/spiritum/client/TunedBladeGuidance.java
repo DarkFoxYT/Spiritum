@@ -32,9 +32,12 @@ public final class TunedBladeGuidance {
                 || net.dark.spiritum.magic.Resonance.enabled(player.getActiveItem())
                 || now - receivedAt > 250_000_000L) return;
         // Rotate the local camera each frame; ordinary movement packets report the resulting look.
-        float step = 30 * seconds;
-        player.setYaw(MathHelper.stepUnwrappedAngleTowards(player.getYaw(), targetYaw, step));
-        player.setPitch(MathHelper.stepTowards(player.getPitch(), targetPitch, step));
+        player.setYaw(MathHelper.stepUnwrappedAngleTowards(player.getYaw(), targetYaw,
+            seconds*MathHelper.sqrt(MathHelper.angleBetween(player.getYaw(), targetYaw)/75)*50
+        ));
+        player.setPitch(MathHelper.stepTowards(player.getPitch(), targetPitch,
+            seconds*MathHelper.sqrt(MathHelper.angleBetween(player.getPitch(), targetPitch)/75)*50
+        ));
         player.setHeadYaw(player.getYaw());
     }
 

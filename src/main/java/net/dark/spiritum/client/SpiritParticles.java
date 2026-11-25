@@ -1,7 +1,7 @@
 package net.dark.spiritum.client;
 
 import net.dark.spiritum.block.entity.PedestalBlockEntity;
-import net.dark.spiritum.registry.ModParticles;
+import net.dark.spiritum.registry.SpiritumParticles;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.minecraft.client.MinecraftClient;
@@ -31,7 +31,7 @@ public final class SpiritParticles {
                 });
         var factories = ParticleFactoryRegistry.getInstance();
         factories.register(
-                ModParticles.RETROSONUS,
+                SpiritumParticles.RETROSONUS,
                 sprites ->
                         (type, world, x, y, z, vx, vy, vz, random) ->
                                 new SpiritParticle(
@@ -44,13 +44,13 @@ public final class SpiritParticles {
                                         false,
                                         true));
         factories.register(
-                ModParticles.DOMINION_RUNE,
+                SpiritumParticles.DOMINION_RUNE,
                 sprites ->
                         (type, world, x, y, z, nx, ny, nz, random) ->
                                 new DominionRune(
                                         world, x, y, z, sprites.getSprite(random), nx, ny, nz));
         factories.register(
-                ModParticles.HEXFLAME,
+                SpiritumParticles.HEXFLAME,
                 sprites ->
                         (type, world, x, y, z, vx, vy, vz, random) ->
                                 new SpiritParticle(
@@ -63,7 +63,7 @@ public final class SpiritParticles {
                                         false,
                                         false));
         factories.register(
-                ModParticles.BIG_HEXFLAME,
+                SpiritumParticles.BIG_HEXFLAME,
                 sprites ->
                         (type, world, x, y, z, vx, vy, vz, random) ->
                                 new SpiritParticle(
@@ -75,7 +75,7 @@ public final class SpiritParticles {
                                         "big_hexflame_particle",
                                         false,
                                         true));
-        for (var sigil : ModParticles.SIGILS.entrySet())
+        for (var sigil : SpiritumParticles.SIGILS.entrySet())
             factories.register(
                     sigil.getValue(),
                     sprites ->

@@ -1,9 +1,8 @@
 package net.dark.spiritum.item;
 
-import net.dark.spiritum.registry.ModContent;
+import net.dark.spiritum.registry.SpiritumContent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 
@@ -23,7 +22,7 @@ public class SoulbindRingItem extends GemSocketItem {
         ItemStack other =
                 user.getStackInHand(hand == Hand.MAIN_HAND ? Hand.OFF_HAND : Hand.MAIN_HAND);
         if (SpiritBinding.socket(ring).isEmpty()
-                && other.isOf(ModContent.SPIRIT_GEM)
+                && other.isOf(SpiritumContent.SPIRIT_GEM)
                 && SpiritBinding.player(other).isEmpty()) {
 
             return ActionResult.FAIL;

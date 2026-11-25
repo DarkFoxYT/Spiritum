@@ -38,7 +38,7 @@ public class SentinelRenderer
         super.updateRenderState(entity, state, delta);
         state.awake = entity.isAwake();
         state.attack = entity.attackPose();
-        state.attackRemaining = Math.max(0, entity.attackRemaining() - delta);
+        state.attackRemaining = Math.max(0, entity.attackRemaining()- delta);
         if (state.awake)
             state.awakeTime = entity.age + delta - awakenedAt.computeIfAbsent(entity, e -> e.age);
         else {

@@ -1,6 +1,6 @@
 package net.dark.spiritum.magic;
 
-import net.dark.spiritum.registry.ModParticles;
+import net.dark.spiritum.registry.SpiritumParticles;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.*;
 import net.minecraft.server.world.ServerWorld;
@@ -11,7 +11,7 @@ public final class InteractionEffects {
     public static void magic(World world, Vec3d center, boolean strong) {
         if (world instanceof ServerWorld server)
             server.spawnParticles(
-                    strong ? ModParticles.BIG_HEXFLAME : ModParticles.HEXFLAME,
+                    strong ? SpiritumParticles.BIG_HEXFLAME : SpiritumParticles.HEXFLAME,
                     center.x,
                     center.y,
                     center.z,

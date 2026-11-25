@@ -11,6 +11,11 @@ base {
 }
 
 loom {
+    runs {
+        server {
+            runDir = "runServer"
+        }
+    }
     mods {
         "spiritum" {
             sourceSet sourceSets.main
@@ -22,6 +27,18 @@ repositories {
     maven { url 'https://maven.blamejared.com' }
     maven { url 'https://maven.shedaniel.me' }
     maven { url 'https://maven.architectury.dev' }
+    maven {
+        name "CaffeineMC"
+        url "https://maven.caffeinemc.net/releases" // or /snapshots
+    }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+    }
+    maven {
+        name = "Sleeping Town"
+        url = "https://repo.sleeping.town/"
+    }
 }
 
 dependencies {
@@ -32,11 +49,14 @@ dependencies {
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modCompileOnly("mezz.jei:jei-${project.minecraft_version}-fabric:${project.jei_version}") { transitive = false }
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}")
+    modCompileOnly("net.caffeinemc:sodium-fabric:${project.sodium_version}") { transitive = false }
+    modCompileOnly("dev.emi:emi-fabric:1.1.24+1.21.1") { transitive = false }
+
     if (project.findProperty('viewer') == 'jei') {
         modLocalRuntime("mezz.jei:jei-${project.minecraft_version}-fabric:${project.jei_version}") { transitive = false }
     } else if (project.findProperty('viewer') == 'rei') {
-        modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
+        modLocalRuntime("me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}") { transitive = false }
         modLocalRuntime 'me.shedaniel.cloth:cloth-config-fabric:21.11.151'
         modLocalRuntime 'dev.architectury:architectury-fabric:19.0.1'
     }

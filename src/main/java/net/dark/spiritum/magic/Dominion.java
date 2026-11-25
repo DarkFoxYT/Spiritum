@@ -1,18 +1,25 @@
 package net.dark.spiritum.magic;
 
+import net.dark.spiritum.Spiritum;
 import net.dark.spiritum.block.entity.PedestalBlockEntity;
-import net.dark.spiritum.registry.ModParticles;
-import net.fabricmc.fabric.api.event.player.*;
+import net.dark.spiritum.registry.SpiritumParticles;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.block.EnderChestBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 /** Shared client/server lookup so mining progress agrees with server enforcement. */
 public final class Dominion {
@@ -28,7 +35,7 @@ public final class Dominion {
     }
 
     public static boolean restricted(World world, BlockPos block, PlayerEntity player) {
-        if (MagicRecipes.ritual("dominion") == null) return false;
+        if (MagicRecipes.ritual(Spiritum.id("dominion")) == null) return false;
         boolean covered = false;
         for (BlockPos pos : RITES.getOrDefault(world, Set.of())) {
             if (!world.isChunkLoaded(pos) || pos.getSquaredDistance(block) > 2500) continue;
@@ -58,7 +65,7 @@ public final class Dominion {
         }
         Vec3d normal = Vec3d.of(face.getVector());
         server.spawnParticles(
-                ModParticles.DOMINION_RUNE,
+                SpiritumParticles.DOMINION_RUNE,
                 point.x,
                 point.y,
                 point.z,

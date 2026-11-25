@@ -1,6 +1,7 @@
 package net.dark.spiritum.entity;
 
-import net.dark.spiritum.registry.ModEntities;
+import net.dark.spiritum.registry.SpiritumEntities;
+import net.dark.spiritum.registry.SpiritumParticles;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.*;
@@ -52,7 +53,7 @@ public class LeechDemonEntity extends OwnedDemonEntity {
     public void tick() {
         super.tick();
         if (!(getEntityWorld() instanceof ServerWorld server) || !isAlive()) return;
-        if (age % 5 == 0) server.spawnParticles(net.dark.spiritum.registry.ModParticles.HEXFLAME, getX(), getY() + .2, getZ(), 2, .1, .1, .1, 0);
+        if (age % 5 == 0) server.spawnParticles(SpiritumParticles.HEXFLAME, getX(), getY() + .2, getZ(), 2, .1, .1, .1, 0);
         if (latchCooldown > 0) latchCooldown--;
         var owner = getOwner();
         if (owner == null || !owner.isAlive()) {
@@ -78,7 +79,7 @@ public class LeechDemonEntity extends OwnedDemonEntity {
                 if (latchedTarget.damage(
                         server, DemonDamage.source(server, DemonDamage.LEECH, this), 2f)) {
                     SpiritEnergyEntity orb =
-                            ModEntities.SPIRIT_ENERGY.create(server, SpawnReason.TRIGGERED);
+                            SpiritumEntities.SPIRIT_ENERGY.create(server, SpawnReason.TRIGGERED);
                     if (orb != null) {
                         orb.setOwnerUuid(getOwnerUuid());
                         orb.refreshPositionAndAngles(anchor.x + .4, anchor.y + .2, anchor.z, 0, 0);

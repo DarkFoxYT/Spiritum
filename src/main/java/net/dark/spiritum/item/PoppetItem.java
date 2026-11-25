@@ -1,7 +1,7 @@
 package net.dark.spiritum.item;
 
 import net.dark.spiritum.magic.RingMagic;
-import net.dark.spiritum.registry.ModEntities;
+import net.dark.spiritum.registry.SpiritumEntities;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
@@ -47,7 +47,7 @@ public class PoppetItem extends GemSocketItem {
                 || !(entity instanceof PlayerEntity user)
                 || SpiritBinding.socket(stack).isEmpty()) return false;
         float speed = throwSpeed(getMaxUseTime(stack, user) - remainingUseTicks);
-        var doll = ModEntities.POPPET.create(world, SpawnReason.TRIGGERED);
+        var doll = SpiritumEntities.POPPET.create(world, SpawnReason.TRIGGERED);
         if (doll == null) return false;
         var direction = user.getRotationVec(1);
         var pos = user.getEyePos().add(direction.multiply(.6));

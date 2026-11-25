@@ -1,11 +1,11 @@
 package net.dark.spiritum.entity;
 
 import net.dark.spiritum.magic.InteractionEffects;
+import net.dark.spiritum.registry.SpiritumParticles;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.item.*;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.storage.*;
 import net.minecraft.util.Uuids;
@@ -72,7 +72,7 @@ public class SpiritEnergyEntity extends Entity implements FlyingItemEntity {
         }
         if (age % 5 == 0)
             world.spawnParticles(
-                    net.dark.spiritum.registry.ModParticles.HEXFLAME, getX(), getY(), getZ(), 1, .03, .03, .03, 0);
+                    SpiritumParticles.HEXFLAME, getX(), getY(), getZ(), 1, .03, .03, .03, 0);
     }
 
     @Override

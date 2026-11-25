@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "spiritum:argent_block",
     "spiritum:hexstone",
     "spiritum:polished_hexstone",
     "spiritum:hexstone_bricks",

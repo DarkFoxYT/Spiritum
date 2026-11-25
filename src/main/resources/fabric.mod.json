@@ -12,6 +12,7 @@
   "entrypoints": {
     "jei_mod_plugin": ["net.dark.spiritum.client.compat.SpiritumJeiPlugin"],
     "rei_client": ["net.dark.spiritum.client.compat.SpiritumReiPlugin"],
+    "emi": ["net.dark.spiritum.client.compat.SpiritumEmiPlugin"],
     "client": [
       "net.dark.spiritum.client.SpiritumClient"
     ],

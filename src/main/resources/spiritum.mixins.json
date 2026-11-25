@@ -2,7 +2,34 @@
   "required": true,
   "package": "net.dark.spiritum.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": ["ResonanceMovementMixin", "MobGoalsAccessor", "ItemPickupOwnerAccessor", "PlayerRingMixin", "ServerPlayerRingMixin", "PlayerRingSlotMixin", "RingDamageMixin", "CreativeRingPacketMixin"],
-  "client": ["InventoryRingScreenMixin", "CreativeRingScreenMixin", "TunedBladeCameraMixin", "TunedBladeArmMixin"],
-  "injectors": {"defaultRequire": 1}
+  "plugin": "net.dark.spiritum.mixin.plugin.SpiritumMixinPlugin",
+  "mixins": [
+    "CreativeRingPacketMixin",
+    "FluidVariantAttributesMixin",
+    "ItemGroupEntriesMixin",
+    "ItemPickupOwnerAccessor",
+    "ItemStackMixin",
+    "MobGoalsAccessor",
+    "PlayerRingMixin",
+    "PlayerRingSlotMixin",
+    "ResonanceMovementMixin",
+    "RingDamageMixin",
+    "ServerPlayerRingMixin",
+    "SimpleRegistryMixin",
+    "accessor.BucketItemAccessor",
+    "accessor.EntityAccessor",
+    "emi$.EmiTagKeyMixin",
+    "emi$.EmiUtilMixin",
+    "emi$.FluidEmiStackMixin",
+    "emi$.FluidEmiStackSerializerMixin",
+    "emi$.JemiTextWidgetMixin"
+  ],
+  "client": [
+    "CreativeRingScreenMixin",
+    "InventoryRingScreenMixin",
+    "TunedBladeArmMixin",
+    "TunedBladeCameraMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1}
 }

@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.minecraft.entity.*;
 import net.minecraft.registry.*;
 
-public final class ModEntities {
+public final class SpiritumEntities {
     public static final EntityType<SingingRodEntity> SINGING_ROD =
             register(
                     "singing_rod",
@@ -26,7 +26,7 @@ public final class ModEntities {
             .dimensions(.7f, 2f).maxTrackingRange(10));
     private static <T extends Entity> EntityType<T> register(
             String id, EntityType.Builder<T> builder) {
-        var key = RegistryKey.of(RegistryKeys.ENTITY_TYPE, ModContent.id(id));
+        var key = RegistryKey.of(RegistryKeys.ENTITY_TYPE, SpiritumContent.id(id));
         return Registry.register(Registries.ENTITY_TYPE, key, builder.build(key));
     }
 
@@ -64,5 +64,5 @@ public final class ModEntities {
         FabricDefaultAttributeRegistry.register(LEMURE, OwnedDemonEntity.attributes(15, 0));
     }
 
-    private ModEntities() {}
+    private SpiritumEntities() {}
 }

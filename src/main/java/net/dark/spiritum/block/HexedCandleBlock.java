@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 
 import net.dark.spiritum.block.entity.CandleBlockEntity;
 import net.dark.spiritum.item.SpiritBinding;
-import net.dark.spiritum.registry.ModContent;
+import net.dark.spiritum.registry.SpiritumContent;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.*;
 import net.minecraft.entity.EquipmentSlot;
@@ -22,7 +22,7 @@ import net.minecraft.world.*;
 
 public class HexedCandleBlock extends BlockWithEntity {
     public static final MapCodec<HexedCandleBlock> CODEC = createCodec(HexedCandleBlock::new);
-    // 0: unlit, 1: blaze, 2: soul, 3: harvest, 4: ritual.
+    // 0: unlit, 1: blaze, 2: soul, 3: harvest, 4: ritual, 5: gem.
     public static final IntProperty FLAME = IntProperty.of("flame", 0, 5);
 
     public HexedCandleBlock(Settings settings) {
@@ -49,8 +49,8 @@ public class HexedCandleBlock extends BlockWithEntity {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
             World world, BlockState state, BlockEntityType<T> type) {
         return world.isClient()
-                ? null
-                : validateTicker(type, ModContent.CANDLE_ENTITY, CandleBlockEntity::tick);
+                ? validateTicker(type, SpiritumContent.CANDLE_ENTITY, CandleBlockEntity::tickClient)
+                : validateTicker(type, SpiritumContent.CANDLE_ENTITY, CandleBlockEntity::tickServer);
     }
 
     @Override
@@ -77,9 +77,9 @@ public class HexedCandleBlock extends BlockWithEntity {
                                 ? 2
                                 : stack.isOf(Items.FLINT_AND_STEEL)
                                         ? 3
-                                        : stack.isOf(ModContent.SPIRIT_FRAGMENT)
+                                        : stack.isOf(SpiritumContent.SPIRIT_FRAGMENT)
                                                 ? 4
-                                                : stack.isOf(ModContent.SPIRIT_GEM) ? 5 : 0;
+                                                : stack.isOf(SpiritumContent.SPIRIT_GEM) ? 5 : 0;
         if (flame == 0) return ActionResult.PASS;
         if (!world.isClient() && world.getBlockEntity(pos) instanceof CandleBlockEntity candle) {
             candle.light(flame);

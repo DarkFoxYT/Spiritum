@@ -2,7 +2,7 @@ package net.dark.spiritum.client;
 
 import net.dark.spiritum.client.model.*;
 import net.dark.spiritum.entity.*;
-import net.dark.spiritum.registry.ModEntities;
+import net.dark.spiritum.registry.SpiritumEntities;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.render.entity.*;
 import net.minecraft.client.render.entity.feature.HeldItemFeatureRenderer;
@@ -28,21 +28,21 @@ public final class DemonRenderers {
     }
 
     public static void initialize() {
-        EntityRendererFactories.register(ModEntities.SINGING_ROD, SingingRodRenderer::new);
-        EntityRendererFactories.register(ModEntities.POPPET, PoppetRenderer::new);
-        EntityRendererFactories.register(ModEntities.SENTINEL, SentinelRenderer::new);
+        EntityRendererFactories.register(SpiritumEntities.SINGING_ROD, SingingRodRenderer::new);
+        EntityRendererFactories.register(SpiritumEntities.POPPET, PoppetRenderer::new);
+        EntityRendererFactories.register(SpiritumEntities.SENTINEL, SentinelRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(LEECH, SuppliedDemonModels::leech);
         EntityModelLayerRegistry.registerModelLayer(IMP, SuppliedDemonModels::imp);
         EntityModelLayerRegistry.registerModelLayer(LEMURE, SuppliedDemonModels::lemure);
         EntityRendererFactories.register(
-                ModEntities.LEECH, context -> new DemonRenderer<>(context, LEECH, "leech", false));
+                SpiritumEntities.LEECH, context -> new DemonRenderer<>(context, LEECH, "leech", false));
         EntityRendererFactories.register(
-                ModEntities.IMP, context -> new DemonRenderer<>(context, IMP, "imp", true));
+                SpiritumEntities.IMP, context -> new DemonRenderer<>(context, IMP, "imp", true));
         EntityRendererFactories.register(
-                ModEntities.LEMURE,
+                SpiritumEntities.LEMURE,
                 context -> new DemonRenderer<>(context, LEMURE, "lemure", false));
         EntityRendererFactories.register(
-                ModEntities.SPIRIT_ENERGY,
+                SpiritumEntities.SPIRIT_ENERGY,
                 context -> new FlyingItemEntityRenderer<>(context, .35f, true));
     }
 

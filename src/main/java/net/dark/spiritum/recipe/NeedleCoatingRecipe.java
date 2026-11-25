@@ -1,6 +1,6 @@
 package net.dark.spiritum.recipe;
 
-import net.dark.spiritum.registry.ModContent;
+import net.dark.spiritum.registry.SpiritumContent;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.*;
 import net.minecraft.recipe.*;
@@ -20,7 +20,7 @@ public class NeedleCoatingRecipe extends SpecialCraftingRecipe {
 
     public static void initialize() {
         Registry.register(
-                Registries.RECIPE_SERIALIZER, ModContent.id("needle_coating"), SERIALIZER);
+                Registries.RECIPE_SERIALIZER, SpiritumContent.id("needle_coating"), SERIALIZER);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class NeedleCoatingRecipe extends SpecialCraftingRecipe {
         int needles = 0, potions = 0;
         for (ItemStack stack : input.getStacks()) {
             if (stack.isEmpty()) continue;
-            if (stack.isOf(ModContent.ARGENT_NEEDLE)
+            if (stack.isOf(SpiritumContent.ARGENT_NEEDLE)
                     && !stack.contains(DataComponentTypes.POTION_CONTENTS)) needles++;
             else if ((stack.isOf(Items.POTION)
                             || stack.isOf(Items.SPLASH_POTION)
@@ -43,13 +43,14 @@ public class NeedleCoatingRecipe extends SpecialCraftingRecipe {
     public ItemStack craft(CraftingRecipeInput input, RegistryWrapper.WrapperLookup registries) {
         ItemStack needle = ItemStack.EMPTY, potion = ItemStack.EMPTY;
         for (ItemStack stack : input.getStacks()) {
-            if (stack.isOf(ModContent.ARGENT_NEEDLE)) needle = stack.copyWithCount(1);
+            if (stack.isOf(SpiritumContent.ARGENT_NEEDLE)) needle = stack.copyWithCount(1);
             else if (!stack.isEmpty()) potion = stack;
         }
         if (needle.isEmpty() || !potion.contains(DataComponentTypes.POTION_CONTENTS))
             return ItemStack.EMPTY;
         needle.set(
                 DataComponentTypes.POTION_CONTENTS, potion.get(DataComponentTypes.POTION_CONTENTS));
+        needle.set(DataComponentTypes.MAX_STACK_SIZE, 1);
         needle.set(DataComponentTypes.POTION_DURATION_SCALE, .25f);
         return needle;
     }

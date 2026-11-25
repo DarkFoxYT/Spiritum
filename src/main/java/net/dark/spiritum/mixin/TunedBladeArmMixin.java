@@ -1,11 +1,13 @@
 package net.dark.spiritum.mixin;
 
+import net.dark.spiritum.item.TunedBladeItem;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.state.BipedEntityRenderState;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,9 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BipedEntityModel.class)
 public abstract class TunedBladeArmMixin {
-    @Shadow public ModelPart head;
-    @Shadow public ModelPart rightArm;
-    @Shadow public ModelPart leftArm;
+    @Final @Shadow public ModelPart head;
+    @Final @Shadow public ModelPart rightArm;
+    @Final @Shadow public ModelPart leftArm;
 
     @Inject(
             method =
@@ -26,7 +28,7 @@ public abstract class TunedBladeArmMixin {
         if (!state.isUsingItem) return;
         Arm arm = state.activeHand == Hand.MAIN_HAND ? state.mainArm : state.mainArm.getOpposite();
         if (!(state.getItemStackForArm(arm).getItem()
-                instanceof net.dark.spiritum.item.TunedBladeItem)) return;
+                instanceof TunedBladeItem)) return;
         ModelPart heldArm = arm == Arm.RIGHT ? rightArm : leftArm;
         ModelPart supportingArm = arm == Arm.RIGHT ? leftArm : rightArm;
         float side = arm == Arm.RIGHT ? 1 : -1;

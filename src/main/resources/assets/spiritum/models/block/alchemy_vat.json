@@ -6,7 +6,7 @@
   ],
   "textures": {
     "0": "spiritum:block/alchemy_vat",
-    "particle": "spiritum:block/alchemy_vat"
+    "particle": "spiritum:block/argent_block"
   },
   "elements": [
     {

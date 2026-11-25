@@ -1,6 +1,6 @@
 package net.dark.spiritum.item;
 
-import net.dark.spiritum.registry.ModEntities;
+import net.dark.spiritum.registry.SpiritumEntities;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.item.*;
 import net.minecraft.server.world.ServerWorld;
@@ -14,7 +14,7 @@ public class SentinelItem extends Item {
     @Override
     public ActionResult useOnBlock(ItemUsageContext context) {
         if (!(context.getWorld() instanceof ServerWorld world)) return ActionResult.SUCCESS;
-        var sentinel = ModEntities.SENTINEL.create(world, SpawnReason.TRIGGERED);
+        var sentinel = SpiritumEntities.SENTINEL.create(world, SpawnReason.TRIGGERED);
         if (sentinel == null) return ActionResult.FAIL;
         var pos = context.getBlockPos().offset(context.getSide());
         sentinel.refreshPositionAndAngles(

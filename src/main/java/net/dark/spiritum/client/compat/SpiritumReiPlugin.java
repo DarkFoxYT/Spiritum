@@ -11,7 +11,7 @@ import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.entry.*;
 import me.shedaniel.rei.api.common.util.*;
 
-import net.dark.spiritum.registry.ModContent;
+import net.dark.spiritum.registry.SpiritumContent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -28,17 +28,17 @@ public final class SpiritumReiPlugin implements REIClientPlugin {
     public void registerCategories(CategoryRegistry registry) {
         registry.add(new Category(false));
         registry.add(new Category(true));
-        registry.addWorkstations(RITUALS, EntryStacks.of(ModContent.RITUAL_PEDESTAL));
-        registry.addWorkstations(ALCHEMY, EntryStacks.of(ModContent.ALCHEMY_VAT));
+        registry.addWorkstations(RITUALS, EntryStacks.of(SpiritumContent.RITUAL_PEDESTAL));
+        registry.addWorkstations(ALCHEMY, EntryStacks.of(SpiritumContent.ALCHEMY_VAT));
     }
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        MagicRecipeView.rituals().forEach(view -> registry.add(new MagicDisplay(view)));
-        MagicRecipeView.alchemyRecipes().forEach(view -> registry.add(new MagicDisplay(view)));
+        OfferingRecipeView.rituals().forEach(view -> registry.add(new MagicDisplay(view)));
+        //AlchemyRecipeView.alchemyRecipes().forEach(view -> registry.add(new MagicDisplay(view)));
     }
 
-    public record MagicDisplay(MagicRecipeView view) implements Display {
+    public record MagicDisplay(OfferingRecipeView view) implements Display {
         @Override
         public List<EntryIngredient> getInputEntries() {
             return view.inputs().stream().map(EntryIngredients::of).toList();
@@ -53,14 +53,16 @@ public final class SpiritumReiPlugin implements REIClientPlugin {
 
         @Override
         public CategoryIdentifier<?> getCategoryIdentifier() {
-            return view.alchemy() ? ALCHEMY : RITUALS;
+            return //view.alchemy() ?
+                //ALCHEMY :
+                RITUALS;
         }
 
         @Override
         public Optional<Identifier> getDisplayLocation() {
             return Optional.of(
-                    view.alchemy() ? Identifier.of(view.recipe().id())
-                            : ModContent.id("ritual/" + view.recipe().id()));
+                    //view.alchemy() ? Identifier.of(view.recipe().id()) :
+                        SpiritumContent.id("ritual/" + view.recipe().id()));
         }
 
         @Override
@@ -90,7 +92,7 @@ public final class SpiritumReiPlugin implements REIClientPlugin {
 
         @Override
         public Renderer getIcon() {
-            return EntryStacks.of(alchemy ? ModContent.ALCHEMY_VAT : ModContent.RITUAL_PEDESTAL);
+            return EntryStacks.of(alchemy ? SpiritumContent.ALCHEMY_VAT : SpiritumContent.RITUAL_PEDESTAL);
         }
 
         @Override

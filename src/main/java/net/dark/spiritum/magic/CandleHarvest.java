@@ -2,7 +2,7 @@ package net.dark.spiritum.magic;
 
 import net.dark.spiritum.block.entity.CandleBlockEntity;
 import net.dark.spiritum.item.SpiritBinding;
-import net.dark.spiritum.registry.ModContent;
+import net.dark.spiritum.registry.SpiritumContent;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.entity.*;
 import net.minecraft.entity.mob.MobEntity;
@@ -18,11 +18,11 @@ public final class CandleHarvest {
                     if (!(entity.getEntityWorld() instanceof ServerWorld world)) return;
                     ItemStack weapon = source.getWeaponStack();
                     boolean hexblade =
-                            source.isDirect() && weapon != null && weapon.isOf(ModContent.HEXBLADE);
+                            source.isDirect() && weapon != null && weapon.isOf(SpiritumContent.HEXBLADE);
                     boolean retrosonus =
                             source.isDirect()
                                     && weapon != null
-                                    && weapon.isOf(ModContent.RETROSONUS);
+                                    && weapon.isOf(SpiritumContent.RETROSONUS);
                     if ((hexblade || retrosonus) && entity instanceof PlayerEntity player) {
                         ItemStack gem = SpiritBinding.socket(weapon);
                         if (!gem.isEmpty() && (hexblade || SpiritBinding.player(gem).isEmpty())) {
@@ -57,7 +57,7 @@ public final class CandleHarvest {
                                         entity.getX(),
                                         entity.getY() + .25,
                                         entity.getZ(),
-                                        new ItemStack(ModContent.SPIRIT_FRAGMENT, count)));
+                                        new ItemStack(SpiritumContent.SPIRIT_FRAGMENT, count)));
                 });
     }
 

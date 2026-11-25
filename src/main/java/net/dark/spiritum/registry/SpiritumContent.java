@@ -1,11 +1,13 @@
 package net.dark.spiritum.registry;
 
+import net.dark.spiritum.Spiritum;
 import net.dark.spiritum.block.*;
 import net.dark.spiritum.block.entity.*;
 import net.dark.spiritum.item.*;
 import net.dark.spiritum.recipe.NeedleCoatingRecipe;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.component.type.AttributeModifierSlot;
@@ -15,17 +17,19 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.*;
 import net.minecraft.registry.*;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public final class ModContent {
+@SuppressWarnings("unused")
+public final class SpiritumContent {
     public static final List<Item> ITEMS = new ArrayList<>();
 
     public static Identifier id(String name) {
-        return Identifier.of("spiritum", name);
+        return Identifier.of(Spiritum.MOD_ID, name);
     }
 
     private static AbstractBlock.Settings settings(String name, Block copy) {
@@ -60,6 +64,10 @@ public final class ModContent {
 
     public static final Block HEXSTONE =
             block("hexstone", new Block(settings("hexstone", Blocks.CALCITE).strength(1.5f)));
+
+    public static final Block ARGENT_BLOCK =
+            block("argent_block", new Block(settings("argent_block", Blocks.IRON_BLOCK).mapColor(MapColor.BRIGHT_TEAL)));
+
     public static final Block POLISHED_HEXSTONE =
             block(
                     "polished_hexstone",
@@ -115,8 +123,7 @@ public final class ModContent {
                     "alchemy_vat",
                     new AlchemyVatBlock(
                             settings("alchemy_vat", Blocks.CAULDRON)
-                                    .strength(2.5f)
-                                    .luminance(s -> s.get(AlchemyVatBlock.FILLED) ? 5 : 0)));
+                                    .strength(2.5f)));
     public static final Item SPIRIT_FRAGMENT = item("spirit_fragment");
     public static final Item ARGENT_NUGGET = item("argent_nugget");
     public static final Item ARGENT_INGOT = item("argent_ingot");
@@ -130,7 +137,7 @@ public final class ModContent {
     public static final Item SENTINEL =
             custom("sentinel", SentinelItem::new, new Item.Settings().maxCount(1));
     public static final Item ARGENT_NEEDLE =
-            custom("argent_needle", ArgentNeedleItem::new, new Item.Settings().maxCount(1));
+            custom("argent_needle", ArgentNeedleItem::new, new Item.Settings().maxCount(16));
     public static final Item HEXBLADE = hexblade();
     public static final Item TUNED_BLADE =
             custom(
@@ -177,8 +184,8 @@ public final class ModContent {
                     "retrosonus_upgrade_smithing_template",
                     settings ->
                             new SmithingTemplateItem(
-                                    Text.translatable("item.spiritum.tuned_blade"),
-                                    Text.translatable("item.spiritum.exalted_ingot"),
+                                    Text.translatable("item.spiritum.tuned_blade").formatted(Formatting.BLUE),
+                                    Text.translatable("item.spiritum.exalted_ingot").formatted(Formatting.BLUE),
                                     Text.translatable("item.spiritum.retrosonus_upgrade.base_slot"),
                                     Text.translatable(
                                             "item.spiritum.retrosonus_upgrade.addition_slot"),
@@ -287,6 +294,8 @@ public final class ModContent {
                             entries.add(SPIRIT_FRAGMENT);
                             entries.add(SPIRIT_GEM);
                             entries.add(HEX_ASH);
+                            entries.add(ItemStack.EMPTY.copyWithCount(1));
+                            entries.add(ARGENT_BLOCK);
                             entries.add(ARGENT_INGOT);
                             entries.add(ARGENT_NUGGET);
                             entries.add(ALCHEMY_VAT);
@@ -298,6 +307,11 @@ public final class ModContent {
                             entries.add(CALX_OF_HADES);
                             entries.add(BOTTLE_OF_HADES);
                             entries.add(TUNED_BLADE);
+                            if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+                                entries.add(EXALTED_INGOT);
+                                entries.add(RETROSONUS_UPGRADE_TEMPLATE);
+                                entries.add(RETROSONUS);
+                            }
                             entries.add(WARDING_RING);
                             entries.add(SOULBIND_RING);
                             entries.add(SUMMONERS_RING);
@@ -315,5 +329,5 @@ public final class ModContent {
         return item;
     }
 
-    private ModContent() {}
+    private SpiritumContent() {}
 }

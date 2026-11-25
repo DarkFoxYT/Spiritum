@@ -1,6 +1,6 @@
 package net.dark.spiritum.entity;
 
-import net.dark.spiritum.registry.ModParticles;
+import net.dark.spiritum.registry.SpiritumParticles;
 import net.minecraft.entity.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
@@ -57,7 +57,7 @@ public class LemureDemonEntity extends OwnedDemonEntity {
             else index++;
         }
         world.spawnParticles(
-                ModParticles.HEXFLAME,
+                SpiritumParticles.HEXFLAME,
                 owner.getX(),
                 owner.getY() + 1,
                 owner.getZ(),

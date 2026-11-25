@@ -1,6 +1,6 @@
 package net.dark.spiritum.world;
 
-import net.dark.spiritum.registry.ModContent;
+import net.dark.spiritum.registry.SpiritumContent;
 import net.fabricmc.fabric.api.biome.v1.*;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.loot.LootPool;
@@ -16,7 +16,7 @@ public final class SpiritumWorld {
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
                 GenerationStep.Feature.UNDERGROUND_ORES,
-                RegistryKey.of(RegistryKeys.PLACED_FEATURE, ModContent.id("hexstone_deposit")));
+                RegistryKey.of(RegistryKeys.PLACED_FEATURE, SpiritumContent.id("hexstone_deposit")));
         LootTableEvents.MODIFY.register(
                 (key, builder, source, registries) -> {
                     if (!source.isBuiltin()) return;
@@ -27,7 +27,7 @@ public final class SpiritumWorld {
                                         .rolls(ConstantLootNumberProvider.create(1))
                                         .conditionally(RandomChanceLootCondition.builder(.65f))
                                         .with(
-                                                ItemEntry.builder(ModContent.ARGENT_NUGGET)
+                                                ItemEntry.builder(SpiritumContent.ARGENT_NUGGET)
                                                         .apply(
                                                                 SetCountLootFunction.builder(
                                                                         UniformLootNumberProvider
@@ -36,7 +36,7 @@ public final class SpiritumWorld {
                                 LootPool.builder()
                                         .rolls(ConstantLootNumberProvider.create(1))
                                         .conditionally(RandomChanceLootCondition.builder(.15f))
-                                        .with(ItemEntry.builder(ModContent.ARGENT_INGOT)));
+                                        .with(ItemEntry.builder(SpiritumContent.ARGENT_INGOT)));
                     } else if (path.equals("chests/simple_dungeon")
                             || path.startsWith("chests/stronghold_")) {
                         builder.pool(
@@ -44,7 +44,7 @@ public final class SpiritumWorld {
                                         .rolls(ConstantLootNumberProvider.create(1))
                                         .conditionally(RandomChanceLootCondition.builder(.25f))
                                         .with(
-                                                ItemEntry.builder(ModContent.ARGENT_NUGGET)
+                                                ItemEntry.builder(SpiritumContent.ARGENT_NUGGET)
                                                         .apply(
                                                                 SetCountLootFunction.builder(
                                                                         UniformLootNumberProvider
